@@ -26,7 +26,7 @@
     },
     {
       "aws_cloudwatch_event_rule": {
-        "aws_cloudwatch_event_rule2": {
+        "aws_cloudwatch_event_rule3": {
           "name": [
             "name"
           ],

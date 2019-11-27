@@ -5,6 +5,9 @@ dependencies/
 .serverless/
 serverless.yml
 
+# terraform
+.terraform/
+
 # Mac OS X
 .DS_Store
 
