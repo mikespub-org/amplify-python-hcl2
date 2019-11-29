@@ -1,0 +1,80 @@
+{
+  "format_version": "0.1",
+  "provider_schemas": {
+    "local": {
+      "provider": {
+        "version": 0,
+        "block": {}
+      },
+      "resource_schemas": {
+        "local_file": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "content": {
+                "type": "string",
+                "optional": true
+              },
+              "content_base64": {
+                "type": "string",
+                "optional": true
+              },
+              "directory_permission": {
+                "type": "string",
+                "description": "Permissions to set for directories created",
+                "optional": true
+              },
+              "file_permission": {
+                "type": "string",
+                "description": "Permissions to set for the output file",
+                "optional": true
+              },
+              "filename": {
+                "type": "string",
+                "description": "Path to the output file",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "sensitive_content": {
+                "type": "string",
+                "optional": true,
+                "sensitive": true
+              }
+            }
+          }
+        }
+      },
+      "data_source_schemas": {
+        "local_file": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "content": {
+                "type": "string",
+                "computed": true
+              },
+              "content_base64": {
+                "type": "string",
+                "computed": true
+              },
+              "filename": {
+                "type": "string",
+                "description": "Path to the output file",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
