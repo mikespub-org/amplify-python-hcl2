@@ -127,6 +127,11 @@
               "nesting_mode": "set",
               "block": {
                 "attributes": {
+                  "accessanalyzer": {
+                    "type": "string",
+                    "description": "Use this to override the default service endpoint URL",
+                    "optional": true
+                  },
                   "acm": {
                     "type": "string",
                     "description": "Use this to override the default service endpoint URL",
@@ -283,6 +288,11 @@
                     "optional": true
                   },
                   "cur": {
+                    "type": "string",
+                    "description": "Use this to override the default service endpoint URL",
+                    "optional": true
+                  },
+                  "dataexchange": {
                     "type": "string",
                     "description": "Use this to override the default service endpoint URL",
                     "optional": true
@@ -447,6 +457,11 @@
                     "description": "Use this to override the default service endpoint URL",
                     "optional": true
                   },
+                  "imagebuilder": {
+                    "type": "string",
+                    "description": "Use this to override the default service endpoint URL",
+                    "optional": true
+                  },
                   "inspector": {
                     "type": "string",
                     "description": "Use this to override the default service endpoint URL",
@@ -528,6 +543,11 @@
                     "optional": true
                   },
                   "managedblockchain": {
+                    "type": "string",
+                    "description": "Use this to override the default service endpoint URL",
+                    "optional": true
+                  },
+                  "marketplacecatalog": {
                     "type": "string",
                     "description": "Use this to override the default service endpoint URL",
                     "optional": true
@@ -752,7 +772,17 @@
                     "description": "Use this to override the default service endpoint URL",
                     "optional": true
                   },
+                  "wafv2": {
+                    "type": "string",
+                    "description": "Use this to override the default service endpoint URL",
+                    "optional": true
+                  },
                   "worklink": {
+                    "type": "string",
+                    "description": "Use this to override the default service endpoint URL",
+                    "optional": true
+                  },
+                  "workmail": {
                     "type": "string",
                     "description": "Use this to override the default service endpoint URL",
                     "optional": true
@@ -774,6 +804,34 @@
         }
       },
       "resource_schemas": {
+        "aws_accessanalyzer_analyzer": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "analyzer_name": {
+                "type": "string",
+                "required": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
+              "type": {
+                "type": "string",
+                "optional": true
+              }
+            }
+          }
+        },
         "aws_acm_certificate": {
           "version": 0,
           "block": {
@@ -1087,6 +1145,10 @@
               "dns_name": {
                 "type": "string",
                 "computed": true
+              },
+              "drop_invalid_header_fields": {
+                "type": "bool",
+                "optional": true
               },
               "enable_cross_zone_load_balancing": {
                 "type": "bool",
@@ -1667,11 +1729,96 @@
                   "attributes": {
                     "field": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "values": {
                       "type": ["list", "string"],
-                      "optional": true
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "host_header": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "optional": true,
+                            "computed": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "http_header": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "http_header_name": {
+                            "type": "string",
+                            "required": true
+                          },
+                          "values": {
+                            "type": ["set", "string"],
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "http_request_method": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "path_pattern": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "optional": true,
+                            "computed": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "query_string": {
+                      "nesting_mode": "set",
+                      "block": {
+                        "attributes": {
+                          "key": {
+                            "type": "string",
+                            "optional": true
+                          },
+                          "value": {
+                            "type": "string",
+                            "required": true
+                          }
+                        }
+                      }
+                    },
+                    "source_ip": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
                     }
                   }
                 },
@@ -1704,6 +1851,11 @@
               "lambda_multi_value_headers_enabled": {
                 "type": "bool",
                 "optional": true
+              },
+              "load_balancing_algorithm_type": {
+                "type": "string",
+                "optional": true,
+                "computed": true
               },
               "name": {
                 "type": "string",
@@ -3191,6 +3343,10 @@
                     "types": {
                       "type": ["list", "string"],
                       "required": true
+                    },
+                    "vpc_endpoint_ids": {
+                      "type": ["set", "string"],
+                      "optional": true
                     }
                   }
                 },
@@ -3289,6 +3445,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "description": {
                 "type": "string",
                 "optional": true
@@ -3304,6 +3464,10 @@
               },
               "product_code": {
                 "type": "string",
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
                 "optional": true
               }
             },
@@ -3426,6 +3590,58 @@
             }
           }
         },
+        "aws_apigatewayv2_api": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "api_endpoint": {
+                "type": "string",
+                "computed": true
+              },
+              "api_key_selection_expression": {
+                "type": "string",
+                "optional": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "execution_arn": {
+                "type": "string",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "protocol_type": {
+                "type": "string",
+                "required": true
+              },
+              "route_selection_expression": {
+                "type": "string",
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
+              "version": {
+                "type": "string",
+                "optional": true
+              }
+            }
+          }
+        },
         "aws_app_cookie_stickiness_policy": {
           "version": 0,
           "block": {
@@ -3460,10 +3676,6 @@
             "attributes": {
               "adjustment_type": {
                 "type": "string",
-                "optional": true
-              },
-              "alarms": {
-                "type": ["list", "string"],
                 "optional": true
               },
               "arn": {
@@ -3854,6 +4066,12 @@
               "spec": {
                 "nesting_mode": "list",
                 "block": {
+                  "attributes": {
+                    "priority": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  },
                   "block_types": {
                     "http_route": {
                       "nesting_mode": "list",
@@ -3889,9 +4107,79 @@
                             "nesting_mode": "list",
                             "block": {
                               "attributes": {
+                                "method": {
+                                  "type": "string",
+                                  "optional": true
+                                },
                                 "prefix": {
                                   "type": "string",
                                   "required": true
+                                },
+                                "scheme": {
+                                  "type": "string",
+                                  "optional": true
+                                }
+                              },
+                              "block_types": {
+                                "header": {
+                                  "nesting_mode": "set",
+                                  "block": {
+                                    "attributes": {
+                                      "invert": {
+                                        "type": "bool",
+                                        "optional": true
+                                      },
+                                      "name": {
+                                        "type": "string",
+                                        "required": true
+                                      }
+                                    },
+                                    "block_types": {
+                                      "match": {
+                                        "nesting_mode": "list",
+                                        "block": {
+                                          "attributes": {
+                                            "exact": {
+                                              "type": "string",
+                                              "optional": true
+                                            },
+                                            "prefix": {
+                                              "type": "string",
+                                              "optional": true
+                                            },
+                                            "regex": {
+                                              "type": "string",
+                                              "optional": true
+                                            },
+                                            "suffix": {
+                                              "type": "string",
+                                              "optional": true
+                                            }
+                                          },
+                                          "block_types": {
+                                            "range": {
+                                              "nesting_mode": "list",
+                                              "block": {
+                                                "attributes": {
+                                                  "end": {
+                                                    "type": "number",
+                                                    "required": true
+                                                  },
+                                                  "start": {
+                                                    "type": "number",
+                                                    "required": true
+                                                  }
+                                                }
+                                              },
+                                              "max_items": 1
+                                            }
+                                          }
+                                        },
+                                        "max_items": 1
+                                      }
+                                    }
+                                  },
+                                  "max_items": 10
                                 }
                               }
                             },
@@ -4521,6 +4809,10 @@
               "uris": {
                 "type": ["map", "string"],
                 "computed": true
+              },
+              "xray_enabled": {
+                "type": "bool",
+                "optional": true
               }
             },
             "block_types": {
@@ -4946,6 +5238,10 @@
                 "optional": true,
                 "computed": true
               },
+              "max_instance_lifetime": {
+                "type": "number",
+                "optional": true
+              },
               "max_size": {
                 "type": "number",
                 "required": true
@@ -5143,6 +5439,10 @@
                             "block": {
                               "attributes": {
                                 "instance_type": {
+                                  "type": "string",
+                                  "optional": true
+                                },
+                                "weighted_capacity": {
                                   "type": "string",
                                   "optional": true
                                 }
@@ -5639,7 +5939,12 @@
               },
               "compute_environment_name": {
                 "type": "string",
-                "required": true
+                "optional": true,
+                "computed": true
+              },
+              "compute_environment_name_prefix": {
+                "type": "string",
+                "optional": true
               },
               "ecc_cluster_arn": {
                 "type": "string",
@@ -5680,6 +5985,10 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "allocation_strategy": {
+                      "type": "string",
+                      "optional": true
+                    },
                     "bid_percentage": {
                       "type": "number",
                       "optional": true
@@ -6034,6 +6343,10 @@
                 "type": "string",
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "type": {
                 "type": "string",
                 "computed": true
@@ -6186,6 +6499,19 @@
               "template_url": {
                 "type": "string",
                 "optional": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "update": {
+                      "type": "string",
+                      "optional": true
+                    }
+                  }
+                }
               }
             }
           }
@@ -6846,7 +7172,8 @@
                           }
                         }
                       },
-                      "min_items": 2
+                      "min_items": 2,
+                      "max_items": 2
                     }
                   }
                 }
@@ -7934,9 +8261,17 @@
                 "type": "string",
                 "required": true
               },
+              "queued_timeout": {
+                "type": "number",
+                "optional": true
+              },
               "service_role": {
                 "type": "string",
                 "required": true
+              },
+              "source_version": {
+                "type": "string",
+                "optional": true
               },
               "tags": {
                 "type": ["map", "string"],
@@ -8219,6 +8554,18 @@
                           }
                         }
                       }
+                    },
+                    "git_submodules_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "fetch_submodules": {
+                            "type": "bool",
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
                     }
                   }
                 }
@@ -8268,6 +8615,18 @@
                           }
                         }
                       }
+                    },
+                    "git_submodules_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "fetch_submodules": {
+                            "type": "bool",
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
                     }
                   }
                 },
@@ -9111,6 +9470,68 @@
             }
           }
         },
+        "aws_codestarnotifications_notification_rule": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "detail_type": {
+                "type": "string",
+                "required": true
+              },
+              "event_type_ids": {
+                "type": ["set", "string"],
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "resource": {
+                "type": "string",
+                "required": true
+              },
+              "status": {
+                "type": "string",
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "target": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "address": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "computed": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 10
+              }
+            }
+          }
+        },
         "aws_cognito_identity_pool": {
           "version": 0,
           "block": {
@@ -9320,7 +9741,7 @@
                     }
                   }
                 },
-                "max_items": 25
+                "max_items": 100
               }
             }
           }
@@ -9437,7 +9858,8 @@
                     },
                     "unused_account_validity_days": {
                       "type": "number",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     }
                   },
                   "block_types": {
@@ -9486,6 +9908,10 @@
                 "block": {
                   "attributes": {
                     "email_sending_account": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "from_email_address": {
                       "type": "string",
                       "optional": true
                     },
@@ -9572,6 +9998,10 @@
                     "require_uppercase": {
                       "type": "bool",
                       "optional": true
+                    },
+                    "temporary_password_validity_days": {
+                      "type": "number",
+                      "optional": true
                     }
                   }
                 },
@@ -9655,12 +10085,36 @@
                 },
                 "max_items": 1
               },
+              "software_token_mfa_configuration": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "enabled": {
+                      "type": "bool",
+                      "required": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
               "user_pool_add_ons": {
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
                     "advanced_security_mode": {
                       "type": "string",
+                      "required": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
+              "username_configuration": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "case_sensitive": {
+                      "type": "bool",
                       "required": true
                     }
                   }
@@ -9724,7 +10178,7 @@
                 "optional": true
               },
               "callback_urls": {
-                "type": ["list", "string"],
+                "type": ["set", "string"],
                 "optional": true
               },
               "client_secret": {
@@ -9749,12 +10203,17 @@
                 "computed": true
               },
               "logout_urls": {
-                "type": ["list", "string"],
+                "type": ["set", "string"],
                 "optional": true
               },
               "name": {
                 "type": "string",
                 "required": true
+              },
+              "prevent_user_existence_errors": {
+                "type": "string",
+                "optional": true,
+                "computed": true
               },
               "read_attributes": {
                 "type": ["set", "string"],
@@ -9765,7 +10224,7 @@
                 "optional": true
               },
               "supported_identity_providers": {
-                "type": ["list", "string"],
+                "type": ["set", "string"],
                 "optional": true
               },
               "user_pool_id": {
@@ -9775,6 +10234,32 @@
               "write_attributes": {
                 "type": ["set", "string"],
                 "optional": true
+              }
+            },
+            "block_types": {
+              "analytics_configuration": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "application_id": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "external_id": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "role_arn": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "user_data_shared": {
+                      "type": "bool",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
               }
             }
           }
@@ -10572,6 +11057,70 @@
             }
           }
         },
+        "aws_datasync_location_smb": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "agent_arns": {
+                "type": ["set", "string"],
+                "required": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "domain": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "password": {
+                "type": "string",
+                "required": true,
+                "sensitive": true
+              },
+              "server_hostname": {
+                "type": "string",
+                "required": true
+              },
+              "subdirectory": {
+                "type": "string",
+                "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
+              "uri": {
+                "type": "string",
+                "computed": true
+              },
+              "user": {
+                "type": "string",
+                "required": true
+              }
+            },
+            "block_types": {
+              "mount_options": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "version": {
+                      "type": "string",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              }
+            }
+          }
+        },
         "aws_datasync_task": {
           "version": 0,
           "block": {
@@ -11017,7 +11566,7 @@
           }
         },
         "aws_db_instance": {
-          "version": 0,
+          "version": 1,
           "block": {
             "attributes": {
               "address": {
@@ -11079,6 +11628,10 @@
                 "type": "string",
                 "optional": true,
                 "computed": true
+              },
+              "delete_automated_backups": {
+                "type": "bool",
+                "optional": true
               },
               "deletion_protection": {
                 "type": "bool",
@@ -11884,6 +12437,10 @@
           "block": {
             "attributes": {
               "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "description": {
                 "type": "string",
                 "computed": true
               },
@@ -13003,6 +13560,11 @@
                 "optional": true,
                 "computed": true
               },
+              "ca_cert_identifier": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
               "cluster_identifier": {
                 "type": "string",
                 "required": true
@@ -13580,6 +14142,10 @@
                 "optional": true,
                 "computed": true
               },
+              "amazon_side_asn": {
+                "type": "string",
+                "computed": true
+              },
               "arn": {
                 "type": "string",
                 "computed": true
@@ -13717,6 +14283,10 @@
                 "optional": true,
                 "computed": true
               },
+              "amazon_side_asn": {
+                "type": "string",
+                "computed": true
+              },
               "arn": {
                 "type": "string",
                 "computed": true
@@ -13836,6 +14406,10 @@
               "amazon_address": {
                 "type": "string",
                 "optional": true,
+                "computed": true
+              },
+              "amazon_side_asn": {
+                "type": "string",
                 "computed": true
               },
               "arn": {
@@ -14020,6 +14594,10 @@
                 "optional": true,
                 "computed": true
               },
+              "amazon_side_asn": {
+                "type": "string",
+                "computed": true
+              },
               "arn": {
                 "type": "string",
                 "computed": true
@@ -14116,6 +14694,10 @@
                 "optional": true,
                 "computed": true
               },
+              "amazon_side_asn": {
+                "type": "string",
+                "computed": true
+              },
               "arn": {
                 "type": "string",
                 "computed": true
@@ -14194,6 +14776,10 @@
               "amazon_address": {
                 "type": "string",
                 "optional": true,
+                "computed": true
+              },
+              "amazon_side_asn": {
+                "type": "string",
                 "computed": true
               },
               "arn": {
@@ -14481,6 +15067,11 @@
                     "enabled": {
                       "type": "bool",
                       "required": true
+                    },
+                    "kms_key_arn": {
+                      "type": "string",
+                      "optional": true,
+                      "computed": true
                     }
                   }
                 },
@@ -15115,6 +15706,181 @@
             }
           }
         },
+        "aws_ec2_traffic_mirror_filter": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "network_services": {
+                "type": ["set", "string"],
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            }
+          }
+        },
+        "aws_ec2_traffic_mirror_filter_rule": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "destination_cidr_block": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "protocol": {
+                "type": "number",
+                "optional": true
+              },
+              "rule_action": {
+                "type": "string",
+                "required": true
+              },
+              "rule_number": {
+                "type": "number",
+                "required": true
+              },
+              "source_cidr_block": {
+                "type": "string",
+                "required": true
+              },
+              "traffic_direction": {
+                "type": "string",
+                "required": true
+              },
+              "traffic_mirror_filter_id": {
+                "type": "string",
+                "required": true
+              }
+            },
+            "block_types": {
+              "destination_port_range": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "from_port": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "to_port": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
+              "source_port_range": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "from_port": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "to_port": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              }
+            }
+          }
+        },
+        "aws_ec2_traffic_mirror_session": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "network_interface_id": {
+                "type": "string",
+                "required": true
+              },
+              "packet_length": {
+                "type": "number",
+                "optional": true
+              },
+              "session_number": {
+                "type": "number",
+                "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
+              "traffic_mirror_filter_id": {
+                "type": "string",
+                "required": true
+              },
+              "traffic_mirror_target_id": {
+                "type": "string",
+                "required": true
+              },
+              "virtual_network_id": {
+                "type": "number",
+                "optional": true,
+                "computed": true
+              }
+            }
+          }
+        },
+        "aws_ec2_traffic_mirror_target": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "network_interface_id": {
+                "type": "string",
+                "optional": true
+              },
+              "network_load_balancer_arn": {
+                "type": "string",
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            }
+          }
+        },
         "aws_ec2_transit_gateway": {
           "version": 0,
           "block": {
@@ -15496,7 +16262,7 @@
             }
           }
         },
-        "aws_ecs_cluster": {
+        "aws_ecs_capacity_provider": {
           "version": 0,
           "block": {
             "attributes": {
@@ -15519,6 +16285,103 @@
               }
             },
             "block_types": {
+              "auto_scaling_group_provider": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "auto_scaling_group_arn": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "managed_termination_protection": {
+                      "type": "string",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "managed_scaling": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "maximum_scaling_step_size": {
+                            "type": "number",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "minimum_scaling_step_size": {
+                            "type": "number",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "status": {
+                            "type": "string",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "target_capacity": {
+                            "type": "number",
+                            "optional": true,
+                            "computed": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    }
+                  }
+                },
+                "min_items": 1,
+                "max_items": 1
+              }
+            }
+          }
+        },
+        "aws_ecs_cluster": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "capacity_providers": {
+                "type": ["set", "string"],
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "default_capacity_provider_strategy": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "base": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "capacity_provider": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "weight": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  }
+                }
+              },
               "setting": {
                 "nesting_mode": "set",
                 "block": {
@@ -15578,7 +16441,8 @@
               },
               "launch_type": {
                 "type": "string",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "name": {
                 "type": "string",
@@ -15607,6 +16471,25 @@
               }
             },
             "block_types": {
+              "capacity_provider_strategy": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "base": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "capacity_provider": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "weight": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  }
+                }
+              },
               "deployment_controller": {
                 "nesting_mode": "list",
                 "block": {
@@ -15875,6 +16758,22 @@
                             "type": "string",
                             "optional": true,
                             "computed": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "efs_volume_configuration": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "file_system_id": {
+                            "type": "string",
+                            "required": true
+                          },
+                          "root_directory": {
+                            "type": "string",
+                            "optional": true
                           }
                         }
                       },
@@ -16214,6 +17113,33 @@
               }
             },
             "block_types": {
+              "encryption_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "resources": {
+                      "type": ["set", "string"],
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "provider": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "key_arn": {
+                            "type": "string",
+                            "required": true
+                          }
+                        }
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  }
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -16249,6 +17175,11 @@
                       "type": "bool",
                       "optional": true
                     },
+                    "public_access_cidrs": {
+                      "type": ["set", "string"],
+                      "optional": true,
+                      "computed": true
+                    },
                     "security_group_ids": {
                       "type": ["set", "string"],
                       "optional": true
@@ -16265,6 +17196,79 @@
                 },
                 "min_items": 1,
                 "max_items": 1
+              }
+            }
+          }
+        },
+        "aws_eks_fargate_profile": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "cluster_name": {
+                "type": "string",
+                "required": true
+              },
+              "fargate_profile_name": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "pod_execution_role_arn": {
+                "type": "string",
+                "required": true
+              },
+              "status": {
+                "type": "string",
+                "computed": true
+              },
+              "subnet_ids": {
+                "type": ["set", "string"],
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "selector": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "labels": {
+                      "type": ["map", "string"],
+                      "optional": true
+                    },
+                    "namespace": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                },
+                "min_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "optional": true
+                    }
+                  }
+                }
               }
             }
           }
@@ -16706,6 +17710,10 @@
                 "optional": true,
                 "computed": true
               },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "availability_zone": {
                 "type": "string",
                 "optional": true,
@@ -16783,7 +17791,8 @@
               },
               "port": {
                 "type": "number",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "preferred_availability_zones": {
                 "type": ["list", "string"],
@@ -17212,6 +18221,23 @@
                     "user_pool_id": {
                       "type": "string",
                       "required": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
+              "domain_endpoint_options": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "enforce_https": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "tls_security_policy": {
+                      "type": "string",
+                      "optional": true,
+                      "computed": true
                     }
                   }
                 },
@@ -17925,6 +18951,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "autoscaling_role": {
                 "type": "string",
                 "optional": true
@@ -18018,6 +19048,10 @@
                   ]],
                 "optional": true,
                 "computed": true
+              },
+              "step_concurrency_level": {
+                "type": "number",
+                "optional": true
               },
               "tags": {
                 "type": ["map", "string"],
@@ -18124,11 +19158,13 @@
                     },
                     "emr_managed_master_security_group": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "emr_managed_slave_security_group": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "instance_profile": {
                       "type": "string",
@@ -18140,7 +19176,8 @@
                     },
                     "service_access_security_group": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "subnet_id": {
                       "type": "string",
@@ -18443,6 +19480,10 @@
                 "type": "string",
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "traffic_type": {
                 "type": "string",
                 "required": true
@@ -18708,6 +19749,10 @@
               "name": {
                 "type": "string",
                 "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               }
             },
             "block_types": {
@@ -18739,6 +19784,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "id": {
                 "type": "string",
                 "optional": true,
@@ -18751,6 +19800,10 @@
               "operating_system": {
                 "type": "string",
                 "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               },
               "version": {
                 "type": "string",
@@ -18802,10 +19855,18 @@
                 "type": "string",
                 "required": true
               },
+              "fleet_type": {
+                "type": "string",
+                "optional": true
+              },
               "id": {
                 "type": "string",
                 "optional": true,
                 "computed": true
+              },
+              "instance_role_arn": {
+                "type": "string",
+                "optional": true
               },
               "log_paths": {
                 "type": ["list", "string"],
@@ -18827,6 +19888,10 @@
               "operating_system": {
                 "type": "string",
                 "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               }
             },
             "block_types": {
@@ -18947,6 +20012,10 @@
                 "type": "string",
                 "required": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "timeout_in_seconds": {
                 "type": "number",
                 "optional": true
@@ -19052,9 +20121,17 @@
           "version": 0,
           "block": {
             "attributes": {
+              "dns_name": {
+                "type": "string",
+                "computed": true
+              },
               "enabled": {
                 "type": "bool",
                 "optional": true
+              },
+              "hosted_zone_id": {
+                "type": "string",
+                "computed": true
               },
               "id": {
                 "type": "string",
@@ -19076,6 +20153,10 @@
               "name": {
                 "type": "string",
                 "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               }
             },
             "block_types": {
@@ -19830,6 +20911,18 @@
                   }
                 },
                 "max_items": 1
+              },
+              "notification_property": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "notify_delay_after": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
               }
             }
           }
@@ -20265,11 +21358,18 @@
               },
               "secret": {
                 "type": "string",
-                "computed": true
+                "computed": true,
+                "sensitive": true
               },
               "ses_smtp_password": {
                 "type": "string",
-                "computed": true
+                "computed": true,
+                "sensitive": true
+              },
+              "ses_smtp_password_v4": {
+                "type": "string",
+                "computed": true,
+                "sensitive": true
               },
               "status": {
                 "type": "string",
@@ -21060,6 +22160,10 @@
                 "type": ["set", "string"],
                 "required": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "target_arn": {
                 "type": "string",
                 "required": true
@@ -21128,6 +22232,10 @@
                 "optional": true
               },
               "get_password_data": {
+                "type": "bool",
+                "optional": true
+              },
+              "hibernation": {
                 "type": "bool",
                 "optional": true
               },
@@ -21958,9 +23066,17 @@
                 "type": "string",
                 "optional": true
               },
+              "key_pair_id": {
+                "type": "string",
+                "computed": true
+              },
               "public_key": {
                 "type": "string",
                 "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               }
             }
           }
@@ -23354,6 +24470,76 @@
             }
           }
         },
+        "aws_kinesis_video_stream": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "creation_time": {
+                "type": "string",
+                "computed": true
+              },
+              "data_retention_in_hours": {
+                "type": "number",
+                "optional": true
+              },
+              "device_name": {
+                "type": "string",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "kms_key_id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "media_type": {
+                "type": "string",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
+              "version": {
+                "type": "string",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "optional": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "aws_kms_alias": {
           "version": 0,
           "block": {
@@ -23547,6 +24733,10 @@
                 "type": "string",
                 "computed": true
               },
+              "customer_master_key_spec": {
+                "type": "string",
+                "optional": true
+              },
               "deletion_window_in_days": {
                 "type": "number",
                 "optional": true
@@ -23575,8 +24765,7 @@
               },
               "key_usage": {
                 "type": "string",
-                "optional": true,
-                "computed": true
+                "optional": true
               },
               "policy": {
                 "type": "string",
@@ -23648,6 +24837,10 @@
                 "type": "number",
                 "optional": true
               },
+              "bisect_batch_on_function_error": {
+                "type": "bool",
+                "optional": true
+              },
               "enabled": {
                 "type": "bool",
                 "optional": true
@@ -23681,6 +24874,21 @@
                 "type": "number",
                 "optional": true
               },
+              "maximum_record_age_in_seconds": {
+                "type": "number",
+                "optional": true,
+                "computed": true
+              },
+              "maximum_retry_attempts": {
+                "type": "number",
+                "optional": true,
+                "computed": true
+              },
+              "parallelization_factor": {
+                "type": "number",
+                "optional": true,
+                "computed": true
+              },
               "starting_position": {
                 "type": "string",
                 "optional": true
@@ -23700,6 +24908,28 @@
               "uuid": {
                 "type": "string",
                 "computed": true
+              }
+            },
+            "block_types": {
+              "destination_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "on_failure": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "destination_arn": {
+                            "type": "string",
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    }
+                  }
+                },
+                "max_items": 1
               }
             }
           }
@@ -23878,6 +25108,68 @@
             }
           }
         },
+        "aws_lambda_function_event_invoke_config": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "function_name": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "maximum_event_age_in_seconds": {
+                "type": "number",
+                "optional": true
+              },
+              "maximum_retry_attempts": {
+                "type": "number",
+                "optional": true
+              },
+              "qualifier": {
+                "type": "string",
+                "optional": true
+              }
+            },
+            "block_types": {
+              "destination_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "on_failure": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "destination": {
+                            "type": "string",
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "on_success": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "destination": {
+                            "type": "string",
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    }
+                  }
+                },
+                "max_items": 1
+              }
+            }
+          }
+        },
         "aws_lambda_layer_version": {
           "version": 0,
           "block": {
@@ -23996,10 +25288,55 @@
             }
           }
         },
+        "aws_lambda_provisioned_concurrency_config": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "function_name": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "provisioned_concurrent_executions": {
+                "type": "number",
+                "required": true
+              },
+              "qualifier": {
+                "type": "string",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "optional": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "aws_launch_configuration": {
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "associate_public_ip_address": {
                 "type": "bool",
                 "optional": true
@@ -24338,6 +25675,22 @@
                 },
                 "max_items": 1
               },
+              "cpu_options": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "core_count": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "threads_per_core": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
               "credit_specification": {
                 "nesting_mode": "list",
                 "block": {
@@ -24460,7 +25813,7 @@
                 "block": {
                   "attributes": {
                     "associate_public_ip_address": {
-                      "type": "bool",
+                      "type": "string",
                       "optional": true
                     },
                     "delete_on_termination": {
@@ -24575,6 +25928,10 @@
               "dns_name": {
                 "type": "string",
                 "computed": true
+              },
+              "drop_invalid_header_fields": {
+                "type": "bool",
+                "optional": true
               },
               "enable_cross_zone_load_balancing": {
                 "type": "bool",
@@ -25183,11 +26540,96 @@
                   "attributes": {
                     "field": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "values": {
                       "type": ["list", "string"],
-                      "optional": true
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "host_header": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "optional": true,
+                            "computed": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "http_header": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "http_header_name": {
+                            "type": "string",
+                            "required": true
+                          },
+                          "values": {
+                            "type": ["set", "string"],
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "http_request_method": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "path_pattern": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "optional": true,
+                            "computed": true
+                          }
+                        }
+                      },
+                      "max_items": 1
+                    },
+                    "query_string": {
+                      "nesting_mode": "set",
+                      "block": {
+                        "attributes": {
+                          "key": {
+                            "type": "string",
+                            "optional": true
+                          },
+                          "value": {
+                            "type": "string",
+                            "required": true
+                          }
+                        }
+                      }
+                    },
+                    "source_ip": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "values": {
+                            "type": ["set", "string"],
+                            "required": true
+                          }
+                        }
+                      },
+                      "max_items": 1
                     }
                   }
                 },
@@ -25261,6 +26703,11 @@
               "lambda_multi_value_headers_enabled": {
                 "type": "bool",
                 "optional": true
+              },
+              "load_balancing_algorithm_type": {
+                "type": "string",
+                "optional": true,
+                "computed": true
               },
               "name": {
                 "type": "string",
@@ -25828,6 +27275,64 @@
             }
           }
         },
+        "aws_media_convert_queue": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "pricing_plan": {
+                "type": "string",
+                "optional": true
+              },
+              "status": {
+                "type": "string",
+                "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "reservation_plan_settings": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "commitment": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "renewal_type": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "reserved_slots": {
+                      "type": "number",
+                      "required": true
+                    }
+                  }
+                },
+                "max_items": 1
+              }
+            }
+          }
+        },
         "aws_media_package_channel": {
           "version": 0,
           "block": {
@@ -26274,6 +27779,47 @@
                   }
                 },
                 "max_items": 1
+              },
+              "open_monitoring": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "prometheus": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "block_types": {
+                          "jmx_exporter": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "enabled_in_broker": {
+                                  "type": "bool",
+                                  "required": true
+                                }
+                              }
+                            },
+                            "max_items": 1
+                          },
+                          "node_exporter": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "enabled_in_broker": {
+                                  "type": "bool",
+                                  "required": true
+                                }
+                              }
+                            },
+                            "max_items": 1
+                          }
+                        }
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  }
+                },
+                "max_items": 1
               }
             }
           }
@@ -26389,6 +27935,14 @@
               "cluster_resource_id": {
                 "type": "string",
                 "computed": true
+              },
+              "deletion_protection": {
+                "type": "bool",
+                "optional": true
+              },
+              "enable_cloudwatch_logs_exports": {
+                "type": ["set", "string"],
+                "optional": true
               },
               "endpoint": {
                 "type": "string",
@@ -27086,6 +28640,10 @@
                 "optional": true,
                 "computed": true
               },
+              "mac_address": {
+                "type": "string",
+                "computed": true
+              },
               "private_dns_name": {
                 "type": "string",
                 "computed": true
@@ -27281,7 +28839,8 @@
                     },
                     "ssh_key": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "sensitive": true
                     },
                     "type": {
                       "type": "string",
@@ -27344,6 +28903,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -27425,6 +28988,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -27435,6 +29002,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -27469,6 +29040,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -27550,6 +29125,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "url": {
                 "type": "string",
                 "optional": true
@@ -27568,6 +29147,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -27602,6 +29185,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -27703,6 +29290,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -27713,6 +29304,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -28062,6 +29657,10 @@
                 "type": "string",
                 "optional": true
               },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -28151,6 +29750,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -28161,6 +29764,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -28198,6 +29805,10 @@
               "allocated_memory": {
                 "type": "number",
                 "optional": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
               },
               "auto_assign_elastic_ips": {
                 "type": "bool",
@@ -28276,6 +29887,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -28286,6 +29901,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -28320,6 +29939,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -28405,6 +30028,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -28415,6 +30042,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -28449,6 +30080,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -28530,6 +30165,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -28540,6 +30179,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -28610,6 +30253,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -28687,6 +30334,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -28697,6 +30348,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -28734,6 +30389,10 @@
               "app_server": {
                 "type": "string",
                 "optional": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
               },
               "auto_assign_elastic_ips": {
                 "type": "bool",
@@ -28832,6 +30491,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -28842,6 +30505,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -29023,7 +30690,8 @@
                     },
                     "ssh_key": {
                       "type": "string",
-                      "optional": true
+                      "optional": true,
+                      "sensitive": true
                     },
                     "type": {
                       "type": "string",
@@ -29047,6 +30715,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "auto_assign_elastic_ips": {
                 "type": "bool",
                 "optional": true
@@ -29124,6 +30796,10 @@
                 "type": ["set", "string"],
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
               "use_ebs_optimized_instances": {
                 "type": "bool",
                 "optional": true
@@ -29134,6 +30810,10 @@
                 "nesting_mode": "set",
                 "block": {
                   "attributes": {
+                    "encrypted": {
+                      "type": "bool",
+                      "optional": true
+                    },
                     "iops": {
                       "type": "number",
                       "optional": true
@@ -29254,7 +30934,8 @@
                       "arn": "string",
                       "email": "string",
                       "id": "string",
-                      "name": "string"
+                      "name": "string",
+                      "status": "string"
                     }
                   ]],
                 "computed": true
@@ -29297,7 +30978,8 @@
                       "arn": "string",
                       "email": "string",
                       "id": "string",
-                      "name": "string"
+                      "name": "string",
+                      "status": "string"
                     }
                   ]],
                 "computed": true
@@ -29910,9 +31592,17 @@
                 "type": "string",
                 "required": true
               },
+              "placement_group_id": {
+                "type": "string",
+                "computed": true
+              },
               "strategy": {
                 "type": "string",
                 "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               }
             }
           }
@@ -30262,6 +31952,10 @@
                 "type": "bool",
                 "optional": true
               },
+              "enable_http_endpoint": {
+                "type": "bool",
+                "optional": true
+              },
               "enabled_cloudwatch_logs_exports": {
                 "type": ["list", "string"],
                 "optional": true
@@ -30487,6 +32181,10 @@
               "static_members": {
                 "type": ["set", "string"],
                 "optional": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
               }
             }
           }
@@ -30509,6 +32207,11 @@
                 "optional": true
               },
               "availability_zone": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "ca_cert_identifier": {
                 "type": "string",
                 "optional": true,
                 "computed": true
@@ -32020,6 +33723,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "gateway_id": {
+                "type": "string",
+                "optional": true
+              },
               "id": {
                 "type": "string",
                 "optional": true,
@@ -32031,7 +33738,90 @@
               },
               "subnet_id": {
                 "type": "string",
+                "optional": true
+              }
+            }
+          }
+        },
+        "aws_s3_access_point": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "account_id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "bucket": {
+                "type": "string",
                 "required": true
+              },
+              "domain_name": {
+                "type": "string",
+                "computed": true
+              },
+              "has_public_access_policy": {
+                "type": "bool",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "network_origin": {
+                "type": "string",
+                "computed": true
+              },
+              "policy": {
+                "type": "string",
+                "optional": true
+              }
+            },
+            "block_types": {
+              "public_access_block_configuration": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "block_public_acls": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "block_public_policy": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "ignore_public_acls": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "restrict_public_buckets": {
+                      "type": "bool",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
+              "vpc_configuration": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "vpc_id": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                },
+                "max_items": 1
               }
             }
           }
@@ -32170,6 +33960,29 @@
                     },
                     "max_age_seconds": {
                       "type": "number",
+                      "optional": true
+                    }
+                  }
+                }
+              },
+              "grant": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "id": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "permissions": {
+                      "type": ["set", "string"],
+                      "required": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "uri": {
+                      "type": "string",
                       "optional": true
                     }
                   }
@@ -32513,6 +34326,101 @@
                     "routing_rules": {
                       "type": "string",
                       "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              }
+            }
+          }
+        },
+        "aws_s3_bucket_analytics_configuration": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "bucket": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              }
+            },
+            "block_types": {
+              "filter": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "prefix": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "tags": {
+                      "type": ["map", "string"],
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              },
+              "storage_class_analysis": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "data_export": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "output_schema_version": {
+                            "type": "string",
+                            "optional": true
+                          }
+                        },
+                        "block_types": {
+                          "destination": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "block_types": {
+                                "s3_bucket_destination": {
+                                  "nesting_mode": "list",
+                                  "block": {
+                                    "attributes": {
+                                      "bucket_account_id": {
+                                        "type": "string",
+                                        "optional": true
+                                      },
+                                      "bucket_arn": {
+                                        "type": "string",
+                                        "required": true
+                                      },
+                                      "format": {
+                                        "type": "string",
+                                        "optional": true
+                                      },
+                                      "prefix": {
+                                        "type": "string",
+                                        "optional": true
+                                      }
+                                    }
+                                  },
+                                  "min_items": 1,
+                                  "max_items": 1
+                                }
+                              }
+                            },
+                            "min_items": 1,
+                            "max_items": 1
+                          }
+                        }
+                      },
+                      "min_items": 1,
+                      "max_items": 1
                     }
                   }
                 },
@@ -33140,6 +35048,10 @@
                 "type": "string",
                 "computed": true
               },
+              "direct_internet_access": {
+                "type": "string",
+                "optional": true
+              },
               "id": {
                 "type": "string",
                 "optional": true,
@@ -33476,6 +35388,38 @@
               "id": {
                 "type": "string",
                 "optional": true,
+                "computed": true
+              }
+            }
+          }
+        },
+        "aws_securityhub_member": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "account_id": {
+                "type": "string",
+                "required": true
+              },
+              "email": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "invite": {
+                "type": "bool",
+                "optional": true
+              },
+              "master_id": {
+                "type": "string",
+                "computed": true
+              },
+              "member_status": {
+                "type": "string",
                 "computed": true
               }
             }
@@ -35077,6 +37021,10 @@
                 "type": "bool",
                 "optional": true
               },
+              "hibernation": {
+                "type": "bool",
+                "optional": true
+              },
               "host_id": {
                 "type": "string",
                 "optional": true,
@@ -35507,7 +37455,8 @@
               },
               "expiration_date": {
                 "type": "string",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "expired": {
                 "type": "string",
@@ -35550,6 +37499,10 @@
                 "computed": true
               },
               "association_name": {
+                "type": "string",
+                "optional": true
+              },
+              "automation_target_parameter_name": {
                 "type": "string",
                 "optional": true
               },
@@ -35715,6 +37668,31 @@
               "tags": {
                 "type": ["map", "string"],
                 "optional": true
+              },
+              "target_type": {
+                "type": "string",
+                "optional": true
+              }
+            },
+            "block_types": {
+              "attachments_source": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "key": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "values": {
+                      "type": ["list", "string"],
+                      "required": true
+                    }
+                  }
+                }
               }
             }
           }
@@ -35730,6 +37708,10 @@
               "cutoff": {
                 "type": "number",
                 "required": true
+              },
+              "description": {
+                "type": "string",
+                "optional": true
               },
               "duration": {
                 "type": "number",
@@ -36394,6 +38376,10 @@
                 "type": "string",
                 "computed": true
               },
+              "cloudwatch_log_group_arn": {
+                "type": "string",
+                "optional": true
+              },
               "gateway_id": {
                 "type": "string",
                 "computed": true
@@ -36860,6 +38846,15 @@
               "force_destroy": {
                 "type": "bool",
                 "optional": true
+              },
+              "host_key": {
+                "type": "string",
+                "optional": true,
+                "sensitive": true
+              },
+              "host_key_fingerprint": {
+                "type": "string",
+                "computed": true
               },
               "id": {
                 "type": "string",
@@ -39410,6 +41405,102 @@
             }
           }
         },
+        "aws_workspaces_directory": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "directory_id": {
+                "type": "string",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "subnet_ids": {
+                "type": ["set", "string"],
+                "optional": true,
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "self_service_permissions": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "change_compute_type": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "increase_volume_size": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "rebuild_workspace": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "restart_workspace": {
+                      "type": "bool",
+                      "optional": true
+                    },
+                    "switch_running_mode": {
+                      "type": "bool",
+                      "optional": true
+                    }
+                  }
+                },
+                "max_items": 1
+              }
+            }
+          }
+        },
+        "aws_workspaces_ip_group": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "rules": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "source": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "aws_xray_sampling_rule": {
           "version": 0,
           "block": {
@@ -39621,6 +41712,10 @@
               },
               "dns_name": {
                 "type": "string",
+                "computed": true
+              },
+              "drop_invalid_header_fields": {
+                "type": "bool",
                 "computed": true
               },
               "enable_deletion_protection": {
@@ -40061,12 +42156,33 @@
           "version": 0,
           "block": {
             "attributes": {
+              "created_date": {
+                "type": "string",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "computed": true
+              },
+              "enabled": {
+                "type": "bool",
+                "computed": true
+              },
               "id": {
                 "type": "string",
                 "required": true
               },
+              "last_updated_date": {
+                "type": "string",
+                "computed": true
+              },
               "name": {
                 "type": "string",
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true,
                 "computed": true
               },
               "value": {
@@ -40109,17 +42225,58 @@
           "version": 0,
           "block": {
             "attributes": {
+              "api_key_source": {
+                "type": "string",
+                "computed": true
+              },
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "binary_media_types": {
+                "type": ["list", "string"],
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "computed": true
+              },
+              "endpoint_configuration": {
+                "type": ["list", ["object", {
+                      "types": ["list", "string"],
+                      "vpc_endpoint_ids": ["list", "string"]
+                    }
+                  ]],
+                "computed": true
+              },
+              "execution_arn": {
+                "type": "string",
+                "computed": true
+              },
               "id": {
                 "type": "string",
                 "optional": true,
+                "computed": true
+              },
+              "minimum_compression_size": {
+                "type": "number",
                 "computed": true
               },
               "name": {
                 "type": "string",
                 "required": true
               },
+              "policy": {
+                "type": "string",
+                "computed": true
+              },
               "root_resource_id": {
                 "type": "string",
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true,
                 "computed": true
               }
             }
@@ -40129,6 +42286,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "description": {
+                "type": "string",
+                "computed": true
+              },
               "id": {
                 "type": "string",
                 "computed": true
@@ -40136,6 +42297,23 @@
               "name": {
                 "type": "string",
                 "required": true
+              },
+              "status": {
+                "type": "string",
+                "computed": true
+              },
+              "status_message": {
+                "type": "string",
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true,
+                "computed": true
+              },
+              "target_arns": {
+                "type": ["set", "string"],
+                "computed": true
               }
             }
           }
@@ -40670,9 +42848,22 @@
                 "optional": true,
                 "computed": true
               },
+              "kms_key_id": {
+                "type": "string",
+                "computed": true
+              },
               "name": {
                 "type": "string",
                 "required": true
+              },
+              "retention_in_days": {
+                "type": "number",
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true,
+                "computed": true
               }
             }
           }
@@ -40940,7 +43131,7 @@
           }
         },
         "aws_db_instance": {
-          "version": 0,
+          "version": 1,
           "block": {
             "attributes": {
               "address": {
@@ -41212,6 +43403,88 @@
             }
           }
         },
+        "aws_directory_service_directory": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "access_url": {
+                "type": "string",
+                "computed": true
+              },
+              "alias": {
+                "type": "string",
+                "computed": true
+              },
+              "connect_settings": {
+                "type": ["list", ["object", {
+                      "customer_dns_ips": ["set", "string"],
+                      "customer_username": "string",
+                      "subnet_ids": ["set", "string"],
+                      "vpc_id": "string"
+                    }
+                  ]],
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "computed": true
+              },
+              "directory_id": {
+                "type": "string",
+                "required": true
+              },
+              "dns_ip_addresses": {
+                "type": ["set", "string"],
+                "computed": true
+              },
+              "edition": {
+                "type": "string",
+                "computed": true
+              },
+              "enable_sso": {
+                "type": "bool",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "computed": true
+              },
+              "security_group_id": {
+                "type": "string",
+                "computed": true
+              },
+              "short_name": {
+                "type": "string",
+                "computed": true
+              },
+              "size": {
+                "type": "string",
+                "computed": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true
+              },
+              "type": {
+                "type": "string",
+                "computed": true
+              },
+              "vpc_settings": {
+                "type": ["list", ["object", {
+                      "subnet_ids": ["set", "string"],
+                      "vpc_id": "string"
+                    }
+                  ]],
+                "computed": true
+              }
+            }
+          }
+        },
         "aws_dx_gateway": {
           "version": 0,
           "block": {
@@ -41348,6 +43621,10 @@
                   "attributes": {
                     "enabled": {
                       "type": "bool",
+                      "computed": true
+                    },
+                    "kms_key_arn": {
+                      "type": "string",
                       "computed": true
                     }
                   }
@@ -41573,6 +43850,84 @@
               "volume_type": {
                 "type": "string",
                 "computed": true
+              }
+            },
+            "block_types": {
+              "filter": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "name": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "values": {
+                      "type": ["list", "string"],
+                      "required": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "aws_ec2_instance_type_offering": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "instance_type": {
+                "type": "string",
+                "computed": true
+              },
+              "location_type": {
+                "type": "string",
+                "optional": true
+              },
+              "preferred_instance_types": {
+                "type": ["list", "string"],
+                "optional": true
+              }
+            },
+            "block_types": {
+              "filter": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "name": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "values": {
+                      "type": ["list", "string"],
+                      "required": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "aws_ec2_instance_type_offerings": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "instance_types": {
+                "type": ["set", "string"],
+                "computed": true
+              },
+              "location_type": {
+                "type": "string",
+                "optional": true
               }
             },
             "block_types": {
@@ -42105,13 +44460,28 @@
                 "type": "string",
                 "computed": true
               },
+              "lifecycle_policy": {
+                "type": ["list", ["object", {
+                      "transition_to_ia": "string"
+                    }
+                  ]],
+                "computed": true
+              },
               "performance_mode": {
                 "type": "string",
+                "computed": true
+              },
+              "provisioned_throughput_in_mibps": {
+                "type": "number",
                 "computed": true
               },
               "tags": {
                 "type": ["map", "string"],
                 "optional": true,
+                "computed": true
+              },
+              "throughput_mode": {
+                "type": "string",
                 "computed": true
               }
             }
@@ -42308,6 +44678,7 @@
                       "cluster_security_group_id": "string",
                       "endpoint_private_access": "bool",
                       "endpoint_public_access": "bool",
+                      "public_access_cidrs": ["set", "string"],
                       "security_group_ids": ["set", "string"],
                       "subnet_ids": ["set", "string"],
                       "vpc_id": "string"
@@ -42726,6 +45097,10 @@
                       "interval": "number"
                     }
                   ]],
+                "computed": true
+              },
+              "arn": {
+                "type": "string",
                 "computed": true
               },
               "availability_zones": {
@@ -43261,6 +45636,11 @@
                 "type": "string",
                 "optional": true
               },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true,
+                "computed": true
+              },
               "unique_id": {
                 "type": "string",
                 "computed": true
@@ -43772,6 +46152,7 @@
               },
               "tags": {
                 "type": ["map", "string"],
+                "optional": true,
                 "computed": true
               }
             }
@@ -43847,6 +46228,10 @@
                 "computed": true
               },
               "creation_date": {
+                "type": "string",
+                "computed": true
+              },
+              "customer_master_key_spec": {
                 "type": "string",
                 "computed": true
               },
@@ -43978,6 +46363,42 @@
                   }
                 },
                 "min_items": 1
+              }
+            }
+          }
+        },
+        "aws_lambda_alias": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "computed": true
+              },
+              "function_name": {
+                "type": "string",
+                "required": true
+              },
+              "function_version": {
+                "type": "string",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "invoke_arn": {
+                "type": "string",
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
               }
             }
           }
@@ -44194,6 +46615,10 @@
           "version": 0,
           "block": {
             "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
               "associate_public_ip_address": {
                 "type": "bool",
                 "computed": true
@@ -44496,6 +46921,10 @@
               },
               "dns_name": {
                 "type": "string",
+                "computed": true
+              },
+              "drop_invalid_header_fields": {
+                "type": "bool",
                 "computed": true
               },
               "enable_deletion_protection": {
@@ -45197,7 +47626,8 @@
                       "arn": "string",
                       "email": "string",
                       "id": "string",
-                      "name": "string"
+                      "name": "string",
+                      "status": "string"
                     }
                   ]],
                 "computed": true
@@ -45240,7 +47670,8 @@
                       "arn": "string",
                       "email": "string",
                       "id": "string",
-                      "name": "string"
+                      "name": "string",
+                      "status": "string"
                     }
                   ]],
                 "computed": true
@@ -45258,6 +47689,31 @@
                     }
                   ]],
                 "computed": true
+              }
+            }
+          }
+        },
+        "aws_organizations_organizational_units": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "children": {
+                "type": ["list", ["object", {
+                      "arn": "string",
+                      "id": "string",
+                      "name": "string"
+                    }
+                  ]],
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "parent_id": {
+                "type": "string",
+                "required": true
               }
             }
           }
@@ -45395,6 +47851,7 @@
               },
               "tags": {
                 "type": ["map", "string"],
+                "optional": true,
                 "computed": true
               }
             },
@@ -45954,12 +48411,18 @@
             "attributes": {
               "associations": {
                 "type": ["list", ["object", {
+                      "gateway_id": "string",
                       "main": "bool",
                       "route_table_association_id": "string",
                       "route_table_id": "string",
                       "subnet_id": "string"
                     }
                   ]],
+                "computed": true
+              },
+              "gateway_id": {
+                "type": "string",
+                "optional": true,
                 "computed": true
               },
               "id": {
@@ -46534,6 +48997,68 @@
             }
           }
         },
+        "aws_sfn_activity": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "creation_date": {
+                "type": "string",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              }
+            }
+          }
+        },
+        "aws_sfn_state_machine": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "arn": {
+                "type": "string",
+                "computed": true
+              },
+              "creation_date": {
+                "type": "string",
+                "computed": true
+              },
+              "definition": {
+                "type": "string",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "role_arn": {
+                "type": "string",
+                "computed": true
+              },
+              "status": {
+                "type": "string",
+                "computed": true
+              }
+            }
+          }
+        },
         "aws_sns_topic": {
           "version": 0,
           "block": {
@@ -46570,6 +49095,11 @@
               "name": {
                 "type": "string",
                 "required": true
+              },
+              "tags": {
+                "type": ["map", "string"],
+                "optional": true,
+                "computed": true
               },
               "url": {
                 "type": "string",
@@ -46647,6 +49177,42 @@
               "with_decryption": {
                 "type": "bool",
                 "optional": true
+              }
+            }
+          }
+        },
+        "aws_ssm_patch_baseline": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "default_baseline": {
+                "type": "bool",
+                "optional": true
+              },
+              "description": {
+                "type": "string",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "computed": true
+              },
+              "name_prefix": {
+                "type": "string",
+                "optional": true
+              },
+              "operating_system": {
+                "type": "string",
+                "optional": true
+              },
+              "owner": {
+                "type": "string",
+                "required": true
               }
             }
           }

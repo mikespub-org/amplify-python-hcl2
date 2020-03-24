@@ -1,2 +1,2 @@
-Terraform v0.12.19
-+ provider.google v2.18.1
+Terraform v0.12.24
++ provider.google v3.14.0

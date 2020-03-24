@@ -1,2 +1,2 @@
-Terraform v0.12.19
-+ provider.azurerm v1.36.1
+Terraform v0.12.24
++ provider.azurerm v2.2.0
