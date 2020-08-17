@@ -1,2 +1,2 @@
-Terraform v0.12.24
-+ provider.azurerm v2.2.0
+Terraform v0.13.0
++ provider registry.terraform.io/hashicorp/azurerm v2.23.0

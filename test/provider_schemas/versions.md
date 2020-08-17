@@ -1,5 +1,5 @@
-Terraform v0.12.24
-+ provider.aws v2.54.0
-+ provider.azurerm v2.2.0
-+ provider.google v3.14.0
-+ provider.local v1.4.0
+Terraform v0.13.0
++ provider registry.terraform.io/hashicorp/aws v3.2.0
++ provider registry.terraform.io/hashicorp/azurerm v2.23.0
++ provider registry.terraform.io/hashicorp/google v3.34.0
++ provider registry.terraform.io/hashicorp/local v1.4.0

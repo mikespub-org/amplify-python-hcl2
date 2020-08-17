@@ -1,10 +1,12 @@
 {
   "format_version": "0.1",
   "provider_schemas": {
-    "local": {
+    "registry.terraform.io/hashicorp/local": {
       "provider": {
         "version": 0,
-        "block": {}
+        "block": {
+          "description_kind": "plain"
+        }
       },
       "resource_schemas": {
         "local_file": {
@@ -13,38 +15,46 @@
             "attributes": {
               "content": {
                 "type": "string",
+                "description_kind": "plain",
                 "optional": true
               },
               "content_base64": {
                 "type": "string",
+                "description_kind": "plain",
                 "optional": true
               },
               "directory_permission": {
                 "type": "string",
                 "description": "Permissions to set for directories created",
+                "description_kind": "plain",
                 "optional": true
               },
               "file_permission": {
                 "type": "string",
                 "description": "Permissions to set for the output file",
+                "description_kind": "plain",
                 "optional": true
               },
               "filename": {
                 "type": "string",
                 "description": "Path to the output file",
+                "description_kind": "plain",
                 "required": true
               },
               "id": {
                 "type": "string",
+                "description_kind": "plain",
                 "optional": true,
                 "computed": true
               },
               "sensitive_content": {
                 "type": "string",
+                "description_kind": "plain",
                 "optional": true,
                 "sensitive": true
               }
-            }
+            },
+            "description_kind": "plain"
           }
         }
       },
@@ -55,23 +65,28 @@
             "attributes": {
               "content": {
                 "type": "string",
+                "description_kind": "plain",
                 "computed": true
               },
               "content_base64": {
                 "type": "string",
+                "description_kind": "plain",
                 "computed": true
               },
               "filename": {
                 "type": "string",
                 "description": "Path to the output file",
+                "description_kind": "plain",
                 "required": true
               },
               "id": {
                 "type": "string",
+                "description_kind": "plain",
                 "optional": true,
                 "computed": true
               }
-            }
+            },
+            "description_kind": "plain"
           }
         }
       }

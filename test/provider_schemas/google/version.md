@@ -1,2 +1,2 @@
-Terraform v0.12.24
-+ provider.google v3.14.0
+Terraform v0.13.0
++ provider registry.terraform.io/hashicorp/google v3.34.0
