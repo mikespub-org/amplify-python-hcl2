@@ -1,2 +1,2 @@
-Terraform v0.13.0
+Terraform v0.13.4
 + provider registry.terraform.io/hashicorp/aws v3.2.0

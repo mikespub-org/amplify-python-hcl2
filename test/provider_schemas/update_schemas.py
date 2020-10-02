@@ -16,7 +16,7 @@ def run_cmd(*args):
     return output.decode("utf-8")
 
 
-def update_provider(provider, upgrade=False):
+def update_provider(provider, upgrade=False, schema=False):
     print("Provider:", provider)
     cwd = os.getcwd()
     os.chdir(provider)
@@ -29,15 +29,16 @@ def update_provider(provider, upgrade=False):
     print("Version:", output)
     with open("version.md", "w") as f:
         f.write(output)
-    output = run_cmd(TF_CMD, "providers", "schema", "-json")
-    print("Schema:", len(output))
-    schema = json.loads(output)
-    with open("schema.json", "w") as f:
-        json.dump(schema, f, indent=2)
+    if schema:
+        output = run_cmd(TF_CMD, "providers", "schema", "-json")
+        print("Schema:", len(output))
+        schema = json.loads(output)
+        with open("schema.json", "w") as f:
+            json.dump(schema, f, indent=2)
     os.chdir(cwd)
 
 
-def update_all(upgrade=False):
+def update_all(upgrade=False, schema=False):
     if upgrade:
         output = run_cmd(TF_CMD, "init", "-upgrade")
     else:
@@ -51,11 +52,11 @@ def update_all(upgrade=False):
             continue
         if provider.startswith("."):
             continue
-        update_provider(provider, upgrade)
+        update_provider(provider, upgrade, schema)
 
 
 if __name__ == "__main__":
-    print("%s [1]" % os.path.basename(sys.argv[0]))
+    print("%s [1 [2]]" % os.path.basename(sys.argv[0]))
     if len(sys.argv) > 1:
         update_all(True)
     else:
