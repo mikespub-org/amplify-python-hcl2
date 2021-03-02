@@ -5,7 +5,7 @@ import subprocess
 import json
 
 
-TF_CMD = "C:\\HashiCorp\\Terraform\\terraform.exe"
+TF_CMD = "terraform.exe"
 TIMEOUT = 3 * 60
 
 
@@ -58,6 +58,6 @@ def update_all(upgrade=False, schema=False):
 if __name__ == "__main__":
     print("%s [1 [2]]" % os.path.basename(sys.argv[0]))
     if len(sys.argv) > 1:
-        update_all(True)
+        update_all(*sys.argv[1:])
     else:
         update_all()
