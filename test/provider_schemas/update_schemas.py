@@ -5,7 +5,8 @@ import subprocess
 import json
 
 
-TF_CMD = "terraform.exe"
+# TF_CMD = "terraform.exe"
+TF_CMD = "terraform"
 TIMEOUT = 3 * 60
 
 
