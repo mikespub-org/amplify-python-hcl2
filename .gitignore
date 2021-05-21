@@ -122,3 +122,9 @@ node_modules/
 lark_parser.py
 # Skip terraform lock for provider tests
 .terraform.lock.hcl
+
+# Yarn files
+.yarn/
+.yarnrc
+yarn.lock
+
