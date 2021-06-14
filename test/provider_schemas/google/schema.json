@@ -3718,7 +3718,7 @@
               },
               "service": {
                 "type": "string",
-                "description": "AppEngine service resource",
+                "description": "AppEngine service resource. Can contain numbers, letters, and hyphens.",
                 "description_kind": "plain",
                 "required": true
               },
@@ -12685,7 +12685,7 @@
               },
               "purpose": {
                 "type": "string",
-                "description": "The purpose of this resource. Possible values include:\n\n* GCE_ENDPOINT for addresses that are used by VM instances, alias IP ranges, internal load balancers, and similar resources.\n\n* SHARED_LOADBALANCER_VIP for an address that can be used by multiple internal load balancers.\n\n* VPC_PEERING for addresses that are reserved for VPC peer networks.",
+                "description": "The purpose of this resource, which can be one of the following values:\n\n* GCE_ENDPOINT for addresses that are used by VM instances, alias IP\n  ranges, internal load balancers, and similar resources.\n\n* SHARED_LOADBALANCER_VIP for an address that can be used by multiple\n  internal load balancers.\n\n* VPC_PEERING for addresses that are reserved for VPC peer networks.\n\n* IPSEC_INTERCONNECT (Beta only) for addresses created from a private IP range\n  that are reserved for a VLAN attachment in an IPsec-encrypted Cloud\n  Interconnect configuration. These addresses are regional resources.\n\nThis should only be set when using an Internal address.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -12903,6 +12903,12 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "predictive_method": {
+                            "type": "string",
+                            "description": "Indicates whether predictive autoscaling based on CPU metric is enabled. Valid values are:\n\n- NONE (default). No predictive method is used. The autoscaler scales the group to meet current demand based on real-time metrics.\n\n- OPTIMIZE_AVAILABILITY. Predictive autoscaling improves availability by monitoring daily and weekly load patterns and scaling out ahead of anticipated demand.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
                           "target": {
                             "type": "number",
                             "description": "The target CPU utilization that the autoscaler should maintain.\nMust be a float value in the range (0, 1]. If not specified, the\ndefault is 0.6.\n\nIf the CPU level is below the target utilization, the autoscaler\nscales down the number of instances until it reaches the minimum\nnumber of instances you specified or until the average CPU of\nyour instances reaches the target utilization.\n\nIf the average CPU is above the target utilization, the autoscaler\nscales up until it reaches the maximum number of instances you\nspecified or until the average utilization reaches the target\nutilization.",
@@ -12997,6 +13003,56 @@
                         "description_kind": "plain"
                       },
                       "max_items": 1
+                    },
+                    "scaling_schedules": {
+                      "nesting_mode": "set",
+                      "block": {
+                        "attributes": {
+                          "description": {
+                            "type": "string",
+                            "description": "A description of a scaling schedule.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "disabled": {
+                            "type": "bool",
+                            "description": "A boolean value that specifies if a scaling schedule can influence autoscaler recommendations. If set to true, then a scaling schedule has no effect.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "duration_sec": {
+                            "type": "number",
+                            "description": "The duration of time intervals (in seconds) for which this scaling schedule will be running. The minimum allowed value is 300.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "min_required_replicas": {
+                            "type": "number",
+                            "description": "Minimum number of VM instances that autoscaler will recommend in time intervals starting according to schedule.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "schedule": {
+                            "type": "string",
+                            "description": "The start timestamps of time intervals when this scaling schedule should provide a scaling signal. This field uses the extended cron format (with an optional year field).",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "time_zone": {
+                            "type": "string",
+                            "description": "The time zone to be used when interpreting the schedule. The value of this field must be a time zone name from the tz database: http://en.wikipedia.org/wiki/Tz_database.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "Scaling schedules defined for an autoscaler. Multiple schedules can be set on an autoscaler and they can overlap.",
+                        "description_kind": "plain"
+                      }
                     }
                   },
                   "description": "The configuration parameters for the autoscaling algorithm. You can\ndefine one or more of the policies for an autoscaler: cpuUtilization,\ncustomMetricUtilizations, and loadBalancingUtilization.\n\nIf none of these are specified, the default will be to autoscale based\non cpuUtilization to 0.6 or 60%.",
@@ -13886,6 +13942,12 @@
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
+              },
+              "provisioned_iops": {
+                "type": "number",
+                "description": "Indicates how many IOPS must be provisioned for the disk.",
+                "description_kind": "plain",
+                "optional": true
               },
               "self_link": {
                 "type": "string",
@@ -15214,21 +15276,6 @@
                 "type": "string",
                 "description_kind": "plain",
                 "computed": true
-              },
-              "vpn_interfaces": {
-                "type": [
-                  "list",
-                  [
-                    "object",
-                    {
-                      "id": "number",
-                      "ip_address": "string"
-                    }
-                  ]
-                ],
-                "description": "A list of interfaces on this VPN gateway.",
-                "description_kind": "plain",
-                "computed": true
               }
             },
             "block_types": {
@@ -15247,6 +15294,27 @@
                       "optional": true
                     }
                   },
+                  "description_kind": "plain"
+                }
+              },
+              "vpn_interfaces": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "id": {
+                      "type": "number",
+                      "description": "The numeric ID of this VPN gateway interface.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "ip_address": {
+                      "type": "string",
+                      "description": "The external IP address for this VPN gateway interface.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "description": "A list of interfaces on this VPN gateway.",
                   "description_kind": "plain"
                 }
               }
@@ -15511,6 +15579,22 @@
                     }
                   },
                   "description": "A nested object resource",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "log_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "enable": {
+                      "type": "bool",
+                      "description": "Indicates whether or not to export logs. This is false by default,\nwhich means no health check logging will be done.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Configure logging on this health check.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -16650,6 +16734,49 @@
                 },
                 "min_items": 1
               },
+              "reservation_affinity": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "type": {
+                      "type": "string",
+                      "description": "The type of reservation from which this instance can consume resources.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "specific_reservation": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "key": {
+                            "type": "string",
+                            "description": "Corresponds to the label key of a reservation resource. To target a SPECIFIC_RESERVATION by name, specify compute.googleapis.com/reservation-name as the key and specify the name of your reservation as the only value.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "values": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Corresponds to the label values of a reservation resource.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Specifies the label selector for the reservation to use.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Specifies the reservations that this instance can consume from.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "scheduling": {
                 "nesting_mode": "list",
                 "block": {
@@ -17270,6 +17397,49 @@
                   "description_kind": "plain"
                 }
               },
+              "reservation_affinity": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "type": {
+                      "type": "string",
+                      "description": "The type of reservation from which this instance can consume resources.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "specific_reservation": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "key": {
+                            "type": "string",
+                            "description": "Corresponds to the label key of a reservation resource. To target a SPECIFIC_RESERVATION by name, specify compute.googleapis.com/reservation-name as the key and specify the name of your reservation as the only value.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "values": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Corresponds to the label values of a reservation resource.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Specifies the label selector for the reservation to use.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Specifies the reservations that this instance can consume from.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "scheduling": {
                 "nesting_mode": "list",
                 "block": {
@@ -17567,6 +17737,47 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "status": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "is_stable": "bool",
+                      "stateful": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "has_stateful_config": "bool",
+                            "per_instance_configs": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "all_effective": "bool"
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ],
+                      "version_target": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "is_reached": "bool"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "The status of this managed instance group.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "target_pools": {
                 "type": [
                   "set",
@@ -17586,6 +17797,12 @@
               "wait_for_instances": {
                 "type": "bool",
                 "description": "Whether to wait for all instances to be created/updated before returning. Note that if this is set to true and the operation does not succeed, Terraform will continue trying until it times out.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "wait_for_instances_status": {
+                "type": "string",
+                "description": "When used with wait_for_instances specifies the status to wait for. When STABLE is specified this resource will wait until the instances are stable before returning. When UPDATED is set, it will wait for the version target to be reached and any per instance configs to be effective as well as all instances to be stable before returning.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -18432,6 +18649,49 @@
                   "description": "Networks to attach to instances created from this template. This can be specified multiple times for multiple networks.",
                   "description_kind": "plain"
                 }
+              },
+              "reservation_affinity": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "type": {
+                      "type": "string",
+                      "description": "The type of reservation from which this instance can consume resources.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "specific_reservation": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "key": {
+                            "type": "string",
+                            "description": "Corresponds to the label key of a reservation resource. To target a SPECIFIC_RESERVATION by name, specify compute.googleapis.com/reservation-name as the key and specify the name of your reservation as the only value.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "values": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Corresponds to the label values of a reservation resource.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Specifies the label selector for the reservation to use.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Specifies the reservations that this instance can consume from.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
               },
               "scheduling": {
                 "nesting_mode": "list",
@@ -20131,6 +20391,12 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "predictive_method": {
+                            "type": "string",
+                            "description": "Indicates whether predictive autoscaling based on CPU metric is enabled. Valid values are:\n\n- NONE (default). No predictive method is used. The autoscaler scales the group to meet current demand based on real-time metrics.\n\n- OPTIMIZE_AVAILABILITY. Predictive autoscaling improves availability by monitoring daily and weekly load patterns and scaling out ahead of anticipated demand.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
                           "target": {
                             "type": "number",
                             "description": "The target CPU utilization that the autoscaler should maintain.\nMust be a float value in the range (0, 1]. If not specified, the\ndefault is 0.6.\n\nIf the CPU level is below the target utilization, the autoscaler\nscales down the number of instances until it reaches the minimum\nnumber of instances you specified or until the average CPU of\nyour instances reaches the target utilization.\n\nIf the average CPU is above the target utilization, the autoscaler\nscales up until it reaches the maximum number of instances you\nspecified or until the average utilization reaches the target\nutilization.",
@@ -20225,6 +20491,56 @@
                         "description_kind": "plain"
                       },
                       "max_items": 1
+                    },
+                    "scaling_schedules": {
+                      "nesting_mode": "set",
+                      "block": {
+                        "attributes": {
+                          "description": {
+                            "type": "string",
+                            "description": "A description of a scaling schedule.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "disabled": {
+                            "type": "bool",
+                            "description": "A boolean value that specifies if a scaling schedule can influence autoscaler recommendations. If set to true, then a scaling schedule has no effect.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "duration_sec": {
+                            "type": "number",
+                            "description": "The duration of time intervals (in seconds) for which this scaling schedule will be running. The minimum allowed value is 300.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "min_required_replicas": {
+                            "type": "number",
+                            "description": "Minimum number of VM instances that autoscaler will recommend in time intervals starting according to schedule.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "schedule": {
+                            "type": "string",
+                            "description": "The start timestamps of time intervals when this scaling schedule should provide a scaling signal. This field uses the extended cron format (with an optional year field).",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "time_zone": {
+                            "type": "string",
+                            "description": "The time zone to be used when interpreting the schedule. The value of this field must be a time zone name from the tz database: http://en.wikipedia.org/wiki/Tz_database.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "Scaling schedules defined for an autoscaler. Multiple schedules can be set on an autoscaler and they can overlap.",
+                        "description_kind": "plain"
+                      }
                     }
                   },
                   "description": "The configuration parameters for the autoscaling algorithm. You can\ndefine one or more of the policies for an autoscaler: cpuUtilization,\ncustomMetricUtilizations, and loadBalancingUtilization.\n\nIf none of these are specified, the default will be to autoscale based\non cpuUtilization to 0.6 or 60%.",
@@ -21542,6 +21858,22 @@
                 },
                 "max_items": 1
               },
+              "log_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "enable": {
+                      "type": "bool",
+                      "description": "Indicates whether or not to export logs. This is false by default,\nwhich means no health check logging will be done.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Configure logging on this health check.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "ssl_health_check": {
                 "nesting_mode": "list",
                 "block": {
@@ -21681,7 +22013,6 @@
                 "type": "string",
                 "description": "The shape to which the group converges either proactively or on resize events (depending on the value set in updatePolicy.instanceRedistributionType).",
                 "description_kind": "plain",
-                "deprecated": true,
                 "optional": true,
                 "computed": true
               },
@@ -21739,6 +22070,47 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "status": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "is_stable": "bool",
+                      "stateful": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "has_stateful_config": "bool",
+                            "per_instance_configs": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "all_effective": "bool"
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ],
+                      "version_target": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "is_reached": "bool"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "The status of this managed instance group.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "target_pools": {
                 "type": [
                   "set",
@@ -21758,6 +22130,12 @@
               "wait_for_instances": {
                 "type": "bool",
                 "description": "Whether to wait for all instances to be created/updated before returning. Note that if this is set to true and the operation does not succeed, Terraform will continue trying until it times out.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "wait_for_instances_status": {
+                "type": "string",
+                "description": "When used with wait_for_instances specifies the status to wait for. When STABLE is specified this resource will wait until the instances are stable before returning. When UPDATED is set, it will wait for the version target to be reached and any per instance configs to be effective as well as all instances to be stable before returning.",
                 "description_kind": "plain",
                 "optional": true
               }
@@ -24145,6 +24523,12 @@
           "version": 0,
           "block": {
             "attributes": {
+              "description": {
+                "type": "string",
+                "description": "An optional description of this resource. Provide this property when you create the resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "id": {
                 "type": "string",
                 "description_kind": "plain",
@@ -24201,6 +24585,68 @@
                     }
                   },
                   "description": "Resource policy for instances used for placement configuration.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "instance_schedule_policy": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "expiration_time": {
+                      "type": "string",
+                      "description": "The expiration time of the schedule. The timestamp is an RFC3339 string.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "start_time": {
+                      "type": "string",
+                      "description": "The start time of the schedule. The timestamp is an RFC3339 string.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "time_zone": {
+                      "type": "string",
+                      "description": "Specifies the time zone to be used in interpreting the schedule. The value of this field must be a time zone name\nfrom the tz database: http://en.wikipedia.org/wiki/Tz_database.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "vm_start_schedule": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "schedule": {
+                            "type": "string",
+                            "description": "Specifies the frequency for the operation, using the unix-cron format.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Specifies the schedule for starting instances.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "vm_stop_schedule": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "schedule": {
+                            "type": "string",
+                            "description": "Specifies the frequency for the operation, using the unix-cron format.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Specifies the schedule for stopping instances.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Resource policy for scheduling instance operations.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -37716,6 +38162,121 @@
                   "description": "The collection of entity entries associated with the entity type.",
                   "description_kind": "plain"
                 }
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_dialogflow_fulfillment": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "display_name": {
+                "type": "string",
+                "description": "The human-readable name of the fulfillment, unique within the agent.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "enabled": {
+                "type": "bool",
+                "description": "Whether fulfillment is enabled.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The unique identifier of the fulfillment. \nFormat: projects/<Project ID>/agent/fulfillment - projects/<Project ID>/locations/<Location ID>/agent/fulfillment",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "block_types": {
+              "features": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "type": {
+                      "type": "string",
+                      "description": "The type of the feature that enabled for fulfillment.\n* SMALLTALK: Fulfillment is enabled for SmallTalk. Possible values: [\"SMALLTALK\"]",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "The field defines whether the fulfillment is enabled for certain features.",
+                  "description_kind": "plain"
+                }
+              },
+              "generic_web_service": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "password": {
+                      "type": "string",
+                      "description": "The password for HTTP Basic authentication.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "request_headers": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "The HTTP request headers to send together with fulfillment requests.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "uri": {
+                      "type": "string",
+                      "description": "The fulfillment URI for receiving POST requests. It must use https protocol.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "username": {
+                      "type": "string",
+                      "description": "The user name for HTTP Basic authentication.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Represents configuration for a generic web service. Dialogflow supports two mechanisms for authentications: - Basic authentication with username and password. - Authentication with additional authentication headers.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
               },
               "timeouts": {
                 "nesting_mode": "single",
@@ -53998,6 +54559,12 @@
                       "description_kind": "plain",
                       "optional": true
                     },
+                    "disk_autoresize_limit": {
+                      "type": "number",
+                      "description": "The maximum size, in GB, to which storage capacity can be automatically increased. The default value is 0, which specifies that there is no limit.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "disk_size": {
                       "type": "number",
                       "description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased.",
@@ -56714,7 +57281,7 @@
               },
               "max_throughput": {
                 "type": "number",
-                "description": "Maximum throughput of the connector in Mbps, must be greater than 'min_throughput'. Default is 1000.",
+                "description": "Maximum throughput of the connector in Mbps, must be greater than 'min_throughput'. Default is 300.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -58755,6 +59322,20 @@
                 "optional": true,
                 "computed": true
               },
+              "log_config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "enable": "bool"
+                    }
+                  ]
+                ],
+                "description": "Configure logging on this health check.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "name": {
                 "type": "string",
                 "description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
@@ -59201,6 +59782,33 @@
                 "description": "The ID of the project in which the resource belongs. If self_link is provided, this value is ignored. If neither self_link nor project are provided, the provider project is used.",
                 "description_kind": "plain",
                 "optional": true
+              },
+              "reservation_affinity": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "specific_reservation": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "key": "string",
+                            "values": [
+                              "list",
+                              "string"
+                            ]
+                          }
+                        ]
+                      ],
+                      "type": "string"
+                    }
+                  ]
+                ],
+                "description": "Specifies the reservations that this instance can consume from.",
+                "description_kind": "plain",
+                "computed": true
               },
               "resource_policies": {
                 "type": [
@@ -59656,6 +60264,33 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "reservation_affinity": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "specific_reservation": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "key": "string",
+                            "values": [
+                              "list",
+                              "string"
+                            ]
+                          }
+                        ]
+                      ],
+                      "type": "string"
+                    }
+                  ]
+                ],
+                "description": "Specifies the reservations that this instance can consume from.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "scheduling": {
                 "type": [
                   "list",
@@ -60105,6 +60740,12 @@
           "version": 0,
           "block": {
             "attributes": {
+              "description": {
+                "type": "string",
+                "description": "An optional description of this resource. Provide this property when you create the resource.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "group_placement_policy": {
                 "type": [
                   "list",
@@ -60125,6 +60766,40 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "instance_schedule_policy": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "expiration_time": "string",
+                      "start_time": "string",
+                      "time_zone": "string",
+                      "vm_start_schedule": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "schedule": "string"
+                          }
+                        ]
+                      ],
+                      "vm_stop_schedule": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "schedule": "string"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "Resource policy for scheduling instance operations.",
+                "description_kind": "plain",
                 "computed": true
               },
               "name": {
@@ -63964,6 +64639,7 @@
                         ]
                       ],
                       "disk_autoresize": "bool",
+                      "disk_autoresize_limit": "number",
                       "disk_size": "number",
                       "disk_type": "string",
                       "insights_config": [
