@@ -422,10 +422,20 @@
           "version": 0,
           "block": {
             "attributes": {
+              "client_certificate_enabled": {
+                "type": "bool",
+                "description_kind": "plain",
+                "optional": true
+              },
               "developer_portal_url": {
                 "type": "string",
                 "description_kind": "plain",
                 "computed": true
+              },
+              "gateway_disabled": {
+                "type": "bool",
+                "description_kind": "plain",
+                "optional": true
               },
               "gateway_regional_url": {
                 "type": "string",
@@ -452,6 +462,11 @@
                 "type": "string",
                 "description_kind": "plain",
                 "computed": true
+              },
+              "min_api_version": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
               },
               "name": {
                 "type": "string",
@@ -535,6 +550,14 @@
               },
               "virtual_network_type": {
                 "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "zones": {
+                "type": [
+                  "list",
+                  "string"
+                ],
                 "description_kind": "plain",
                 "optional": true
               }
@@ -4510,6 +4533,81 @@
             },
             "description_kind": "plain",
             "deprecated": true
+          }
+        },
+        "azurerm_api_management_redis_cache": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "api_management_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "cache_location": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "connection_string": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true,
+                "sensitive": true
+              },
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "redis_cache_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
           }
         },
         "azurerm_api_management_subscription": {
@@ -15713,7 +15811,7 @@
               },
               "georeplications": {
                 "type": [
-                  "set",
+                  "list",
                   [
                     "object",
                     {
@@ -15721,7 +15819,8 @@
                       "tags": [
                         "map",
                         "string"
-                      ]
+                      ],
+                      "zone_redundancy_enabled": "bool"
                     }
                   ]
                 ],
@@ -15845,6 +15944,11 @@
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
+              },
+              "zone_redundancy_enabled": {
+                "type": "bool",
+                "description_kind": "plain",
+                "optional": true
               }
             },
             "block_types": {
@@ -17023,6 +17127,27 @@
                         },
                         "description_kind": "plain"
                       }
+                    },
+                    "spatial_index": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "path": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "types": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "computed": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      }
                     }
                   },
                   "description_kind": "plain"
@@ -17511,6 +17636,27 @@
                             "type": "string",
                             "description_kind": "plain",
                             "required": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      }
+                    },
+                    "spatial_index": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "path": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "types": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "computed": true
                           }
                         },
                         "description_kind": "plain"
@@ -18245,7 +18391,7 @@
           }
         },
         "azurerm_data_factory": {
-          "version": 1,
+          "version": 2,
           "block": {
             "attributes": {
               "customer_managed_key_id": {
@@ -18322,6 +18468,29 @@
                   "description_kind": "plain"
                 },
                 "max_items": 1
+              },
+              "global_parameter": {
+                "nesting_mode": "set",
+                "block": {
+                  "attributes": {
+                    "name": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "value": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
               },
               "identity": {
                 "nesting_mode": "list",
@@ -21944,6 +22113,124 @@
             "description_kind": "plain"
           }
         },
+        "azurerm_data_factory_linked_service_odata": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "additional_properties": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true
+              },
+              "annotations": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true
+              },
+              "data_factory_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "integration_runtime_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "parameters": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_group_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "url": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "basic_authentication": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "password": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true,
+                      "sensitive": true
+                    },
+                    "username": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "azurerm_data_factory_linked_service_postgresql": {
           "version": 0,
           "block": {
@@ -23258,6 +23545,219 @@
               }
             },
             "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "azurerm_data_protection_backup_instance_postgresql": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "backup_policy_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "database_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "vault_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "azurerm_data_protection_backup_policy_postgresql": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "backup_repeating_time_intervals": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              },
+              "default_retention_duration": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "resource_group_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "vault_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "retention_rule": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "duration": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "priority": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "criteria": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "absolute_criteria": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "days_of_week": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "months_of_year": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "scheduled_backup_times": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "weeks_of_month": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -29465,6 +29965,63 @@
             "description_kind": "plain"
           }
         },
+        "azurerm_eventhub_namespace_customer_managed_key": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "eventhub_namespace_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "key_vault_key_ids": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "azurerm_eventhub_namespace_disaster_recovery_config": {
           "version": 0,
           "block": {
@@ -29544,10 +30101,20 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "bandwidth_in_gbps": {
+                "type": "number",
+                "description_kind": "plain",
+                "optional": true
+              },
               "bandwidth_in_mbps": {
                 "type": "number",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
+              },
+              "express_route_port_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
               },
               "id": {
                 "type": "string",
@@ -29568,7 +30135,7 @@
               "peering_location": {
                 "type": "string",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
               },
               "resource_group_name": {
                 "type": "string",
@@ -29584,7 +30151,7 @@
               "service_provider_name": {
                 "type": "string",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
               },
               "service_provider_provisioning_state": {
                 "type": "string",
@@ -38056,6 +38623,85 @@
             "description_kind": "plain"
           }
         },
+        "azurerm_hpc_cache_blob_nfs_target": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "access_policy_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "cache_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "namespace_path": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "resource_group_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "storage_container_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "usage_model": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "azurerm_hpc_cache_blob_target": {
           "version": 0,
           "block": {
@@ -42354,6 +43000,248 @@
                     }
                   },
                   "block_types": {
+                    "kubelet_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "allowed_unsafe_sysctls": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "container_log_max_line": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "container_log_max_size_mb": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "cpu_cfs_quota_enabled": {
+                            "type": "bool",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "cpu_cfs_quota_period": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "cpu_manager_policy": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "image_gc_high_threshold": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "image_gc_low_threshold": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "pod_max_pid": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "topology_manager_policy": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "linux_os_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "swap_file_size_mb": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "transparent_huge_page_defrag": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "transparent_huge_page_enabled": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "block_types": {
+                          "sysctl_config": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "fs_aio_max_nr": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "fs_file_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "fs_inotify_max_user_watches": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "fs_nr_open": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "kernel_threads_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_netdev_max_backlog": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_optmem_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_rmem_default": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_rmem_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_somaxconn": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_wmem_default": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_core_wmem_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_ip_local_port_range_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_ip_local_port_range_min": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_neigh_default_gc_thresh1": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_neigh_default_gc_thresh2": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_neigh_default_gc_thresh3": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_fin_timeout": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_keepalive_intvl": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_keepalive_probes": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_keepalive_time": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_max_syn_backlog": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_max_tw_buckets": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_ipv4_tcp_tw_reuse": {
+                                  "type": "bool",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_netfilter_nf_conntrack_buckets": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "net_netfilter_nf_conntrack_max": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "vm_max_map_count": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "vm_swappiness": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "vm_vfs_cache_pressure": {
+                                  "type": "number",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "upgrade_settings": {
                       "nesting_mode": "list",
                       "block": {
@@ -42864,6 +43752,248 @@
               }
             },
             "block_types": {
+              "kubelet_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "allowed_unsafe_sysctls": {
+                      "type": [
+                        "set",
+                        "string"
+                      ],
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "container_log_max_line": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "container_log_max_size_mb": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "cpu_cfs_quota_enabled": {
+                      "type": "bool",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "cpu_cfs_quota_period": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "cpu_manager_policy": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "image_gc_high_threshold": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "image_gc_low_threshold": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "pod_max_pid": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "topology_manager_policy": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "linux_os_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "swap_file_size_mb": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "transparent_huge_page_defrag": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "transparent_huge_page_enabled": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "block_types": {
+                    "sysctl_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "fs_aio_max_nr": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "fs_file_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "fs_inotify_max_user_watches": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "fs_nr_open": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "kernel_threads_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_netdev_max_backlog": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_optmem_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_rmem_default": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_rmem_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_somaxconn": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_wmem_default": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_core_wmem_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_ip_local_port_range_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_ip_local_port_range_min": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_neigh_default_gc_thresh1": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_neigh_default_gc_thresh2": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_neigh_default_gc_thresh3": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_fin_timeout": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_keepalive_intvl": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_keepalive_probes": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_keepalive_time": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_max_syn_backlog": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_max_tw_buckets": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_ipv4_tcp_tw_reuse": {
+                            "type": "bool",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_netfilter_nf_conntrack_buckets": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "net_netfilter_nf_conntrack_max": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "vm_max_map_count": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "vm_swappiness": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "vm_vfs_cache_pressure": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -43877,6 +45007,11 @@
                 "description_kind": "plain",
                 "required": true
               },
+              "data_format": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
               "database_name": {
                 "type": "string",
                 "description_kind": "plain",
@@ -43906,6 +45041,11 @@
                 "description_kind": "plain",
                 "required": true
               },
+              "mapping_rule_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
               "name": {
                 "type": "string",
                 "description_kind": "plain",
@@ -43920,6 +45060,11 @@
                 "type": "string",
                 "description_kind": "plain",
                 "required": true
+              },
+              "table_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
               }
             },
             "block_types": {
@@ -44007,6 +45152,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "availability_zone": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
                     "id": {
                       "type": "string",
                       "description_kind": "plain",
@@ -44056,7 +45207,8 @@
                     "private_ip_address_version": {
                       "type": "string",
                       "description_kind": "plain",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "public_ip_address_id": {
                       "type": "string",
@@ -44082,7 +45234,9 @@
                         "string"
                       ],
                       "description_kind": "plain",
-                      "optional": true
+                      "deprecated": true,
+                      "optional": true,
+                      "computed": true
                     }
                   },
                   "description_kind": "plain"
@@ -47816,6 +48970,138 @@
                       "optional": true
                     },
                     "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "azurerm_machine_learning_compute_cluster": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "machine_learning_workspace_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "subnet_resource_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "tags": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true
+              },
+              "vm_priority": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "vm_size": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "identity": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "principal_id": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "tenant_id": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "scale_settings": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "max_node_count": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "min_node_count": {
+                      "type": "number",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "scale_down_nodes_after_idle_duration": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
                       "type": "string",
                       "description_kind": "plain",
                       "optional": true
@@ -56502,7 +57788,9 @@
                   "string"
                 ],
                 "description_kind": "plain",
-                "optional": true
+                "deprecated": true,
+                "optional": true,
+                "computed": true
               },
               "resource_group_name": {
                 "type": "string",
@@ -56585,6 +57873,55 @@
                 "required": true
               },
               "public_ip_address_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "azurerm_nat_gateway_public_ip_prefix_association": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "nat_gateway_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "public_ip_prefix_id": {
                 "type": "string",
                 "description_kind": "plain",
                 "required": true
@@ -64342,6 +65679,15 @@
           "version": 0,
           "block": {
             "attributes": {
+              "categories": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
               "description": {
                 "type": "string",
                 "description_kind": "plain",
@@ -64832,11 +66178,6 @@
                       "optional": true
                     },
                     "read": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
-                    },
-                    "update": {
                       "type": "string",
                       "description_kind": "plain",
                       "optional": true
@@ -71982,6 +73323,116 @@
                 },
                 "max_items": 1
               },
+              "share_properties": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "cors_rule": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "allowed_headers": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "allowed_methods": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "allowed_origins": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "exposed_headers": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "max_age_in_seconds": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 5
+                    },
+                    "retention_policy": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "days": {
+                            "type": "number",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "smb": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "authentication_types": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "channel_encryption_type": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "kerberos_ticket_encryption_type": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "versions": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "static_website": {
                 "nesting_mode": "list",
                 "block": {
@@ -73937,6 +75388,30 @@
               }
             },
             "block_types": {
+              "identity": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "principal_id": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "tenant_id": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -75651,7 +77126,7 @@
           }
         },
         "azurerm_synapse_role_assignment": {
-          "version": 0,
+          "version": 1,
           "block": {
             "attributes": {
               "id": {
@@ -75670,10 +77145,15 @@
                 "description_kind": "plain",
                 "required": true
               },
+              "synapse_spark_pool_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
               "synapse_workspace_id": {
                 "type": "string",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
               }
             },
             "block_types": {
@@ -75985,6 +77465,11 @@
               },
               "customer_managed_key_versionless_id": {
                 "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "data_exfiltration_protection_enabled": {
+                "type": "bool",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -76722,6 +78207,102 @@
                 "type": "string",
                 "description_kind": "plain",
                 "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "azurerm_virtual_desktop_application": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "application_group_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "command_line_argument_policy": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "command_line_arguments": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "friendly_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "icon_index": {
+                "type": "number",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "icon_path": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "path": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "show_in_portal": {
+                "type": "bool",
+                "description_kind": "plain",
+                "optional": true
               }
             },
             "block_types": {
@@ -86346,7 +87927,7 @@
           }
         },
         "azurerm_data_factory": {
-          "version": 1,
+          "version": 2,
           "block": {
             "attributes": {
               "github_configuration": {
@@ -90416,6 +91997,48 @@
               },
               "versionless_id": {
                 "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "azurerm_key_vault_secrets": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "key_vault_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "names": {
+                "type": [
+                  "list",
+                  "string"
+                ],
                 "description_kind": "plain",
                 "computed": true
               }
@@ -98923,6 +100546,21 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "identity": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "principal_id": "string",
+                      "tenant_id": "string",
+                      "type": "string"
+                    }
+                  ]
+                ],
+                "description_kind": "plain",
                 "computed": true
               },
               "job_id": {
