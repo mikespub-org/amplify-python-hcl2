@@ -106,6 +106,11 @@
               "description_kind": "plain",
               "optional": true
             },
+            "cloud_resource_manager_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
             "cloud_run_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
@@ -315,6 +320,11 @@
               "optional": true
             },
             "notebooks_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "org_policy_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -11201,6 +11211,12 @@
                 "optional": true,
                 "computed": true
               },
+              "service_account": {
+                "type": "string",
+                "description": "The service account used for all user-controlled operations including\ntriggers.patch, triggers.run, builds.create, and builds.cancel.\n\nIf no service account is set, then the standard Cloud Build service account\n([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.\n\nFormat: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL}",
+                "description_kind": "plain",
+                "optional": true
+              },
               "substitutions": {
                 "type": [
                   "map",
@@ -12767,7 +12783,7 @@
                     },
                     "node_count": {
                       "type": "number",
-                      "description": "The number of nodes in the Kubernetes Engine cluster that will be used to run this environment.",
+                      "description": "The number of nodes in the Kubernetes Engine cluster that will be used to run this environment. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
@@ -12780,7 +12796,7 @@
                         "attributes": {
                           "disk_size_gb": {
                             "type": "number",
-                            "description": "The disk size in GB used for node VMs. Minimum size is 20GB. If unspecified, defaults to 100GB. Cannot be updated.",
+                            "description": "The disk size in GB used for node VMs. Minimum size is 20GB. If unspecified, defaults to 100GB. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -12806,7 +12822,7 @@
                           },
                           "machine_type": {
                             "type": "string",
-                            "description": "The Compute Engine machine type used for cluster instances, specified as a name or relative resource name. For example: \"projects/{project}/zones/{zone}/machineTypes/{machineType}\". Must belong to the enclosing environment's project and region/zone.",
+                            "description": "The Compute Engine machine type used for cluster instances, specified as a name or relative resource name. For example: \"projects/{project}/zones/{zone}/machineTypes/{machineType}\". Must belong to the enclosing environment's project and region/zone. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -12823,7 +12839,7 @@
                               "set",
                               "string"
                             ],
-                            "description": "The set of Google API scopes to be made available on all node VMs. Cannot be updated. If empty, defaults to [\"https://www.googleapis.com/auth/cloud-platform\"].",
+                            "description": "The set of Google API scopes to be made available on all node VMs. Cannot be updated. If empty, defaults to [\"https://www.googleapis.com/auth/cloud-platform\"]. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -12846,13 +12862,13 @@
                               "set",
                               "string"
                             ],
-                            "description": "The list of instance tags applied to all node VMs. Tags are used to identify valid sources or targets for network firewalls. Each tag within the list must comply with RFC1035. Cannot be updated.",
+                            "description": "The list of instance tags applied to all node VMs. Tags are used to identify valid sources or targets for network firewalls. Each tag within the list must comply with RFC1035. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true
                           },
                           "zone": {
                             "type": "string",
-                            "description": "The Compute Engine zone in which to deploy the VMs running the Apache Airflow software, specified as the zone name or relative resource name (e.g. \"projects/{project}/zones/{zone}\"). Must belong to the enclosing environment's project and region.",
+                            "description": "The Compute Engine zone in which to deploy the VMs running the Apache Airflow software, specified as the zone name or relative resource name (e.g. \"projects/{project}/zones/{zone}\"). Must belong to the enclosing environment's project and region. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "required": true
                           }
@@ -12875,7 +12891,7 @@
                           },
                           "enable_private_endpoint": {
                             "type": "bool",
-                            "description": "If true, access to the public endpoint of the GKE cluster is denied.",
+                            "description": "If true, access to the public endpoint of the GKE cluster is denied. If this field is set to true, ip_allocation_policy.use_ip_aliases must be set to true for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -12888,7 +12904,7 @@
                           },
                           "web_server_ipv4_cidr_block": {
                             "type": "string",
-                            "description": "The CIDR block from which IP range for web server will be reserved. Needs to be disjoint from master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block.",
+                            "description": "The CIDR block from which IP range for web server will be reserved. Needs to be disjoint from master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -12939,7 +12955,14 @@
                           },
                           "python_version": {
                             "type": "string",
-                            "description": "The major version of Python used to run the Apache Airflow scheduler, worker, and webserver processes. Can be set to '2' or '3'. If not specified, the default is '2'. Cannot be updated.",
+                            "description": "The major version of Python used to run the Apache Airflow scheduler, worker, and webserver processes. Can be set to '2' or '3'. If not specified, the default is '2'. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*. Environments in newer versions always use Python major version 3.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "scheduler_count": {
+                            "type": "number",
+                            "description": "The number of schedulers for Airflow. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-2.*.*.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -17324,7 +17347,7 @@
                   "list",
                   "string"
                 ],
-                "description": "A list of short names or self_links of resource policies to attach to the instance. Modifying this list will cause the instance to recreate. Currently a max of 1 resource policy is supported.",
+                "description": "A list of short names or self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -17548,6 +17571,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "ipv6_access_type": {
+                      "type": "string",
+                      "description": "One of EXTERNAL, INTERNAL to indicate whether the IP can be accessed from the Internet. This field is always inherited from its subnetwork.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
                     "name": {
                       "type": "string",
                       "description": "The name of the interface",
@@ -17573,6 +17602,13 @@
                       "description": "The type of vNIC to be used on this interface. Possible values:GVNIC, VIRTIO_NET",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "stack_type": {
+                      "type": "string",
+                      "description": "The stack type for this network interface to identify whether the IPv6 feature is enabled or not. If not specified, IPV4_ONLY will be used.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
                     },
                     "subnetwork": {
                       "type": "string",
@@ -17637,6 +17673,39 @@
                           }
                         },
                         "description": "An array of alias IP ranges for this network interface.",
+                        "description_kind": "plain"
+                      }
+                    },
+                    "ipv6_access_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "external_ipv6": {
+                            "type": "string",
+                            "description": "The first IPv6 address of the external IPv6 range associated with this instance, prefix length is stored in externalIpv6PrefixLength in ipv6AccessConfig. The field is output only, an IPv6 address from a subnetwork associated with the instance will be allocated dynamically.",
+                            "description_kind": "plain",
+                            "computed": true
+                          },
+                          "external_ipv6_prefix_length": {
+                            "type": "string",
+                            "description": "The prefix length of the external IPv6 range.",
+                            "description_kind": "plain",
+                            "computed": true
+                          },
+                          "network_tier": {
+                            "type": "string",
+                            "description": "The service-level to be provided for IPv6 traffic when the subnet has an external subnet. Only PREMIUM tier is valid for IPv6",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "public_ptr_domain_name": {
+                            "type": "string",
+                            "description": "The domain name to be used when creating DNSv6 records for the external IPv6 ranges.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "An array of IPv6 access configurations for this interface. Currently, only one IPv6 access config, DIRECT_IPV6, is supported. If there is no ipv6AccessConfig specified, then this instance will have no external IPv6 Internet access.",
                         "description_kind": "plain"
                       }
                     }
@@ -18032,7 +18101,7 @@
                   "list",
                   "string"
                 ],
-                "description": "A list of short names or self_links of resource policies to attach to the instance. Modifying this list will cause the instance to recreate. Currently a max of 1 resource policy is supported.",
+                "description": "A list of short names or self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -18287,6 +18356,12 @@
                       "optional": true,
                       "computed": true
                     },
+                    "ipv6_access_type": {
+                      "type": "string",
+                      "description": "One of EXTERNAL, INTERNAL to indicate whether the IP can be accessed from the Internet. This field is always inherited from its subnetwork.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
                     "name": {
                       "type": "string",
                       "description": "The name of the interface",
@@ -18314,6 +18389,13 @@
                       "optional": true,
                       "computed": true
                     },
+                    "stack_type": {
+                      "type": "string",
+                      "description": "The stack type for this network interface to identify whether the IPv6 feature is enabled or not. If not specified, IPV4_ONLY will be used.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
                     "subnetwork": {
                       "type": "string",
                       "description": "The name or self_link of the subnetwork attached to this interface.",
@@ -18327,6 +18409,42 @@
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "ipv6_access_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "external_ipv6": {
+                            "type": "string",
+                            "description": "The first IPv6 address of the external IPv6 range associated with this instance, prefix length is stored in externalIpv6PrefixLength in ipv6AccessConfig. The field is output only, an IPv6 address from a subnetwork associated with the instance will be allocated dynamically.",
+                            "description_kind": "plain",
+                            "computed": true
+                          },
+                          "external_ipv6_prefix_length": {
+                            "type": "string",
+                            "description": "The prefix length of the external IPv6 range.",
+                            "description_kind": "plain",
+                            "computed": true
+                          },
+                          "network_tier": {
+                            "type": "string",
+                            "description": "The service-level to be provided for IPv6 traffic when the subnet has an external subnet. Only PREMIUM tier is valid for IPv6",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "public_ptr_domain_name": {
+                            "type": "string",
+                            "description": "The domain name to be used when creating DNSv6 records for the external IPv6 ranges.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "An array of IPv6 access configurations for this interface. Currently, only one IPv6 access config, DIRECT_IPV6, is supported. If there is no ipv6AccessConfig specified, then this instance will have no external IPv6 Internet access.",
+                        "description_kind": "plain"
+                      }
                     }
                   },
                   "description": "The networks attached to the instance.",
@@ -19512,6 +19630,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "ipv6_access_type": {
+                      "type": "string",
+                      "description": "One of EXTERNAL, INTERNAL to indicate whether the IP can be accessed from the Internet. This field is always inherited from its subnetwork.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
                     "name": {
                       "type": "string",
                       "description": "The name of the network_interface.",
@@ -19536,6 +19660,13 @@
                       "description": "The type of vNIC to be used on this interface. Possible values:GVNIC, VIRTIO_NET",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "stack_type": {
+                      "type": "string",
+                      "description": "The stack type for this network interface to identify whether the IPv6 feature is enabled or not. If not specified, IPV4_ONLY will be used.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
                     },
                     "subnetwork": {
                       "type": "string",
@@ -19600,6 +19731,39 @@
                           }
                         },
                         "description": "An array of alias IP ranges for this network interface. Can only be specified for network interfaces on subnet-mode networks.",
+                        "description_kind": "plain"
+                      }
+                    },
+                    "ipv6_access_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "external_ipv6": {
+                            "type": "string",
+                            "description": "The first IPv6 address of the external IPv6 range associated with this instance, prefix length is stored in externalIpv6PrefixLength in ipv6AccessConfig. The field is output only, an IPv6 address from a subnetwork associated with the instance will be allocated dynamically.",
+                            "description_kind": "plain",
+                            "computed": true
+                          },
+                          "external_ipv6_prefix_length": {
+                            "type": "string",
+                            "description": "The prefix length of the external IPv6 range.",
+                            "description_kind": "plain",
+                            "computed": true
+                          },
+                          "network_tier": {
+                            "type": "string",
+                            "description": "The service-level to be provided for IPv6 traffic when the subnet has an external subnet. Only PREMIUM tier is valid for IPv6",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "public_ptr_domain_name": {
+                            "type": "string",
+                            "description": "The domain name to be used when creating DNSv6 records for the external IPv6 ranges.",
+                            "description_kind": "plain",
+                            "computed": true
+                          }
+                        },
+                        "description": "An array of IPv6 access configurations for this interface. Currently, only one IPv6 access config, DIRECT_IPV6, is supported. If there is no ipv6AccessConfig specified, then this instance will have no external IPv6 Internet access.",
                         "description_kind": "plain"
                       }
                     }
@@ -21662,7 +21826,7 @@
               },
               "session_affinity": {
                 "type": "string",
-                "description": "Type of session affinity to use. The default is NONE. Session affinity is\nnot applicable if the protocol is UDP. Possible values: [\"NONE\", \"CLIENT_IP\", \"CLIENT_IP_PORT_PROTO\", \"CLIENT_IP_PROTO\", \"GENERATED_COOKIE\", \"HEADER_FIELD\", \"HTTP_COOKIE\"]",
+                "description": "Type of session affinity to use. The default is NONE. Session affinity is\nnot applicable if the protocol is UDP. Possible values: [\"NONE\", \"CLIENT_IP\", \"CLIENT_IP_PORT_PROTO\", \"CLIENT_IP_PROTO\", \"GENERATED_COOKIE\", \"HEADER_FIELD\", \"HTTP_COOKIE\", \"CLIENT_IP_NO_DESTINATION\"]",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -27357,6 +27521,12 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "external_ipv6_prefix": {
+                "type": "string",
+                "description": "The range of external IPv6 addresses that are owned by this subnetwork.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "fingerprint": {
                 "type": "string",
                 "description": "Fingerprint of this resource. This field is used internally during updates of this resource.",
@@ -27381,6 +27551,18 @@
                 "description": "The range of internal addresses that are owned by this subnetwork.\nProvide this property when you create the subnetwork. For example,\n10.0.0.0/8 or 192.168.0.0/16. Ranges must be unique and\nnon-overlapping within a network. Only IPv4 is supported.",
                 "description_kind": "plain",
                 "required": true
+              },
+              "ipv6_access_type": {
+                "type": "string",
+                "description": "The access type of IPv6 address this subnet holds. It's immutable and can only be specified during creation\nor the first time the subnet is updated into IPV4_IPV6 dual stack. If the ipv6_type is EXTERNAL then this subnet\ncannot enable direct path. Possible values: [\"EXTERNAL\"]",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "ipv6_cidr_range": {
+                "type": "string",
+                "description": "The range of internal IPv6 addresses that are owned by this subnetwork.",
+                "description_kind": "plain",
+                "computed": true
               },
               "name": {
                 "type": "string",
@@ -27452,6 +27634,13 @@
               "self_link": {
                 "type": "string",
                 "description_kind": "plain",
+                "computed": true
+              },
+              "stack_type": {
+                "type": "string",
+                "description": "The stack type for this subnet to identify whether the IPv6 feature is enabled or not.\nIf not specified IPV4_ONLY will be used. Possible values: [\"IPV4_ONLY\", \"IPV4_IPV6\"]",
+                "description_kind": "plain",
+                "optional": true,
                 "computed": true
               }
             },
@@ -31717,6 +31906,25 @@
                 },
                 "max_items": 1
               },
+              "logging_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "enable_components": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "GKE components exposing logs. Valid values include SYSTEM_COMPONENTS and WORKLOADS.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Logging configuration for the cluster.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "maintenance_policy": {
                 "nesting_mode": "list",
                 "block": {
@@ -31884,6 +32092,25 @@
                     }
                   },
                   "description": "The desired configuration options for master authorized networks. Omit the nested cidr_blocks attribute to disallow external access (except the cluster node IPs, which GKE automatically whitelists).",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "monitoring_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "enable_components": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "GKE components exposing metrics. Valid values include SYSTEM_COMPONENTS.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Monitoring configuration for the cluster.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -32068,11 +32295,19 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "mode": {
+                            "type": "string",
+                            "description": "Mode is the configuration for how to expose metadata to workloads running on the node.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
                           "node_metadata": {
                             "type": "string",
                             "description": "NodeMetadata is the configuration for how to expose metadata to the workloads running on the node.",
                             "description_kind": "plain",
-                            "required": true
+                            "deprecated": true,
+                            "optional": true,
+                            "computed": true
                           }
                         },
                         "description": "The workload metadata configuration for this node.",
@@ -32355,11 +32590,19 @@
                             "nesting_mode": "list",
                             "block": {
                               "attributes": {
+                                "mode": {
+                                  "type": "string",
+                                  "description": "Mode is the configuration for how to expose metadata to workloads running on the node.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
                                 "node_metadata": {
                                   "type": "string",
                                   "description": "NodeMetadata is the configuration for how to expose metadata to the workloads running on the node.",
                                   "description_kind": "plain",
-                                  "required": true
+                                  "deprecated": true,
+                                  "optional": true,
+                                  "computed": true
                                 }
                               },
                               "description": "The workload metadata configuration for this node.",
@@ -32902,11 +33145,19 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "mode": {
+                            "type": "string",
+                            "description": "Mode is the configuration for how to expose metadata to workloads running on the node.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
                           "node_metadata": {
                             "type": "string",
                             "description": "NodeMetadata is the configuration for how to expose metadata to the workloads running on the node.",
                             "description_kind": "plain",
-                            "required": true
+                            "deprecated": true,
+                            "optional": true,
+                            "computed": true
                           }
                         },
                         "description": "The workload metadata configuration for this node.",
@@ -37705,6 +37956,12 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "dag_timeout": {
+                "type": "string",
+                "description": "Optional. Timeout duration for the DAG of jobs, expressed in seconds (see [JSON representation of duration](https://developers.google.com/protocol-buffers/docs/proto3#json)). The timeout duration must be from 10 minutes (\"600s\") to 24 hours (\"86400s\"). The timer begins when the first job is submitted. If the workflow is running at the end of the timeout period, any remaining jobs are cancelled, the workflow is ended, and if the workflow was running on a [managed cluster](/dataproc/docs/concepts/workflows/using-workflows#configuring_or_selecting_a_cluster), the cluster is deleted.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "id": {
                 "type": "string",
                 "description_kind": "plain",
@@ -37716,7 +37973,7 @@
                   "map",
                   "string"
                 ],
-                "description": "Optional. The labels to associate with this template. These labels will be propagated to all jobs and clusters created by the workflow instance. Label **keys** must contain 1 to 63 characters, and must conform to (https://www.ietf.org/rfc/rfc1035.txt). No more than 32 labels can be associated with a template.",
+                "description": "Optional. The labels to associate with this template. These labels will be propagated to all jobs and clusters created by the workflow instance. Label **keys** must contain 1 to 63 characters, and must conform to [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt). Label **values** may be empty, but, if present, must contain 1 to 63 characters, and must conform to [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt). No more than 32 labels can be associated with a template.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -37747,8 +38004,9 @@
               },
               "version": {
                 "type": "number",
-                "description": "Optional. Used to perform a consistent read-modify-write. This field should be left blank for a `CreateWorkflowTemplate` request. It is required for an `UpdateWorkflowTemplate` request, and must match the current server version. A typical update template flow would fetch the current template with a `GetWorkflowTemplate` request, which will return the current template with the `version` field filled in with the current server version. The user updates other fields in the template, then returns it as part of the `UpdateWorkflowTemplate` request.",
+                "description": "Output only. The current version of this workflow template.",
                 "description_kind": "plain",
+                "deprecated": true,
                 "optional": true,
                 "computed": true
               }
@@ -37763,7 +38021,7 @@
                         "map",
                         "string"
                       ],
-                      "description": "Optional. The labels to associate with this job. Label keys must be between 1 and 63 characters long, and must conform to the following regular expression: {0,63} No more than 32 labels can be associated with a given job.",
+                      "description": "Optional. The labels to associate with this job. Label keys must be between 1 and 63 characters long, and must conform to the following regular expression: p{Ll}p{Lo}{0,62} Label values must be between 1 and 63 characters long, and must conform to the following regular expression: [p{Ll}p{Lo}p{N}_-]{0,63} No more than 32 labels can be associated with a given job.",
                       "description_kind": "plain",
                       "optional": true
                     },
@@ -37778,7 +38036,7 @@
                     },
                     "step_id": {
                       "type": "string",
-                      "description": "Required. The step id. The id must be unique among all jobs within the template. The step id is used as prefix for job id, as job `goog-dataproc-workflow-step-id` label, and in field from other steps. The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). Cannot begin or end with underscore or hyphen. Must consist of between 3 and 50 characters.",
+                      "description": "Required. The step id. The id must be unique among all jobs within the template. The step id is used as prefix for job id, as job `goog-dataproc-workflow-step-id` label, and in prerequisiteStepIds field from other steps. The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). Cannot begin or end with underscore or hyphen. Must consist of between 3 and 50 characters.",
                       "description_kind": "plain",
                       "required": true
                     }
@@ -37926,7 +38184,7 @@
                                     "list",
                                     "string"
                                   ],
-                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": } }",
+                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": [ \"query1\", \"query2\", \"query3;query4\", ] } }",
                                   "description_kind": "plain",
                                   "required": true
                                 }
@@ -37981,7 +38239,7 @@
                               "map",
                               "string"
                             ],
-                            "description": "Optional. Mapping of query variable names to values (equivalent to the Pig command: `name=`).",
+                            "description": "Optional. Mapping of query variable names to values (equivalent to the Pig command: `name=[value]`).",
                             "description_kind": "plain",
                             "optional": true
                           }
@@ -38015,7 +38273,7 @@
                                     "list",
                                     "string"
                                   ],
-                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": } }",
+                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": [ \"query1\", \"query2\", \"query3;query4\", ] } }",
                                   "description_kind": "plain",
                                   "required": true
                                 }
@@ -38061,7 +38319,7 @@
                               "map",
                               "string"
                             ],
-                            "description": "Optional. A mapping of property names to values. Used to set Presto (https://prestodb.io/docs/current/sql/set-session.html) Equivalent to using the --session flag in the Presto CLI",
+                            "description": "Optional. A mapping of property names to values. Used to set Presto [session properties](https://prestodb.io/docs/current/sql/set-session.html) Equivalent to using the --session flag in the Presto CLI",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -38101,7 +38359,7 @@
                                     "list",
                                     "string"
                                   ],
-                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": } }",
+                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": [ \"query1\", \"query2\", \"query3;query4\", ] } }",
                                   "description_kind": "plain",
                                   "required": true
                                 }
@@ -38220,7 +38478,7 @@
                           },
                           "max_failures_total": {
                             "type": "number",
-                            "description": "Optional. Maximum number of times in total a driver may be restarted as a result of driver exiting with non-zero code before job is reported failed. Maximum value is 240",
+                            "description": "Optional. Maximum number of times in total a driver may be restarted as a result of driver exiting with non-zero code before job is reported failed. Maximum value is 240.",
                             "description_kind": "plain",
                             "optional": true
                           }
@@ -38458,7 +38716,7 @@
                                     "list",
                                     "string"
                                   ],
-                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": } }",
+                                  "description": "Required. The queries to execute. You do not need to end a query expression with a semicolon. Multiple queries can be specified in one string by separating each with a semicolon. Here is an example of a Dataproc API snippet that uses a QueryList to specify a HiveJob: \"hiveJob\": { \"queryList\": { \"queries\": [ \"query1\", \"query2\", \"query3;query4\", ] } }",
                                   "description_kind": "plain",
                                   "required": true
                                 }
@@ -38495,7 +38753,7 @@
                         "list",
                         "string"
                       ],
-                      "description": "Required. Paths to all fields that the parameter replaces. A field is allowed to appear in at most one parameter's list of field paths. A field path is similar in syntax to a .sparkJob.args",
+                      "description": "Required. Paths to all fields that the parameter replaces. A field is allowed to appear in at most one parameter's list of field paths. A field path is similar in syntax to a google.protobuf.FieldMask. For example, a field path that references the zone field of a workflow template's cluster selector would be specified as `placement.clusterSelector.zone`. Also, field paths can reference fields using the following syntax: * Values in maps can be referenced by key: * labels['key'] * placement.clusterSelector.clusterLabels['key'] * placement.managedCluster.labels['key'] * placement.clusterSelector.clusterLabels['key'] * jobs['step-id'].labels['key'] * Jobs in the jobs list can be referenced by step-id: * jobs['step-id'].hadoopJob.mainJarFileUri * jobs['step-id'].hiveJob.queryFileUri * jobs['step-id'].pySparkJob.mainPythonFileUri * jobs['step-id'].hadoopJob.jarFileUris[0] * jobs['step-id'].hadoopJob.archiveUris[0] * jobs['step-id'].hadoopJob.fileUris[0] * jobs['step-id'].pySparkJob.pythonFileUris[0] * Items in repeated fields can be referenced by a zero-based index: * jobs['step-id'].sparkJob.args[0] * Other examples: * jobs['step-id'].hadoopJob.properties['key'] * jobs['step-id'].hadoopJob.args[0] * jobs['step-id'].hiveJob.scriptVariables['key'] * jobs['step-id'].hadoopJob.mainJarFileUri * placement.clusterSelector.zone It may not be possible to parameterize maps and repeated fields in their entirety since only individual map values and individual items in repeated fields can be referenced. For example, the following field paths are invalid: - placement.clusterSelector.clusterLabels - jobs['step-id'].sparkJob.args",
                       "description_kind": "plain",
                       "required": true
                     },
@@ -38605,7 +38863,7 @@
                               "map",
                               "string"
                             ],
-                            "description": "Optional. The labels to associate with this cluster. Label keys must be between 1 and 63 characters long, and must conform to the following PCRE regular expression: {0,63} No more than 32 labels can be associated with a given cluster.",
+                            "description": "Optional. The labels to associate with this cluster. Label keys must be between 1 and 63 characters long, and must conform to the following PCRE regular expression: p{Ll}p{Lo}{0,62} Label values must be between 1 and 63 characters long, and must conform to the following PCRE regular expression: [p{Ll}p{Lo}p{N}_-]{0,63} No more than 32 labels can be associated with a given cluster.",
                             "description_kind": "plain",
                             "optional": true
                           }
@@ -38617,13 +38875,13 @@
                               "attributes": {
                                 "staging_bucket": {
                                   "type": "string",
-                                  "description": "Optional. A Cloud Storage bucket used to stage job dependencies, config files, and job driver console output. If you do not specify a staging bucket, Cloud Dataproc will determine a Cloud Storage location (US, ASIA, or EU) for your cluster's staging bucket according to the Compute Engine zone where your cluster is deployed, and then create and manage this project-level, per-location bucket (see (https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/staging-bucket)).",
+                                  "description": "Optional. A Cloud Storage bucket used to stage job dependencies, config files, and job driver console output. If you do not specify a staging bucket, Cloud Dataproc will determine a Cloud Storage location (US, ASIA, or EU) for your cluster's staging bucket according to the Compute Engine zone where your cluster is deployed, and then create and manage this project-level, per-location bucket (see [Dataproc staging bucket](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/staging-bucket)). **This field requires a Cloud Storage bucket name, not a URI to a Cloud Storage bucket.**",
                                   "description_kind": "plain",
                                   "optional": true
                                 },
                                 "temp_bucket": {
                                   "type": "string",
-                                  "description": "Optional. A Cloud Storage bucket used to store ephemeral cluster and jobs data, such as Spark and MapReduce history files. If you do not specify a temp bucket, Dataproc will determine a Cloud Storage location (US, ASIA, or EU) for your cluster's temp bucket according to the Compute Engine zone where your cluster is deployed, and then create and manage this project-level, per-location bucket. The default bucket has a TTL of 90 days, but you can use any TTL (or none) if you specify a bucket.",
+                                  "description": "Optional. A Cloud Storage bucket used to store ephemeral cluster and jobs data, such as Spark and MapReduce history files. If you do not specify a temp bucket, Dataproc will determine a Cloud Storage location (US, ASIA, or EU) for your cluster's temp bucket according to the Compute Engine zone where your cluster is deployed, and then create and manage this project-level, per-location bucket. The default bucket has a TTL of 90 days, but you can use any TTL (or none) if you specify a bucket. **This field requires a Cloud Storage bucket name, not a URI to a Cloud Storage bucket.**",
                                   "description_kind": "plain",
                                   "optional": true
                                 }
@@ -38635,7 +38893,7 @@
                                     "attributes": {
                                       "policy": {
                                         "type": "string",
-                                        "description": "Optional. The autoscaling policy used by the cluster. Only resource names including projectid and location (region) are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/` Note that the policy must be in the same project and Dataproc region.",
+                                        "description": "Optional. The autoscaling policy used by the cluster. Only resource names including projectid and location (region) are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/locations/[dataproc_region]/autoscalingPolicies/[policy_id]` * `projects/[project_id]/locations/[dataproc_region]/autoscalingPolicies/[policy_id]` Note that the policy must be in the same project and Dataproc region.",
                                         "description_kind": "plain",
                                         "optional": true
                                       }
@@ -38702,13 +38960,13 @@
                                           "map",
                                           "string"
                                         ],
-                                        "description": "The Compute Engine metadata entries to add to all instances (see (https://cloud.google.com/compute/docs/storing-retrieving-metadata#project_and_instance_metadata)).",
+                                        "description": "The Compute Engine metadata entries to add to all instances (see [Project and instance metadata](https://cloud.google.com/compute/docs/storing-retrieving-metadata#project_and_instance_metadata)).",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
                                       "network": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine network to be used for machine communications. Cannot be specified with subnetwork_uri. If neither `network_uri` nor `subnetwork_uri` is specified, the \"default\" network of the project is used, if it exists. Cannot be a \"Custom Subnet Network\" (see /regions/global/default` * `default`",
+                                        "description": "Optional. The Compute Engine network to be used for machine communications. Cannot be specified with subnetwork_uri. If neither `network_uri` nor `subnetwork_uri` is specified, the \"default\" network of the project is used, if it exists. Cannot be a \"Custom Subnet Network\" (see [Using Subnetworks](https://cloud.google.com/compute/docs/subnetworks) for more information). A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/regions/global/default` * `projects/[project_id]/regions/global/default` * `default`",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -38720,7 +38978,7 @@
                                       },
                                       "service_account": {
                                         "type": "string",
-                                        "description": "Optional. The (https://cloud.google.com/compute/docs/access/service-accounts#default_service_account) is used.",
+                                        "description": "Optional. The [Dataproc service account](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/service-accounts#service_accounts_in_dataproc) (also see [VM Data Plane identity](https://cloud.google.com/dataproc/docs/concepts/iam/dataproc-principals#vm_service_account_data_plane_identity)) used by Dataproc cluster VM instances to access Google Cloud Platform services. If not specified, the [Compute Engine default service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account) is used.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -38735,7 +38993,7 @@
                                       },
                                       "subnetwork": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine subnetwork to be used for machine communications. Cannot be specified with network_uri. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects//regions/us-east1/subnetworks/sub0` * `sub0`",
+                                        "description": "Optional. The Compute Engine subnetwork to be used for machine communications. Cannot be specified with network_uri. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/regions/us-east1/subnetworks/sub0` * `projects/[project_id]/regions/us-east1/subnetworks/sub0` * `sub0`",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -38744,13 +39002,13 @@
                                           "set",
                                           "string"
                                         ],
-                                        "description": "The Compute Engine tags to add to all instances (see (https://cloud.google.com/compute/docs/label-or-tag-resources#tags)).",
+                                        "description": "The Compute Engine tags to add to all instances (see [Tagging instances](https://cloud.google.com/compute/docs/label-or-tag-resources#tags)).",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
                                       "zone": {
                                         "type": "string",
-                                        "description": "Optional. The zone where the Compute Engine cluster will be located. On a create request, it is required in the \"global\" region. If omitted in a non-global Dataproc region, the service will pick a zone in the corresponding Compute Engine region. On a get request, zone will always be present. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/` * `us-central1-f`",
+                                        "description": "Optional. The zone where the Compute Engine cluster will be located. On a create request, it is required in the \"global\" region. If omitted in a non-global Dataproc region, the service will pick a zone in the corresponding Compute Engine region. On a get request, zone will always be present. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/zones/[zone]` * `projects/[project_id]/zones/[zone]` * `us-central1-f`",
                                         "description_kind": "plain",
                                         "optional": true,
                                         "computed": true
@@ -38763,7 +39021,7 @@
                                           "attributes": {
                                             "node_group": {
                                               "type": "string",
-                                              "description": "Required. The URI of a sole-tenant /zones/us-central1-a/nodeGroups/node-group-1` * `node-group-1`",
+                                              "description": "Required. The URI of a sole-tenant [node group resource](https://cloud.google.com/compute/docs/reference/rest/v1/nodeGroups) that the cluster will be created on. A full URL, partial URI, or node group name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/zones/us-central1-a/nodeGroups/node-group-1` * `projects/[project_id]/zones/us-central1-a/nodeGroups/node-group-1` * `node-group-1`",
                                               "description_kind": "plain",
                                               "required": true
                                             }
@@ -38822,12 +39080,12 @@
                                       },
                                       "execution_timeout": {
                                         "type": "string",
-                                        "description": "Optional. Amount of time executable has to complete. Default is 10 minutes (see JSON representation of (https://developers.google.com/protocol-buffers/docs/proto3#json)). Cluster creation fails with an explanatory error message (the name of the executable that caused the error and the exceeded timeout period) if the executable is not completed at end of the timeout period.",
+                                        "description": "Optional. Amount of time executable has to complete. Default is 10 minutes (see JSON representation of [Duration](https://developers.google.com/protocol-buffers/docs/proto3#json)). Cluster creation fails with an explanatory error message (the name of the executable that caused the error and the exceeded timeout period) if the executable is not completed at end of the timeout period.",
                                         "description_kind": "plain",
                                         "optional": true
                                       }
                                     },
-                                    "description": "Optional. Commands to execute on each node after config is completed. By default, executables are run on master and all worker nodes. You can test a node's `role` metadata to run an executable on a master or worker node, as shown below using `curl` (you can also use `wget`): ROLE=$(curl -H Metadata-Flavor:Google http://metadata/computeMetadata/v1/instance/attributes/dataproc-role) if ; then ... master specific actions ... else ... worker specific actions ... fi",
+                                    "description": "Optional. Commands to execute on each node after config is completed. By default, executables are run on master and all worker nodes. You can test a node's `role` metadata to run an executable on a master or worker node, as shown below using `curl` (you can also use `wget`): ROLE=$(curl -H Metadata-Flavor:Google http://metadata/computeMetadata/v1/instance/attributes/dataproc-role) if [[ \"${ROLE}\" == 'Master' ]]; then ... master specific actions ... else ... worker specific actions ... fi",
                                     "description_kind": "plain"
                                   }
                                 },
@@ -38837,25 +39095,25 @@
                                     "attributes": {
                                       "auto_delete_time": {
                                         "type": "string",
-                                        "description": "Optional. The time when cluster will be auto-deleted (see JSON representation of (https://developers.google.com/protocol-buffers/docs/proto3#json)).",
+                                        "description": "Optional. The time when cluster will be auto-deleted (see JSON representation of [Timestamp](https://developers.google.com/protocol-buffers/docs/proto3#json)).",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
                                       "auto_delete_ttl": {
                                         "type": "string",
-                                        "description": "Optional. The lifetime duration of cluster. The cluster will be auto-deleted at the end of this period. Minimum value is 10 minutes; maximum value is 14 days (see JSON representation of (https://developers.google.com/protocol-buffers/docs/proto3#json)).",
+                                        "description": "Optional. The lifetime duration of cluster. The cluster will be auto-deleted at the end of this period. Minimum value is 10 minutes; maximum value is 14 days (see JSON representation of [Duration](https://developers.google.com/protocol-buffers/docs/proto3#json)).",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
                                       "idle_delete_ttl": {
                                         "type": "string",
-                                        "description": "Optional. The duration to keep the cluster alive while idling (when no jobs are running). Passing this threshold will cause the cluster to be deleted. Minimum value is 5 minutes; maximum value is 14 days (see JSON representation of (https://developers.google.com/protocol-buffers/docs/proto3#json).",
+                                        "description": "Optional. The duration to keep the cluster alive while idling (when no jobs are running). Passing this threshold will cause the cluster to be deleted. Minimum value is 5 minutes; maximum value is 14 days (see JSON representation of [Duration](https://developers.google.com/protocol-buffers/docs/proto3#json)).",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
                                       "idle_start_time": {
                                         "type": "string",
-                                        "description": "Output only. The time when cluster became idle (most recent job finished) and became eligible for deletion due to idleness (see JSON representation of (https://developers.google.com/protocol-buffers/docs/proto3#json)).",
+                                        "description": "Output only. The time when cluster became idle (most recent job finished) and became eligible for deletion due to idleness (see JSON representation of [Timestamp](https://developers.google.com/protocol-buffers/docs/proto3#json)).",
                                         "description_kind": "plain",
                                         "computed": true
                                       }
@@ -38871,7 +39129,7 @@
                                     "attributes": {
                                       "image": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine image resource used for cluster instances. The URI can represent an image or image family. Image examples: * `https://www.googleapis.com/compute/beta/projects/` If the URI is unspecified, it will be inferred from `SoftwareConfig.image_version` or the system default.",
+                                        "description": "Optional. The Compute Engine image resource used for cluster instances. The URI can represent an image or image family. Image examples: * `https://www.googleapis.com/compute/beta/projects/[project_id]/global/images/[image-id]` * `projects/[project_id]/global/images/[image-id]` * `image-id` Image family examples. Dataproc will use the most recent image from the family: * `https://www.googleapis.com/compute/beta/projects/[project_id]/global/images/family/[custom-image-family-name]` * `projects/[project_id]/global/images/family/[custom-image-family-name]` If the URI is unspecified, it will be inferred from `SoftwareConfig.image_version` or the system default.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -38892,7 +39150,7 @@
                                       },
                                       "machine_type": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine machine type used for cluster instances. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/(https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the machine type resource, for example, `n1-standard-2`.",
+                                        "description": "Optional. The Compute Engine machine type used for cluster instances. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2` * `projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2` * `n1-standard-2` **Auto Zone Exception**: If you are using the Dataproc [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the machine type resource, for example, `n1-standard-2`.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -38913,13 +39171,14 @@
                                       },
                                       "min_cpu_platform": {
                                         "type": "string",
-                                        "description": "Optional. Specifies the minimum cpu platform for the Instance Group. See (https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
+                                        "description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -> Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
                                         "description_kind": "plain",
-                                        "optional": true
+                                        "optional": true,
+                                        "computed": true
                                       },
                                       "num_instances": {
                                         "type": "number",
-                                        "description": "Optional. The number of VM instances in the instance group. For master instance groups, must be set to 1.",
+                                        "description": "Optional. The number of VM instances in the instance group. For [HA cluster](/dataproc/docs/concepts/configuring-clusters/high-availability) [master_config](#FIELDS.master_config) groups, **must be set to 3**. For standard cluster [master_config](#FIELDS.master_config) groups, **must be set to 1**.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -38943,7 +39202,7 @@
                                             },
                                             "accelerator_type": {
                                               "type": "string",
-                                              "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See (https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the accelerator type resource, for example, `nvidia-tesla-k80`.",
+                                              "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See [Compute Engine AcceleratorTypes](https://cloud.google.com/compute/docs/reference/beta/acceleratorTypes). Examples: * `https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80` * `projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80` * `nvidia-tesla-k80` **Auto Zone Exception**: If you are using the Dataproc [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the accelerator type resource, for example, `nvidia-tesla-k80`.",
                                               "description_kind": "plain",
                                               "optional": true
                                             }
@@ -38964,13 +39223,13 @@
                                             },
                                             "boot_disk_type": {
                                               "type": "string",
-                                              "description": "Optional. Type of the boot disk (default is \"pd-standard\"). Valid values: \"pd-ssd\" (Persistent Disk Solid State Drive) or \"pd-standard\" (Persistent Disk Hard Disk Drive).",
+                                              "description": "Optional. Type of the boot disk (default is \"pd-standard\"). Valid values: \"pd-balanced\" (Persistent Disk Balanced Solid State Drive), \"pd-ssd\" (Persistent Disk Solid State Drive), or \"pd-standard\" (Persistent Disk Hard Disk Drive). See [Disk types](https://cloud.google.com/compute/docs/disks#disk-types).",
                                               "description_kind": "plain",
                                               "optional": true
                                             },
                                             "num_local_ssds": {
                                               "type": "number",
-                                              "description": "Optional. Number of attached SSDs, from 0 to 4 (default is 0). If SSDs are not attached, the boot disk is used to store runtime logs and (https://hadoop.apache.org/docs/r1.2.1/hdfs_user_guide.html) data. If one or more SSDs are attached, this runtime bulk data is spread across them, and the boot disk contains only basic config and installed binaries.",
+                                              "description": "Optional. Number of attached SSDs, from 0 to 4 (default is 0). If SSDs are not attached, the boot disk is used to store runtime logs and [HDFS](https://hadoop.apache.org/docs/r1.2.1/hdfs_user_guide.html) data. If one or more SSDs are attached, this runtime bulk data is spread across them, and the boot disk contains only basic config and installed binaries.",
                                               "description_kind": "plain",
                                               "optional": true,
                                               "computed": true
@@ -38982,7 +39241,7 @@
                                         "max_items": 1
                                       }
                                     },
-                                    "description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
+                                    "description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
                                     "description_kind": "plain"
                                   },
                                   "max_items": 1
@@ -38993,7 +39252,7 @@
                                     "attributes": {
                                       "image": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine image resource used for cluster instances. The URI can represent an image or image family. Image examples: * `https://www.googleapis.com/compute/beta/projects/` If the URI is unspecified, it will be inferred from `SoftwareConfig.image_version` or the system default.",
+                                        "description": "Optional. The Compute Engine image resource used for cluster instances. The URI can represent an image or image family. Image examples: * `https://www.googleapis.com/compute/beta/projects/[project_id]/global/images/[image-id]` * `projects/[project_id]/global/images/[image-id]` * `image-id` Image family examples. Dataproc will use the most recent image from the family: * `https://www.googleapis.com/compute/beta/projects/[project_id]/global/images/family/[custom-image-family-name]` * `projects/[project_id]/global/images/family/[custom-image-family-name]` If the URI is unspecified, it will be inferred from `SoftwareConfig.image_version` or the system default.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39014,7 +39273,7 @@
                                       },
                                       "machine_type": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine machine type used for cluster instances. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/(https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the machine type resource, for example, `n1-standard-2`.",
+                                        "description": "Optional. The Compute Engine machine type used for cluster instances. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2` * `projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2` * `n1-standard-2` **Auto Zone Exception**: If you are using the Dataproc [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the machine type resource, for example, `n1-standard-2`.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39035,13 +39294,14 @@
                                       },
                                       "min_cpu_platform": {
                                         "type": "string",
-                                        "description": "Optional. Specifies the minimum cpu platform for the Instance Group. See (https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
+                                        "description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -> Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
                                         "description_kind": "plain",
-                                        "optional": true
+                                        "optional": true,
+                                        "computed": true
                                       },
                                       "num_instances": {
                                         "type": "number",
-                                        "description": "Optional. The number of VM instances in the instance group. For master instance groups, must be set to 1.",
+                                        "description": "Optional. The number of VM instances in the instance group. For [HA cluster](/dataproc/docs/concepts/configuring-clusters/high-availability) [master_config](#FIELDS.master_config) groups, **must be set to 3**. For standard cluster [master_config](#FIELDS.master_config) groups, **must be set to 1**.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39065,7 +39325,7 @@
                                             },
                                             "accelerator_type": {
                                               "type": "string",
-                                              "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See (https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the accelerator type resource, for example, `nvidia-tesla-k80`.",
+                                              "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See [Compute Engine AcceleratorTypes](https://cloud.google.com/compute/docs/reference/beta/acceleratorTypes). Examples: * `https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80` * `projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80` * `nvidia-tesla-k80` **Auto Zone Exception**: If you are using the Dataproc [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the accelerator type resource, for example, `nvidia-tesla-k80`.",
                                               "description_kind": "plain",
                                               "optional": true
                                             }
@@ -39086,13 +39346,13 @@
                                             },
                                             "boot_disk_type": {
                                               "type": "string",
-                                              "description": "Optional. Type of the boot disk (default is \"pd-standard\"). Valid values: \"pd-ssd\" (Persistent Disk Solid State Drive) or \"pd-standard\" (Persistent Disk Hard Disk Drive).",
+                                              "description": "Optional. Type of the boot disk (default is \"pd-standard\"). Valid values: \"pd-balanced\" (Persistent Disk Balanced Solid State Drive), \"pd-ssd\" (Persistent Disk Solid State Drive), or \"pd-standard\" (Persistent Disk Hard Disk Drive). See [Disk types](https://cloud.google.com/compute/docs/disks#disk-types).",
                                               "description_kind": "plain",
                                               "optional": true
                                             },
                                             "num_local_ssds": {
                                               "type": "number",
-                                              "description": "Optional. Number of attached SSDs, from 0 to 4 (default is 0). If SSDs are not attached, the boot disk is used to store runtime logs and (https://hadoop.apache.org/docs/r1.2.1/hdfs_user_guide.html) data. If one or more SSDs are attached, this runtime bulk data is spread across them, and the boot disk contains only basic config and installed binaries.",
+                                              "description": "Optional. Number of attached SSDs, from 0 to 4 (default is 0). If SSDs are not attached, the boot disk is used to store runtime logs and [HDFS](https://hadoop.apache.org/docs/r1.2.1/hdfs_user_guide.html) data. If one or more SSDs are attached, this runtime bulk data is spread across them, and the boot disk contains only basic config and installed binaries.",
                                               "description_kind": "plain",
                                               "optional": true,
                                               "computed": true
@@ -39104,7 +39364,7 @@
                                         "max_items": 1
                                       }
                                     },
-                                    "description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
+                                    "description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
                                     "description_kind": "plain"
                                   },
                                   "max_items": 1
@@ -39208,7 +39468,7 @@
                                               "optional": true
                                             }
                                           },
-                                          "description": "Kerberos related configuration.",
+                                          "description": "Optional. Kerberos related configuration.",
                                           "description_kind": "plain"
                                         },
                                         "max_items": 1
@@ -39225,7 +39485,16 @@
                                     "attributes": {
                                       "image_version": {
                                         "type": "string",
-                                        "description": "Optional. The version of software inside the cluster. It must be one of the supported (https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-versions#other_versions). If unspecified, it defaults to the latest Debian version.",
+                                        "description": "Optional. The version of software inside the cluster. It must be one of the supported [Dataproc Versions](https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-versions#supported_dataproc_versions), such as \"1.2\" (including a subminor version, such as \"1.2.29\"), or the [\"preview\" version](https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-versions#other_versions). If unspecified, it defaults to the latest Debian version.",
+                                        "description_kind": "plain",
+                                        "optional": true
+                                      },
+                                      "optional_components": {
+                                        "type": [
+                                          "list",
+                                          "string"
+                                        ],
+                                        "description": "Optional. The set of components to activate on the cluster.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39234,7 +39503,7 @@
                                           "map",
                                           "string"
                                         ],
-                                        "description": "Optional. The properties to set on daemon config files. Property keys are specified in `prefix:property` format, for example `core:hadoop.tmp.dir`. The following are supported prefixes and their mappings: * capacity-scheduler: `capacity-scheduler.xml` * core: `core-site.xml` * distcp: `distcp-default.xml` * hdfs: `hdfs-site.xml` * hive: `hive-site.xml` * mapred: `mapred-site.xml` * pig: `pig.properties` * spark: `spark-defaults.conf` * yarn: `yarn-site.xml` For more information, see (https://cloud.google.com/dataproc/docs/concepts/cluster-properties).",
+                                        "description": "Optional. The properties to set on daemon config files. Property keys are specified in `prefix:property` format, for example `core:hadoop.tmp.dir`. The following are supported prefixes and their mappings: * capacity-scheduler: `capacity-scheduler.xml` * core: `core-site.xml` * distcp: `distcp-default.xml` * hdfs: `hdfs-site.xml` * hive: `hive-site.xml` * mapred: `mapred-site.xml` * pig: `pig.properties` * spark: `spark-defaults.conf` * yarn: `yarn-site.xml` For more information, see [Cluster properties](https://cloud.google.com/dataproc/docs/concepts/cluster-properties).",
                                         "description_kind": "plain",
                                         "optional": true
                                       }
@@ -39250,7 +39519,7 @@
                                     "attributes": {
                                       "image": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine image resource used for cluster instances. The URI can represent an image or image family. Image examples: * `https://www.googleapis.com/compute/beta/projects/` If the URI is unspecified, it will be inferred from `SoftwareConfig.image_version` or the system default.",
+                                        "description": "Optional. The Compute Engine image resource used for cluster instances. The URI can represent an image or image family. Image examples: * `https://www.googleapis.com/compute/beta/projects/[project_id]/global/images/[image-id]` * `projects/[project_id]/global/images/[image-id]` * `image-id` Image family examples. Dataproc will use the most recent image from the family: * `https://www.googleapis.com/compute/beta/projects/[project_id]/global/images/family/[custom-image-family-name]` * `projects/[project_id]/global/images/family/[custom-image-family-name]` If the URI is unspecified, it will be inferred from `SoftwareConfig.image_version` or the system default.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39271,7 +39540,7 @@
                                       },
                                       "machine_type": {
                                         "type": "string",
-                                        "description": "Optional. The Compute Engine machine type used for cluster instances. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/(https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the machine type resource, for example, `n1-standard-2`.",
+                                        "description": "Optional. The Compute Engine machine type used for cluster instances. A full URL, partial URI, or short name are valid. Examples: * `https://www.googleapis.com/compute/v1/projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2` * `projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2` * `n1-standard-2` **Auto Zone Exception**: If you are using the Dataproc [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the machine type resource, for example, `n1-standard-2`.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39292,13 +39561,14 @@
                                       },
                                       "min_cpu_platform": {
                                         "type": "string",
-                                        "description": "Optional. Specifies the minimum cpu platform for the Instance Group. See (https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
+                                        "description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -> Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
                                         "description_kind": "plain",
-                                        "optional": true
+                                        "optional": true,
+                                        "computed": true
                                       },
                                       "num_instances": {
                                         "type": "number",
-                                        "description": "Optional. The number of VM instances in the instance group. For master instance groups, must be set to 1.",
+                                        "description": "Optional. The number of VM instances in the instance group. For [HA cluster](/dataproc/docs/concepts/configuring-clusters/high-availability) [master_config](#FIELDS.master_config) groups, **must be set to 3**. For standard cluster [master_config](#FIELDS.master_config) groups, **must be set to 1**.",
                                         "description_kind": "plain",
                                         "optional": true
                                       },
@@ -39322,7 +39592,7 @@
                                             },
                                             "accelerator_type": {
                                               "type": "string",
-                                              "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See (https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the accelerator type resource, for example, `nvidia-tesla-k80`.",
+                                              "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See [Compute Engine AcceleratorTypes](https://cloud.google.com/compute/docs/reference/beta/acceleratorTypes). Examples: * `https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80` * `projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80` * `nvidia-tesla-k80` **Auto Zone Exception**: If you are using the Dataproc [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/auto-zone#using_auto_zone_placement) feature, you must use the short name of the accelerator type resource, for example, `nvidia-tesla-k80`.",
                                               "description_kind": "plain",
                                               "optional": true
                                             }
@@ -39343,13 +39613,13 @@
                                             },
                                             "boot_disk_type": {
                                               "type": "string",
-                                              "description": "Optional. Type of the boot disk (default is \"pd-standard\"). Valid values: \"pd-ssd\" (Persistent Disk Solid State Drive) or \"pd-standard\" (Persistent Disk Hard Disk Drive).",
+                                              "description": "Optional. Type of the boot disk (default is \"pd-standard\"). Valid values: \"pd-balanced\" (Persistent Disk Balanced Solid State Drive), \"pd-ssd\" (Persistent Disk Solid State Drive), or \"pd-standard\" (Persistent Disk Hard Disk Drive). See [Disk types](https://cloud.google.com/compute/docs/disks#disk-types).",
                                               "description_kind": "plain",
                                               "optional": true
                                             },
                                             "num_local_ssds": {
                                               "type": "number",
-                                              "description": "Optional. Number of attached SSDs, from 0 to 4 (default is 0). If SSDs are not attached, the boot disk is used to store runtime logs and (https://hadoop.apache.org/docs/r1.2.1/hdfs_user_guide.html) data. If one or more SSDs are attached, this runtime bulk data is spread across them, and the boot disk contains only basic config and installed binaries.",
+                                              "description": "Optional. Number of attached SSDs, from 0 to 4 (default is 0). If SSDs are not attached, the boot disk is used to store runtime logs and [HDFS](https://hadoop.apache.org/docs/r1.2.1/hdfs_user_guide.html) data. If one or more SSDs are attached, this runtime bulk data is spread across them, and the boot disk contains only basic config and installed binaries.",
                                               "description_kind": "plain",
                                               "optional": true,
                                               "computed": true
@@ -39361,7 +39631,7 @@
                                         "max_items": 1
                                       }
                                     },
-                                    "description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
+                                    "description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
                                     "description_kind": "plain"
                                   },
                                   "max_items": 1
@@ -41885,18 +42155,19 @@
               },
               "managed_zone": {
                 "type": "string",
-                "description": "Identifies the managed zone addressed by this request.",
+                "description": "The name of the zone in which this record set will reside.",
                 "description_kind": "plain",
                 "required": true
               },
               "name": {
                 "type": "string",
-                "description": "For example, www.example.com.",
+                "description": "The DNS name this record set will apply to.",
                 "description_kind": "plain",
                 "required": true
               },
               "project": {
                 "type": "string",
+                "description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -41906,46 +42177,21 @@
                   "list",
                   "string"
                 ],
-                "description": "The string data for the records in this record set whose meaning depends on the DNS type. \nFor TXT record, if the string data contains spaces, add surrounding \\\" if you don't want your string to get\nsplit on spaces. To specify a single record value longer than 255 characters such as a TXT record for \nDKIM, add \\\"\\\" inside the Terraform configuration string (e.g. \"first255characters\\\"\\\"morecharacters\").",
+                "description": "The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \\\" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \\\"\\\" inside the Terraform configuration string (e.g. \"first255characters\\\"\\\"morecharacters\").",
                 "description_kind": "plain",
-                "optional": true
+                "required": true
               },
               "ttl": {
                 "type": "number",
-                "description": "Number of seconds that this ResourceRecordSet can be cached by\nresolvers.",
+                "description": "The time-to-live of this record set (seconds).",
                 "description_kind": "plain",
                 "optional": true
               },
               "type": {
                 "type": "string",
-                "description": "One of valid DNS resource types. Possible values: [\"A\", \"AAAA\", \"CAA\", \"CNAME\", \"DNSKEY\", \"DS\", \"IPSECVPNKEY\", \"MX\", \"NAPTR\", \"NS\", \"PTR\", \"SOA\", \"SPF\", \"SRV\", \"SSHFP\", \"TLSA\", \"TXT\"]",
+                "description": "The DNS record set type.",
                 "description_kind": "plain",
                 "required": true
-              }
-            },
-            "block_types": {
-              "timeouts": {
-                "nesting_mode": "single",
-                "block": {
-                  "attributes": {
-                    "create": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
-                    },
-                    "delete": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
-                    },
-                    "update": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
-                    }
-                  },
-                  "description_kind": "plain"
-                }
               }
             },
             "description_kind": "plain"
@@ -42479,7 +42725,7 @@
                           },
                           "topic": {
                             "type": "string",
-                            "description": "Optional. The name of the Pub/Sub topic created and managed by Eventarc system as a transport for the event delivery. Format: `projects/{PROJECT_ID}/topics/{TOPIC_NAME}`. You may set an existing topic for triggers of the type `google.cloud.pubsub.topic.v1.messagePublished` only. The topic you provide here will not be deleted by Eventarc at trigger deletion.",
+                            "description": "Optional. The name of the Pub/Sub topic created and managed by Eventarc system as a transport for the event delivery. Format: `projects/{PROJECT_ID}/topics/{TOPIC_NAME You may set an existing topic for triggers of the type google.cloud.pubsub.topic.v1.messagePublished` only. The topic you provide here will not be deleted by Eventarc at trigger deletion.",
                             "description_kind": "plain",
                             "optional": true
                           }
@@ -45188,6 +45434,12 @@
                       "description": "Byte(s) to be used as the segment terminator. If this is unset, '\\r' will be used as segment terminator.\n\nA base64-encoded string.",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "The version of the unschematized parser to be used when a custom 'schema' is not set. Default value: \"V1\" Possible values: [\"V1\", \"V2\"]",
+                      "description_kind": "plain",
+                      "optional": true
                     }
                   },
                   "description": "A nested object resource",
@@ -47587,6 +47839,13 @@
               },
               "id": {
                 "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "import_only": {
+                "type": "bool",
+                "description": "Whether this key may contain imported versions only.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -51057,7 +51316,7 @@
                     },
                     "matcher": {
                       "type": "string",
-                      "description": "The type of content matcher that will be applied to the server output, compared to the content string when the check is run. Default value: \"CONTAINS_STRING\" Possible values: [\"CONTAINS_STRING\", \"NOT_CONTAINS_STRING\", \"MATCHES_REGEX\", \"NON_MATCHES_REGEX\"]",
+                      "description": "The type of content matcher that will be applied to the server output, compared to the content string when the check is run. Default value: \"CONTAINS_STRING\" Possible values: [\"CONTAINS_STRING\", \"NOT_CONTAINS_STRING\", \"MATCHES_REGEX\", \"NOT_MATCHES_REGEX\"]",
                       "description_kind": "plain",
                       "optional": true
                     }
@@ -53051,6 +53310,184 @@
               }
             },
             "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_org_policy_policy": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Immutable. The resource name of the Policy. Must be one of the following forms, where constraint_name is the name of the constraint which this Policy configures: * `projects/{project_number}/policies/{constraint_name}` * `folders/{folder_id}/policies/{constraint_name}` * `organizations/{organization_id}/policies/{constraint_name}` For example, \"projects/123/policies/compute.disableSerialPortAccess\". Note: `projects/{project_id}/policies/{constraint_name}` is also an acceptable name for API requests, but responses will return the name using the equivalent project number.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "parent": {
+                "type": "string",
+                "description": "The parent of the resource.",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "spec": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "etag": {
+                      "type": "string",
+                      "description": "An opaque tag indicating the current version of the `Policy`, used for concurrency control. This field is ignored if used in a `CreatePolicy` request. When the `Policy` is returned from either a `GetPolicy` or a `ListPolicies` request, this `etag` indicates the version of the current `Policy` to use when executing a read-modify-write loop. When the `Policy` is returned from a `GetEffectivePolicy` request, the `etag` will be unset.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "inherit_from_parent": {
+                      "type": "bool",
+                      "description": "Determines the inheritance behavior for this `Policy`. If `inherit_from_parent` is true, PolicyRules set higher up in the hierarchy (up to the closest root) are inherited and present in the effective policy. If it is false, then no rules are inherited, and this Policy becomes the new root for evaluation. This field can be set only for Policies which configure list constraints.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "reset": {
+                      "type": "bool",
+                      "description": "Ignores policies set above this resource and restores the `constraint_default` enforcement behavior of the specific `Constraint` at this resource. This field can be set in policies for either list or boolean constraints. If set, `rules` must be empty and `inherit_from_parent` must be set to false.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update_time": {
+                      "type": "string",
+                      "description": "Output only. The time stamp this was previously updated. This represents the last time a call to `CreatePolicy` or `UpdatePolicy` was made for that `Policy`.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "rules": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "allow_all": {
+                            "type": "string",
+                            "description": "Setting this to true means that all values are allowed. This field can be set only in Policies for list constraints.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "deny_all": {
+                            "type": "string",
+                            "description": "Setting this to true means that all values are denied. This field can be set only in Policies for list constraints.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "enforce": {
+                            "type": "string",
+                            "description": "If `true`, then the `Policy` is enforced. If `false`, then any configuration is acceptable. This field can be set only in Policies for boolean constraints.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "block_types": {
+                          "condition": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "description": {
+                                  "type": "string",
+                                  "description": "Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "expression": {
+                                  "type": "string",
+                                  "description": "Textual representation of an expression in Common Expression Language syntax.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "location": {
+                                  "type": "string",
+                                  "description": "Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "description": "Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "A condition which determines whether this rule is used in the evaluation of the policy. When set, the `expression` field in the `Expr' must include from 1 to 10 subexpressions, joined by the \"||\" or \"&&\" operators. Each subexpression must be of the form \"resource.matchTag('/tag_key_short_name, 'tag_value_short_name')\". or \"resource.matchTagId('tagKeys/key_id', 'tagValues/value_id')\". where key_name and value_name are the resource names for Label Keys and Values. These names are available from the Tag Manager Service. An example expression is: \"resource.matchTag('123456789/environment, 'prod')\". or \"resource.matchTagId('tagKeys/123', 'tagValues/456')\".",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          },
+                          "values": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "allowed_values": {
+                                  "type": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "description": "List of values allowed at this resource.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "denied_values": {
+                                  "type": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "description": "List of values denied at this resource.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "List of values to be used for this PolicyRule. This field can be set only in Policies for list constraints.",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          }
+                        },
+                        "description": "Up to 10 PolicyRules are allowed. In Policies for boolean constraints, the following requirements apply: - There must be one and only one PolicyRule where condition is unset. - BooleanPolicyRules with conditions must set `enforced` to the opposite of the PolicyRule without a condition. - During policy evaluation, PolicyRules with conditions that are true for a target resource take precedence.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "Basic information about the Organization Policy.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -57729,6 +58166,69 @@
             "description_kind": "plain"
           }
         },
+        "google_pubsub_lite_reservation": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the reservation.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "region": {
+                "type": "string",
+                "description": "The region of the pubsub lite reservation.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "throughput_capacity": {
+                "type": "number",
+                "description": "The reserved throughput capacity. Every unit of throughput capacity is\nequivalent to 1 MiB/s of published messages or 2 MiB/s of subscribed\nmessages.",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_pubsub_lite_subscription": {
           "version": 0,
           "block": {
@@ -57886,6 +58386,22 @@
                     }
                   },
                   "description": "The settings for this topic's partitions.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "reservation_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "throughput_reservation": {
+                      "type": "string",
+                      "description": "The Reservation to use for this topic's throughput capacity.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "The settings for this topic's Reservation usage.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -59038,7 +59554,8 @@
                 "max_items": 1
               }
             },
-            "description_kind": "plain"
+            "description_kind": "plain",
+            "deprecated": true
           }
         },
         "google_runtimeconfig_config_iam_member": {
@@ -59104,7 +59621,8 @@
                 "max_items": 1
               }
             },
-            "description_kind": "plain"
+            "description_kind": "plain",
+            "deprecated": true
           }
         },
         "google_runtimeconfig_config_iam_policy": {
@@ -59139,7 +59657,8 @@
                 "computed": true
               }
             },
-            "description_kind": "plain"
+            "description_kind": "plain",
+            "deprecated": true
           }
         },
         "google_runtimeconfig_variable": {
@@ -60139,6 +60658,81 @@
                       "optional": true
                     },
                     "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_service_networking_peered_dns_domain": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "dns_suffix": {
+                "type": "string",
+                "description": "The DNS domain name suffix of the peered DNS domain.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the peered DNS domain.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "network": {
+                "type": "string",
+                "description": "Network in the consumer project to peer with.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "parent": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The ID of the project that the service account will be created in. Defaults to the provider project configuration.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "service": {
+                "type": "string",
+                "description": "The name of the service to create a peered DNS domain for, e.g. servicenetworking.googleapis.com",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
                       "type": "string",
                       "description_kind": "plain",
                       "optional": true
@@ -65325,7 +65919,8 @@
                               "map",
                               "string"
                             ],
-                            "python_version": "string"
+                            "python_version": "string",
+                            "scheduler_count": "number"
                           }
                         ]
                       ]
@@ -66878,10 +67473,24 @@
                           }
                         ]
                       ],
+                      "ipv6_access_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "external_ipv6": "string",
+                            "external_ipv6_prefix_length": "string",
+                            "network_tier": "string",
+                            "public_ptr_domain_name": "string"
+                          }
+                        ]
+                      ],
+                      "ipv6_access_type": "string",
                       "name": "string",
                       "network": "string",
                       "network_ip": "string",
                       "nic_type": "string",
+                      "stack_type": "string",
                       "subnetwork": "string",
                       "subnetwork_project": "string"
                     }
@@ -66929,7 +67538,7 @@
                   "list",
                   "string"
                 ],
-                "description": "A list of short names or self_links of resource policies to attach to the instance. Modifying this list will cause the instance to recreate. Currently a max of 1 resource policy is supported.",
+                "description": "A list of short names or self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -67368,10 +67977,24 @@
                           }
                         ]
                       ],
+                      "ipv6_access_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "external_ipv6": "string",
+                            "external_ipv6_prefix_length": "string",
+                            "network_tier": "string",
+                            "public_ptr_domain_name": "string"
+                          }
+                        ]
+                      ],
+                      "ipv6_access_type": "string",
                       "name": "string",
                       "network": "string",
                       "network_ip": "string",
                       "nic_type": "string",
+                      "stack_type": "string",
                       "subnetwork": "string",
                       "subnetwork_project": "string"
                     }
@@ -68687,6 +69310,23 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "logging_config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "enable_components": [
+                        "list",
+                        "string"
+                      ]
+                    }
+                  ]
+                ],
+                "description": "Logging configuration for the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "logging_service": {
                 "type": "string",
                 "description": "The logging service that the cluster should write logs to. Available options include logging.googleapis.com(Legacy Stackdriver), logging.googleapis.com/kubernetes(Stackdriver Kubernetes Engine Logging), and none. Defaults to logging.googleapis.com/kubernetes.",
@@ -68800,6 +69440,23 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "monitoring_config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "enable_components": [
+                        "list",
+                        "string"
+                      ]
+                    }
+                  ]
+                ],
+                "description": "Monitoring configuration for the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "monitoring_service": {
                 "type": "string",
                 "description": "The monitoring service that the cluster should write metrics to. Automatically send metrics from pods in the cluster to the Google Cloud Monitoring API. VM metrics will be collected by Google Compute Engine regardless of this setting Available options include monitoring.googleapis.com(Legacy Stackdriver), monitoring.googleapis.com/kubernetes(Stackdriver Kubernetes Engine Monitoring), and none. Defaults to monitoring.googleapis.com/kubernetes.",
@@ -68905,6 +69562,7 @@
                         [
                           "object",
                           {
+                            "mode": "string",
                             "node_metadata": "string"
                           }
                         ]
@@ -69024,6 +69682,7 @@
                               [
                                 "object",
                                 {
+                                  "mode": "string",
                                   "node_metadata": "string"
                                 }
                               ]
@@ -69982,6 +70641,12 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "import_only": {
+                "type": "bool",
+                "description": "Whether this key may contain imported versions only.",
+                "description_kind": "plain",
                 "computed": true
               },
               "key_ring": {
@@ -71188,7 +71853,8 @@
                 "optional": true
               }
             },
-            "description_kind": "plain"
+            "description_kind": "plain",
+            "deprecated": true
           }
         },
         "google_secret_manager_secret": {
@@ -71542,6 +72208,103 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_service_networking_peered_dns_domain": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "dns_suffix": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "network": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "parent": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "service": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_sourcerepo_repository": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Resource name of the repository, of the form '{{repo}}'.\nThe repo name may contain slashes. eg, 'name/with/slash'",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "pubsub_configs": {
+                "type": [
+                  "set",
+                  [
+                    "object",
+                    {
+                      "message_format": "string",
+                      "service_account_email": "string",
+                      "topic": "string"
+                    }
+                  ]
+                ],
+                "description": "How this repository publishes a change in the repository through Cloud Pub/Sub. \nKeyed by the topic names.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "size": {
+                "type": "number",
+                "description": "The disk usage of the repo, in bytes.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "url": {
+                "type": "string",
+                "description": "URL to clone the repository from Google Cloud Source Repositories.",
+                "description_kind": "plain",
+                "computed": true
               }
             },
             "description_kind": "plain"
@@ -72009,6 +72772,236 @@
                   ]
                 ],
                 "description": "The settings to use for the database. The configuration is detailed below.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_storage_bucket": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "bucket_policy_only": {
+                "type": "bool",
+                "description": "Enables Bucket Policy Only access to a bucket.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "cors": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "max_age_seconds": "number",
+                      "method": [
+                        "list",
+                        "string"
+                      ],
+                      "origin": [
+                        "list",
+                        "string"
+                      ],
+                      "response_header": [
+                        "list",
+                        "string"
+                      ]
+                    }
+                  ]
+                ],
+                "description": "The bucket's Cross-Origin Resource Sharing (CORS) configuration.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "default_event_based_hold": {
+                "type": "bool",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "encryption": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "default_kms_key_name": "string"
+                    }
+                  ]
+                ],
+                "description": "The bucket's encryption configuration.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "force_destroy": {
+                "type": "bool",
+                "description": "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "A set of key/value label pairs to assign to the bucket.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "lifecycle_rule": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "action": [
+                        "set",
+                        [
+                          "object",
+                          {
+                            "storage_class": "string",
+                            "type": "string"
+                          }
+                        ]
+                      ],
+                      "condition": [
+                        "set",
+                        [
+                          "object",
+                          {
+                            "age": "number",
+                            "created_before": "string",
+                            "custom_time_before": "string",
+                            "days_since_custom_time": "number",
+                            "days_since_noncurrent_time": "number",
+                            "matches_storage_class": [
+                              "list",
+                              "string"
+                            ],
+                            "noncurrent_time_before": "string",
+                            "num_newer_versions": "number",
+                            "with_state": "string"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "The bucket's Lifecycle Rules configuration.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The Google Cloud Storage location",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "logging": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "log_bucket": "string",
+                      "log_object_prefix": "string"
+                    }
+                  ]
+                ],
+                "description": "The bucket's Access & Storage Logs configuration.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the bucket.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "requester_pays": {
+                "type": "bool",
+                "description": "Enables Requester Pays on a storage bucket.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "retention_policy": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "is_locked": "bool",
+                      "retention_period": "number"
+                    }
+                  ]
+                ],
+                "description": "Configuration of the bucket's data retention policy for how long objects in the bucket should be retained.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "self_link": {
+                "type": "string",
+                "description": "The URI of the created resource.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "storage_class": {
+                "type": "string",
+                "description": "The Storage Class of the new bucket. Supported values include: STANDARD, MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "uniform_bucket_level_access": {
+                "type": "bool",
+                "description": "Enables uniform bucket-level access on a bucket.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "url": {
+                "type": "string",
+                "description": "The base URL of the bucket, in the format gs://<bucket-name>.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "versioning": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "enabled": "bool"
+                    }
+                  ]
+                ],
+                "description": "The bucket's Versioning configuration.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "website": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "main_page_suffix": "string",
+                      "not_found_page": "string"
+                    }
+                  ]
+                ],
+                "description": "Configuration if the bucket acts as a website.",
                 "description_kind": "plain",
                 "computed": true
               }
