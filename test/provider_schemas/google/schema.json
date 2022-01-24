@@ -146,6 +146,16 @@
               "description_kind": "plain",
               "optional": true
             },
+            "container_aws_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "container_azure_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
             "container_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
@@ -295,6 +305,11 @@
               "optional": true
             },
             "monitoring_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "network_connectivity_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -3196,6 +3211,12 @@
                 "optional": true,
                 "computed": true
               },
+              "ip_range": {
+                "type": "string",
+                "description": "IP range represents the customer-provided CIDR block of length 22 that will be used for\nthe Apigee instance creation. This optional range, if provided, should be freely\navailable as part of larger named range the customer has allocated to the Service\nNetworking peering. If this is not provided, Apigee will automatically request for any\navailable /22 CIDR block from Service Networking. The customer should use this CIDR block\nfor configuring their firewall needs to allow traffic from Apigee.\nInput format: \"a.b.c.d/22\"",
+                "description_kind": "plain",
+                "optional": true
+              },
               "location": {
                 "type": "string",
                 "description": "Compute Engine location where the instance resides. For trial organization\nsubscriptions, the location must be a Compute Engine zone. For paid organization\nsubscriptions, it should correspond to a Compute Engine region.",
@@ -3218,7 +3239,8 @@
                 "type": "string",
                 "description": "The size of the CIDR block range that will be reserved by the instance. For valid values, \nsee [CidrRange](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances#CidrRange) on the documentation.",
                 "description_kind": "plain",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "port": {
                 "type": "string",
@@ -3906,7 +3928,7 @@
               },
               "runtime_api_version": {
                 "type": "string",
-                "description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at https://cloud.google.com/appengine/docs/standard//config/appref",
+                "description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at 'https://cloud.google.com/appengine/docs/standard/<language>/config/appref'\\\nSubstitute '<language>' with 'python', 'java', 'php', 'ruby', 'go' or 'nodejs'.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -4896,7 +4918,7 @@
               },
               "runtime_api_version": {
                 "type": "string",
-                "description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at https://cloud.google.com/appengine/docs/standard//config/appref",
+                "description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at 'https://cloud.google.com/appengine/docs/standard/<language>/config/appref'\\\nSubstitute '<language>' with 'python', 'java', 'php', 'ruby', 'go' or 'nodejs'.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -5503,7 +5525,7 @@
                   "map",
                   "string"
                 ],
-                "description": "These parameters are specific to each data source.",
+                "description": "Parameters specific to each data source. For more information see the bq tab in the 'Setting up a data transfer'\nsection for each data source. For example the parameters for Cloud Storage transfers are listed here:\nhttps://cloud.google.com/bigquery-transfer/docs/cloud-storage-transfer#bq",
                 "description_kind": "plain",
                 "required": true
               },
@@ -6983,6 +7005,12 @@
                 "optional": true,
                 "computed": true
               },
+              "return_table_type": {
+                "type": "string",
+                "description": "Optional. Can be set only if routineType = \"TABLE_VALUED_FUNCTION\".\n\nIf absent, the return table type is inferred from definitionBody at query time in each query\nthat references this routine. If present, then the columns in the evaluated table result will\nbe cast to match the column types specificed in return table type, at query time.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "return_type": {
                 "type": "string",
                 "description": "A JSON schema for the return type. Optional if language = \"SQL\"; required otherwise.\nIf absent, the return type is inferred from definitionBody at query time in each query\nthat references this routine. If present, then the evaluated result will be cast to\nthe specified returned type at query time. ~>**NOTE**: Because this field expects a JSON\nstring, any changes to the string will create a diff, even if the JSON itself hasn't\nchanged. If the API returns a different value for the same schema, e.g. it switche\nd the order of values or replaced STRUCT field type with RECORD field type, we currently\ncannot suppress the recurring diff this causes. As a workaround, we recommend using\nthe schema as returned by the API.",
@@ -6997,7 +7025,7 @@
               },
               "routine_type": {
                 "type": "string",
-                "description": "The type of routine. Possible values: [\"SCALAR_FUNCTION\", \"PROCEDURE\"]",
+                "description": "The type of routine. Possible values: [\"SCALAR_FUNCTION\", \"PROCEDURE\", \"TABLE_VALUED_FUNCTION\"]",
                 "description_kind": "plain",
                 "optional": true
               }
@@ -10332,7 +10360,8 @@
                             "type": "string",
                             "description": "Email address of the IAM service account associated with the revision of the\nservice. The service account represents the identity of the running revision,\nand determines what permissions the revision has. If not provided, the revision\nwill use the project's default service account.",
                             "description_kind": "plain",
-                            "optional": true
+                            "optional": true,
+                            "computed": true
                           },
                           "serving_state": {
                             "type": "string",
@@ -10628,6 +10657,12 @@
                                   "nesting_mode": "list",
                                   "block": {
                                     "attributes": {
+                                      "default_mode": {
+                                        "type": "number",
+                                        "description": "Mode bits to use on created files by default. Must be a value between 0000\nand 0777. Defaults to 0644. Directories within the path are not affected by\nthis setting. This might be in conflict with other options that affect the\nfile mode, like fsGroup, and the result can be other mode bits set.",
+                                        "description_kind": "plain",
+                                        "optional": true
+                                      },
                                       "secret_name": {
                                         "type": "string",
                                         "description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n<alias>:projects/<project-id|project-number>/secrets/<secret-name>.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation.",
@@ -10645,6 +10680,12 @@
                                               "description": "The Cloud Secret Manager secret version.\nCan be 'latest' for the latest value or an integer for a specific version.",
                                               "description_kind": "plain",
                                               "required": true
+                                            },
+                                            "mode": {
+                                              "type": "number",
+                                              "description": "Mode bits to use on this file, must be a value between 0000 and 0777. If\nnot specified, the volume defaultMode will be used. This might be in\nconflict with other options that affect the file mode, like fsGroup, and\nthe result can be other mode bits set.",
+                                              "description_kind": "plain",
+                                              "optional": true
                                             },
                                             "path": {
                                               "type": "string",
@@ -11622,6 +11663,38 @@
                       },
                       "max_items": 1
                     },
+                    "available_secrets": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "block_types": {
+                          "secret_manager": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "env": {
+                                  "type": "string",
+                                  "description": "Environment variable name to associate with the secret. Secret environment\nvariables must be unique across all of a build's secrets, and must be used\nby at least one build step.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                },
+                                "version_name": {
+                                  "type": "string",
+                                  "description": "Resource name of the SecretVersion. In format: projects/*/secrets/*/versions/*",
+                                  "description_kind": "plain",
+                                  "required": true
+                                }
+                              },
+                              "description": "Pairs a secret environment variable with a SecretVersion in Secret Manager.",
+                              "description_kind": "plain"
+                            },
+                            "min_items": 1
+                          }
+                        },
+                        "description": "Secrets and secret environment variables.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "options": {
                       "nesting_mode": "list",
                       "block": {
@@ -12005,7 +12078,7 @@
                             "optional": true
                           }
                         },
-                        "description": "filter to match changes in pull requests.  Specify only one of pullRequest or push.",
+                        "description": "filter to match changes in pull requests. Specify only one of 'pull_request' or 'push'.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -12033,7 +12106,7 @@
                             "optional": true
                           }
                         },
-                        "description": "filter to match changes in refs, like branches or tags.  Specify only one of pullRequest or push.",
+                        "description": "filter to match changes in refs, like branches or tags. Specify only one of 'pull_request' or 'push'.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -12398,6 +12471,12 @@
               "max_instances": {
                 "type": "number",
                 "description": "The limit on the maximum number of function instances that may coexist at a given time.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "min_instances": {
+                "type": "number",
+                "description": "The limit on the minimum number of function instances that may coexist at a given time.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -13189,6 +13268,13 @@
                       "description_kind": "plain",
                       "computed": true
                     },
+                    "environment_size": {
+                      "type": "string",
+                      "description": "The size of the Cloud Composer environment. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
                     "gke_cluster": {
                       "type": "string",
                       "description": "The Kubernetes Engine cluster used to run this environment.",
@@ -13204,6 +13290,38 @@
                     }
                   },
                   "block_types": {
+                    "database_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "machine_type": {
+                            "type": "string",
+                            "description": "Optional. Cloud SQL machine type used by Airflow database. It has to be one of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16. If not specified, db-n1-standard-2 will be used.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The configuration of Cloud SQL instance that is used by the Apache Airflow software. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "encryption_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "kms_key_name": {
+                            "type": "string",
+                            "description": "Optional. Customer-managed Encryption Key available through Google's Key Management Service. Cannot be updated.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The encryption options for the Composer environment and its dependencies. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "node_config": {
                       "nesting_mode": "list",
                       "block": {
@@ -13297,6 +13415,13 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "cloud_composer_network_ipv4_cidr_block": {
+                            "type": "string",
+                            "description": "The CIDR block from which IP range for Cloud Composer Network in tenant project will be reserved. Needs to be disjoint from private_cluster_config.master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
                           "cloud_sql_ipv4_cidr_block": {
                             "type": "string",
                             "description": "The CIDR block from which IP range in tenant project will be reserved for Cloud SQL. Needs to be disjoint from web_server_ipv4_cidr_block.",
@@ -13384,6 +13509,165 @@
                           }
                         },
                         "description": "The configuration settings for software inside the environment.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "web_server_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "machine_type": {
+                            "type": "string",
+                            "description": "Optional. Machine type on which Airflow web server is running. It has to be one of: composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8. If not specified, composer-n1-webserver-2 will be used. Value custom is returned only in response, if Airflow web server parameters were manually changed to a non-standard values.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The configuration settings for the Airflow web server App Engine instance. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "web_server_network_access_control": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "block_types": {
+                          "allowed_ip_range": {
+                            "nesting_mode": "set",
+                            "block": {
+                              "attributes": {
+                                "description": {
+                                  "type": "string",
+                                  "description": "A description of this ip range.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "description": "IP address or range, defined using CIDR notation, of requests that this rule applies to. Examples: 192.168.1.1 or 192.168.0.0/16 or 2001:db8::/32 or 2001:0db8:0000:0042:0000:8a2e:0370:7334. IP range prefixes should be properly truncated. For example, 1.2.3.4/24 should be truncated to 1.2.3.0/24. Similarly, for IPv6, 2001:db8::1/32 should be truncated to 2001:db8::/32.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                }
+                              },
+                              "description": "A collection of allowed IP ranges with descriptions.",
+                              "description_kind": "plain"
+                            }
+                          }
+                        },
+                        "description": "The network-level access control policy for the Airflow web server. If unspecified, no network-level access restrictions will be applied. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "workloads_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "block_types": {
+                          "scheduler": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "count": {
+                                  "type": "number",
+                                  "description": "The number of schedulers.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "cpu": {
+                                  "type": "number",
+                                  "description": "CPU request and limit for a single Airflow scheduler replica",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "memory_gb": {
+                                  "type": "number",
+                                  "description": "Memory (GB) request and limit for a single Airflow scheduler replica.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "storage_gb": {
+                                  "type": "number",
+                                  "description": "Storage (GB) request and limit for a single Airflow scheduler replica.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "Configuration for resources used by Airflow schedulers.",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          },
+                          "web_server": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "cpu": {
+                                  "type": "number",
+                                  "description": "CPU request and limit for Airflow web server.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "memory_gb": {
+                                  "type": "number",
+                                  "description": "Memory (GB) request and limit for Airflow web server.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "storage_gb": {
+                                  "type": "number",
+                                  "description": "Storage (GB) request and limit for Airflow web server.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "Configuration for resources used by Airflow web server.",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          },
+                          "worker": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "cpu": {
+                                  "type": "number",
+                                  "description": "CPU request and limit for a single Airflow worker replica.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "max_count": {
+                                  "type": "number",
+                                  "description": "Maximum number of workers for autoscaling.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "memory_gb": {
+                                  "type": "number",
+                                  "description": "Memory (GB) request and limit for a single Airflow worker replica.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "min_count": {
+                                  "type": "number",
+                                  "description": "Minimum number of workers for autoscaling.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "storage_gb": {
+                                  "type": "number",
+                                  "description": "Storage (GB) request and limit for a single Airflow worker replica.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "Configuration for resources used by Airflow workers.",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          }
+                        },
+                        "description": "The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -14196,13 +14480,13 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Indicates whether the backend service will be used with internal or\nexternal load balancing. A backend service created for one type of\nload balancing cannot be used with the other. Default value: \"EXTERNAL\" Possible values: [\"EXTERNAL\", \"INTERNAL_SELF_MANAGED\"]",
+                "description": "Indicates whether the backend service will be used with internal or\nexternal load balancing. A backend service created for one type of\nload balancing cannot be used with the other. For more information, refer to\n[Choosing a load balancer](https://cloud.google.com/load-balancing/docs/backend-service). Default value: \"EXTERNAL\" Possible values: [\"EXTERNAL\", \"INTERNAL_SELF_MANAGED\", \"EXTERNAL_MANAGED\"]",
                 "description_kind": "plain",
                 "optional": true
               },
               "locality_lb_policy": {
                 "type": "string",
-                "description": "The load balancing algorithm used within the scope of the locality.\nThe possible values are -\n\n* ROUND_ROBIN - This is a simple policy in which each healthy backend\n                is selected in round robin order.\n\n* LEAST_REQUEST - An O(1) algorithm which selects two random healthy\n                  hosts and picks the host which has fewer active requests.\n\n* RING_HASH - The ring/modulo hash load balancer implements consistent\n              hashing to backends. The algorithm has the property that the\n              addition/removal of a host from a set of N hosts only affects\n              1/N of the requests.\n\n* RANDOM - The load balancer selects a random healthy host.\n\n* ORIGINAL_DESTINATION - Backend host is selected based on the client\n                         connection metadata, i.e., connections are opened\n                         to the same address as the destination address of\n                         the incoming connection before the connection\n                         was redirected to the load balancer.\n\n* MAGLEV - used as a drop in replacement for the ring hash load balancer.\n           Maglev is not as stable as ring hash but has faster table lookup\n           build times and host selection times. For more information about\n           Maglev, refer to https://ai.google/research/pubs/pub44824\n\nThis field is applicable only when the load_balancing_scheme is set to\nINTERNAL_SELF_MANAGED. Possible values: [\"ROUND_ROBIN\", \"LEAST_REQUEST\", \"RING_HASH\", \"RANDOM\", \"ORIGINAL_DESTINATION\", \"MAGLEV\"]",
+                "description": "The load balancing algorithm used within the scope of the locality.\nThe possible values are:\n\n* 'ROUND_ROBIN': This is a simple policy in which each healthy backend\n                 is selected in round robin order.\n\n* 'LEAST_REQUEST': An O(1) algorithm which selects two random healthy\n                   hosts and picks the host which has fewer active requests.\n\n* 'RING_HASH': The ring/modulo hash load balancer implements consistent\n               hashing to backends. The algorithm has the property that the\n               addition/removal of a host from a set of N hosts only affects\n               1/N of the requests.\n\n* 'RANDOM': The load balancer selects a random healthy host.\n\n* 'ORIGINAL_DESTINATION': Backend host is selected based on the client\n                          connection metadata, i.e., connections are opened\n                          to the same address as the destination address of\n                          the incoming connection before the connection\n                          was redirected to the load balancer.\n\n* 'MAGLEV': used as a drop in replacement for the ring hash load balancer.\n            Maglev is not as stable as ring hash but has faster table lookup\n            build times and host selection times. For more information about\n            Maglev, refer to https://ai.google/research/pubs/pub44824\n\n\nThis field is applicable to either:\n\n* A regional backend service with the service_protocol set to HTTP, HTTPS, or HTTP2,\n  and loadBalancingScheme set to INTERNAL_MANAGED.\n* A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.\n\n\nIf session_affinity is not NONE, and this field is not set to MAGLEV or RING_HASH,\nsession affinity settings will not take effect.\n\nOnly ROUND_ROBIN and RING_HASH are supported when the backend service is referenced\nby a URL map that is bound to target gRPC proxy that has validate_for_proxyless\nfield set to true. Possible values: [\"ROUND_ROBIN\", \"LEAST_REQUEST\", \"RING_HASH\", \"RANDOM\", \"ORIGINAL_DESTINATION\", \"MAGLEV\"]",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -15508,7 +15792,7 @@
                   "set",
                   "string"
                 ],
-                "description": "If source ranges are specified, the firewall will apply only to\ntraffic that has source IP address in these ranges. These ranges must\nbe expressed in CIDR format. One or both of sourceRanges and\nsourceTags may be set. If both properties are set, the firewall will\napply to traffic that has source IP address within sourceRanges OR the\nsource IP that belongs to a tag listed in the sourceTags property. The\nconnection does not need to match both properties for the firewall to\napply. Only IPv4 is supported.",
+                "description": "If source ranges are specified, the firewall will apply only to\ntraffic that has source IP address in these ranges. These ranges must\nbe expressed in CIDR format. One or both of sourceRanges and\nsourceTags may be set. If both properties are set, the firewall will\napply to traffic that has source IP address within sourceRanges OR the\nsource IP that belongs to a tag listed in the sourceTags property. The\nconnection does not need to match both properties for the firewall to\napply. Only IPv4 is supported. For INGRESS traffic, one of 'source_ranges',\n'source_tags' or 'source_service_accounts' is required.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -15517,7 +15801,7 @@
                   "set",
                   "string"
                 ],
-                "description": "If source service accounts are specified, the firewall will apply only\nto traffic originating from an instance with a service account in this\nlist. Source service accounts cannot be used to control traffic to an\ninstance's external IP address because service accounts are associated\nwith an instance, not an IP address. sourceRanges can be set at the\nsame time as sourceServiceAccounts. If both are set, the firewall will\napply to traffic that has source IP address within sourceRanges OR the\nsource IP belongs to an instance with service account listed in\nsourceServiceAccount. The connection does not need to match both\nproperties for the firewall to apply. sourceServiceAccounts cannot be\nused at the same time as sourceTags or targetTags.",
+                "description": "If source service accounts are specified, the firewall will apply only\nto traffic originating from an instance with a service account in this\nlist. Source service accounts cannot be used to control traffic to an\ninstance's external IP address because service accounts are associated\nwith an instance, not an IP address. sourceRanges can be set at the\nsame time as sourceServiceAccounts. If both are set, the firewall will\napply to traffic that has source IP address within sourceRanges OR the\nsource IP belongs to an instance with service account listed in\nsourceServiceAccount. The connection does not need to match both\nproperties for the firewall to apply. sourceServiceAccounts cannot be\nused at the same time as sourceTags or targetTags. For INGRESS traffic,\none of 'source_ranges', 'source_tags' or 'source_service_accounts' is required.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -15526,7 +15810,7 @@
                   "set",
                   "string"
                 ],
-                "description": "If source tags are specified, the firewall will apply only to traffic\nwith source IP that belongs to a tag listed in source tags. Source\ntags cannot be used to control traffic to an instance's external IP\naddress. Because tags are associated with an instance, not an IP\naddress. One or both of sourceRanges and sourceTags may be set. If\nboth properties are set, the firewall will apply to traffic that has\nsource IP address within sourceRanges OR the source IP that belongs to\na tag listed in the sourceTags property. The connection does not need\nto match both properties for the firewall to apply.",
+                "description": "If source tags are specified, the firewall will apply only to traffic\nwith source IP that belongs to a tag listed in source tags. Source\ntags cannot be used to control traffic to an instance's external IP\naddress. Because tags are associated with an instance, not an IP\naddress. One or both of sourceRanges and sourceTags may be set. If\nboth properties are set, the firewall will apply to traffic that has\nsource IP address within sourceRanges OR the source IP that belongs to\na tag listed in the sourceTags property. The connection does not need\nto match both properties for the firewall to apply. For INGRESS traffic,\none of 'source_ranges', 'source_tags' or 'source_service_accounts' is required.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -16042,7 +16326,7 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL",
+                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n*   `EXTERNAL_MANAGED` is used for:\n    *   Global external HTTP(S) load balancers \n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL, EXTERNAL_MANAGED",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -16308,7 +16592,7 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL",
+                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n*   `EXTERNAL_MANAGED` is used for:\n    *   Global external HTTP(S) load balancers \n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL, EXTERNAL_MANAGED",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -22190,13 +22474,13 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Indicates what kind of load balancing this regional backend service\nwill be used for. A backend service created for one type of load\nbalancing cannot be used with the other(s). Default value: \"INTERNAL\" Possible values: [\"EXTERNAL\", \"INTERNAL\", \"INTERNAL_MANAGED\"]",
+                "description": "Indicates what kind of load balancing this regional backend service\nwill be used for. A backend service created for one type of load\nbalancing cannot be used with the other(s). For more information, refer to\n[Choosing a load balancer](https://cloud.google.com/load-balancing/docs/backend-service). Default value: \"INTERNAL\" Possible values: [\"EXTERNAL\", \"EXTERNAL_MANAGED\", \"INTERNAL\", \"INTERNAL_MANAGED\"]",
                 "description_kind": "plain",
                 "optional": true
               },
               "locality_lb_policy": {
                 "type": "string",
-                "description": "The load balancing algorithm used within the scope of the locality.\nThe possible values are -\n\n* ROUND_ROBIN - This is a simple policy in which each healthy backend\n                is selected in round robin order.\n\n* LEAST_REQUEST - An O(1) algorithm which selects two random healthy\n                  hosts and picks the host which has fewer active requests.\n\n* RING_HASH - The ring/modulo hash load balancer implements consistent\n              hashing to backends. The algorithm has the property that the\n              addition/removal of a host from a set of N hosts only affects\n              1/N of the requests.\n\n* RANDOM - The load balancer selects a random healthy host.\n\n* ORIGINAL_DESTINATION - Backend host is selected based on the client\n                         connection metadata, i.e., connections are opened\n                         to the same address as the destination address of\n                         the incoming connection before the connection\n                         was redirected to the load balancer.\n\n* MAGLEV - used as a drop in replacement for the ring hash load balancer.\n           Maglev is not as stable as ring hash but has faster table lookup\n           build times and host selection times. For more information about\n           Maglev, refer to https://ai.google/research/pubs/pub44824\n\nThis field is applicable only when the 'load_balancing_scheme' is set to\nINTERNAL_MANAGED and the 'protocol' is set to HTTP, HTTPS, or HTTP2. Possible values: [\"ROUND_ROBIN\", \"LEAST_REQUEST\", \"RING_HASH\", \"RANDOM\", \"ORIGINAL_DESTINATION\", \"MAGLEV\"]",
+                "description": "The load balancing algorithm used within the scope of the locality.\nThe possible values are:\n\n* 'ROUND_ROBIN': This is a simple policy in which each healthy backend\n                 is selected in round robin order.\n\n* 'LEAST_REQUEST': An O(1) algorithm which selects two random healthy\n                   hosts and picks the host which has fewer active requests.\n\n* 'RING_HASH': The ring/modulo hash load balancer implements consistent\n               hashing to backends. The algorithm has the property that the\n               addition/removal of a host from a set of N hosts only affects\n               1/N of the requests.\n\n* 'RANDOM': The load balancer selects a random healthy host.\n\n* 'ORIGINAL_DESTINATION': Backend host is selected based on the client\n                          connection metadata, i.e., connections are opened\n                          to the same address as the destination address of\n                          the incoming connection before the connection\n                          was redirected to the load balancer.\n\n* 'MAGLEV': used as a drop in replacement for the ring hash load balancer.\n            Maglev is not as stable as ring hash but has faster table lookup\n            build times and host selection times. For more information about\n            Maglev, refer to https://ai.google/research/pubs/pub44824\n\n\nThis field is applicable to either:\n\n* A regional backend service with the service_protocol set to HTTP, HTTPS, or HTTP2,\n  and loadBalancingScheme set to INTERNAL_MANAGED.\n* A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.\n\n\nIf session_affinity is not NONE, and this field is not set to MAGLEV or RING_HASH,\nsession affinity settings will not take effect.\n\nOnly ROUND_ROBIN and RING_HASH are supported when the backend service is referenced\nby a URL map that is bound to target gRPC proxy that has validate_for_proxyless\nfield set to true. Possible values: [\"ROUND_ROBIN\", \"LEAST_REQUEST\", \"RING_HASH\", \"RANDOM\", \"ORIGINAL_DESTINATION\", \"MAGLEV\"]",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -22214,7 +22498,7 @@
               },
               "port_name": {
                 "type": "string",
-                "description": "A named port on a backend instance group representing the port for\ncommunication to the backend VMs in that group. Required when the\nloadBalancingScheme is EXTERNAL, INTERNAL_MANAGED, or INTERNAL_SELF_MANAGED\nand the backends are instance groups. The named port must be defined on each\nbackend instance group. This parameter has no meaning if the backends are NEGs. API sets a\ndefault of \"http\" if not given.\nMust be omitted when the loadBalancingScheme is INTERNAL (Internal TCP/UDP Load Balancing).",
+                "description": "A named port on a backend instance group representing the port for\ncommunication to the backend VMs in that group. Required when the\nloadBalancingScheme is EXTERNAL, EXTERNAL_MANAGED, INTERNAL_MANAGED, or INTERNAL_SELF_MANAGED\nand the backends are instance groups. The named port must be defined on each\nbackend instance group. This parameter has no meaning if the backends are NEGs. API sets a\ndefault of \"http\" if not given.\nMust be omitted when the loadBalancingScheme is INTERNAL (Internal TCP/UDP Load Balancing).",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -26036,6 +26320,45 @@
               }
             },
             "block_types": {
+              "share_settings": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "share_type": {
+                      "type": "string",
+                      "description": "Type of sharing for this shared-reservation Possible values: [\"LOCAL\", \"SPECIFIC_PROJECTS\"]",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "project_map": {
+                      "nesting_mode": "set",
+                      "block": {
+                        "attributes": {
+                          "id": {
+                            "type": "string",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "project_id": {
+                            "type": "string",
+                            "description": "The project id/number, should be same as the key of this project config in the project map.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "A map of project number and project config. This is only valid when shareType's value is SPECIFIC_PROJECTS.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "The share setting for reservations.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "specific_reservation": {
                 "nesting_mode": "list",
                 "block": {
@@ -28044,7 +28367,7 @@
               },
               "purpose": {
                 "type": "string",
-                "description": "The purpose of the resource. A subnetwork with purpose set to\nINTERNAL_HTTPS_LOAD_BALANCER is a user-created subnetwork that is\nreserved for Internal HTTP(S) Load Balancing. \n\nIf set to INTERNAL_HTTPS_LOAD_BALANCER you must also set the 'role' field.",
+                "description": "The purpose of the resource. A subnetwork with purpose set to\nINTERNAL_HTTPS_LOAD_BALANCER is a user-created subnetwork that is\nreserved for Internal HTTP(S) Load Balancing.\n\nIf set to INTERNAL_HTTPS_LOAD_BALANCER you must also set the 'role' field.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -31877,6 +32200,1469 @@
             "description_kind": "plain"
           }
         },
+        "google_container_aws_cluster": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "annotations": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. Annotations on the cluster. This field has the same restrictions as Kubernetes annotations. The total size of all keys and values combined is limited to 256k. Key can have 2 segments: prefix (optional) and name (required), separated by a slash (/). Prefix must be a DNS subdomain. Name must be 63 characters or less, begin and end with alphanumerics, with dashes (-), underscores (_), dots (.), and alphanumerics between.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "aws_region": {
+                "type": "string",
+                "description": "Required. The AWS region where the cluster runs. Each Google Cloud region supports a subset of nearby AWS regions. You can call to list all supported AWS regions within a given Google Cloud region.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time at which this cluster was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional. A human readable description of this cluster. Cannot be longer than 255 UTF-8 encoded bytes.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "endpoint": {
+                "type": "string",
+                "description": "Output only. The endpoint of the cluster's API server.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "etag": {
+                "type": "string",
+                "description": "Allows clients to perform consistent read-modify-writes through optimistic concurrency control. May be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of this resource.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "reconciling": {
+                "type": "bool",
+                "description": "Output only. If set, there are currently changes in flight to the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. The current state of the cluster. Possible values: STATE_UNSPECIFIED, PROVISIONING, RUNNING, RECONCILING, STOPPING, ERROR, DEGRADED",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. A globally unique identifier for the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time at which this cluster was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "workload_identity_config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "identity_provider": "string",
+                      "issuer_uri": "string",
+                      "workload_pool": "string"
+                    }
+                  ]
+                ],
+                "description": "Output only. Workload Identity settings.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "authorization": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "admin_users": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "username": {
+                            "type": "string",
+                            "description": "Required. The name of the user, e.g. `my-gcp-id@gmail.com`.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. Users to perform operations as a cluster admin. A managed ClusterRoleBinding will be created to grant the `cluster-admin` ClusterRole to the users. At most one user can be specified. For more info on RBAC, see https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1
+                    }
+                  },
+                  "description": "Required. Configuration related to the cluster RBAC settings.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "control_plane": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "iam_instance_profile": {
+                      "type": "string",
+                      "description": "Required. The name of the AWS IAM instance pofile to assign to each control plane replica.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "instance_type": {
+                      "type": "string",
+                      "description": "Optional. The AWS instance type. When unspecified, it defaults to `t3.medium`.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "security_group_ids": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Optional. The IDs of additional security groups to add to control plane replicas. The Anthos Multi-Cloud API will automatically create and manage security groups with the minimum rules needed for a functioning cluster.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "subnet_ids": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Required. The list of subnets where control plane replicas will run. A replica will be provisioned on each subnet and up to three values can be provided. Each subnet must be in a different AWS Availability Zone (AZ).",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "tags": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "Optional. A set of AWS resource tags to propagate to all underlying managed AWS resources. Specify at most 50 pairs containing alphanumerics, spaces, and symbols (.+-=_:@/). Keys can be up to 127 Unicode characters. Values can be up to 255 Unicode characters.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "Required. The Kubernetes version to run on control plane replicas (e.g. `1.19.10-gke.1000`). You can list all supported versions on a given Google Cloud region by calling .",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "aws_services_authentication": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "role_arn": {
+                            "type": "string",
+                            "description": "Required. The Amazon Resource Name (ARN) of the role that the Anthos Multi-Cloud API will assume when managing AWS resources on your account.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "role_session_name": {
+                            "type": "string",
+                            "description": "Optional. An identifier for the assumed role session. When unspecified, it defaults to `multicloud-service-agent`.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Required. Authentication configuration for management of AWS resources.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    },
+                    "config_encryption": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "kms_key_arn": {
+                            "type": "string",
+                            "description": "Required. The ARN of the AWS KMS key used to encrypt cluster configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. The ARN of the AWS KMS key used to encrypt cluster configuration.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    },
+                    "database_encryption": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "kms_key_arn": {
+                            "type": "string",
+                            "description": "Required. The ARN of the AWS KMS key used to encrypt cluster secrets.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. The ARN of the AWS KMS key used to encrypt cluster secrets.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    },
+                    "main_volume": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "iops": {
+                            "type": "number",
+                            "description": "Optional. The number of I/O operations per second (IOPS) to provision for GP3 volume.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "kms_key_arn": {
+                            "type": "string",
+                            "description": "Optional. The Amazon Resource Name (ARN) of the Customer Managed Key (CMK) used to encrypt AWS EBS volumes. If not specified, the default Amazon managed key associated to the AWS region where this cluster runs will be used.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "size_gib": {
+                            "type": "number",
+                            "description": "Optional. The size of the volume, in GiBs. When unspecified, a default value is provided. See the specific reference in the parent resource.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "volume_type": {
+                            "type": "string",
+                            "description": "Optional. Type of the EBS volume. When unspecified, it defaults to GP2 volume. Possible values: VOLUME_TYPE_UNSPECIFIED, GP2, GP3",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Optional. Configuration related to the main volume provisioned for each control plane replica. The main volume is in charge of storing all of the cluster's etcd state. Volumes will be provisioned in the availability zone associated with the corresponding subnet. When unspecified, it defaults to 8 GiB with the GP2 volume type.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "proxy_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "secret_arn": {
+                            "type": "string",
+                            "description": "The ARN of the AWS Secret Manager secret that contains the HTTP(S) proxy configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "secret_version": {
+                            "type": "string",
+                            "description": "The version string of the AWS Secret Manager secret that contains the HTTP(S) proxy configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Proxy configuration for outbound HTTP(S) traffic.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "root_volume": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "iops": {
+                            "type": "number",
+                            "description": "Optional. The number of I/O operations per second (IOPS) to provision for GP3 volume.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "kms_key_arn": {
+                            "type": "string",
+                            "description": "Optional. The Amazon Resource Name (ARN) of the Customer Managed Key (CMK) used to encrypt AWS EBS volumes. If not specified, the default Amazon managed key associated to the AWS region where this cluster runs will be used.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "size_gib": {
+                            "type": "number",
+                            "description": "Optional. The size of the volume, in GiBs. When unspecified, a default value is provided. See the specific reference in the parent resource.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "volume_type": {
+                            "type": "string",
+                            "description": "Optional. Type of the EBS volume. When unspecified, it defaults to GP2 volume. Possible values: VOLUME_TYPE_UNSPECIFIED, GP2, GP3",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Optional. Configuration related to the root volume provisioned for each control plane replica. Volumes will be provisioned in the availability zone associated with the corresponding subnet. When unspecified, it defaults to 32 GiB with the GP2 volume type.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "ssh_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "ec2_key_pair": {
+                            "type": "string",
+                            "description": "Required. The name of the EC2 key pair used to login into cluster machines.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Optional. SSH configuration for how to access the underlying control plane machines.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Required. Configuration related to the cluster control plane.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "fleet": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "membership": {
+                      "type": "string",
+                      "description": "The name of the managed Hub Membership resource associated to this cluster. Membership names are formatted as projects/<project-number>/locations/global/membership/<cluster-id>.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "project": {
+                      "type": "string",
+                      "description": "The number of the Fleet host project where this cluster will be registered.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "description": "Fleet configuration.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "networking": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "pod_address_cidr_blocks": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Required. All pods in the cluster are assigned an RFC1918 IPv4 address from these ranges. Only a single range is supported. This field cannot be changed after creation.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "service_address_cidr_blocks": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Required. All services in the cluster are assigned an RFC1918 IPv4 address from these ranges. Only a single range is supported. This field cannot be changed after creation.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "vpc_id": {
+                      "type": "string",
+                      "description": "Required. The VPC associated with the cluster. All component clusters (i.e. control plane and node pools) run on a single VPC. This field cannot be changed after creation.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Required. Cluster-wide networking configuration.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_container_aws_node_pool": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "annotations": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. Annotations on the node pool. This field has the same restrictions as Kubernetes annotations. The total size of all keys and values combined is limited to 256k. Key can have 2 segments: prefix (optional) and name (required), separated by a slash (/). Prefix must be a DNS subdomain. Name must be 63 characters or less, begin and end with alphanumerics, with dashes (-), underscores (_), dots (.), and alphanumerics between.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "cluster": {
+                "type": "string",
+                "description": "The awsCluster for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time at which this node pool was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "etag": {
+                "type": "string",
+                "description": "Allows clients to perform consistent read-modify-writes through optimistic concurrency control. May be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of this resource.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "reconciling": {
+                "type": "bool",
+                "description": "Output only. If set, there are currently changes in flight to the node pool.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. The lifecycle state of the node pool. Possible values: STATE_UNSPECIFIED, PROVISIONING, RUNNING, RECONCILING, STOPPING, ERROR, DEGRADED",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "subnet_id": {
+                "type": "string",
+                "description": "Required. The subnet where the node pool node run.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. A globally unique identifier for the node pool.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time at which this node pool was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "version": {
+                "type": "string",
+                "description": "Required. The Kubernetes version to run on this node pool (e.g. `1.19.10-gke.1000`). You can list all supported versions on a given Google Cloud region by calling GetAwsServerConfig.",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "autoscaling": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "max_node_count": {
+                      "type": "number",
+                      "description": "Required. Maximum number of nodes in the NodePool. Must be >= min_node_count.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "min_node_count": {
+                      "type": "number",
+                      "description": "Required. Minimum number of nodes in the NodePool. Must be >= 1 and <= max_node_count.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Required. Autoscaler configuration for this node pool.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "iam_instance_profile": {
+                      "type": "string",
+                      "description": "Required. The name of the AWS IAM role assigned to nodes in the pool.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "instance_type": {
+                      "type": "string",
+                      "description": "Optional. The AWS instance type. When unspecified, it defaults to `t3.medium`.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "labels": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "Optional. The initial labels assigned to nodes of this node pool. An object containing a list of \"key\": value pairs. Example: { \"name\": \"wrench\", \"mass\": \"1.3kg\", \"count\": \"3\" }.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "security_group_ids": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Optional. The IDs of additional security groups to add to nodes in this pool. The manager will automatically create security groups with minimum rules needed for a functioning cluster.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "tags": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "Optional. Key/value metadata to assign to each underlying AWS resource. Specify at most 50 pairs containing alphanumerics, spaces, and symbols (.+-=_:@/). Keys can be up to 127 Unicode characters. Values can be up to 255 Unicode characters.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "block_types": {
+                    "config_encryption": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "kms_key_arn": {
+                            "type": "string",
+                            "description": "Required. The ARN of the AWS KMS key used to encrypt node pool configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. The ARN of the AWS KMS key used to encrypt node pool configuration.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    },
+                    "root_volume": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "iops": {
+                            "type": "number",
+                            "description": "Optional. The number of I/O operations per second (IOPS) to provision for GP3 volume.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "kms_key_arn": {
+                            "type": "string",
+                            "description": "Optional. The Amazon Resource Name (ARN) of the Customer Managed Key (CMK) used to encrypt AWS EBS volumes. If not specified, the default Amazon managed key associated to the AWS region where this cluster runs will be used.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "size_gib": {
+                            "type": "number",
+                            "description": "Optional. The size of the volume, in GiBs. When unspecified, a default value is provided. See the specific reference in the parent resource.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "volume_type": {
+                            "type": "string",
+                            "description": "Optional. Type of the EBS volume. When unspecified, it defaults to GP2 volume. Possible values: VOLUME_TYPE_UNSPECIFIED, GP2, GP3",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Optional. Template for the root volume provisioned for node pool nodes. Volumes will be provisioned in the availability zone assigned to the node pool subnet. When unspecified, it defaults to 32 GiB with the GP2 volume type.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "ssh_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "ec2_key_pair": {
+                            "type": "string",
+                            "description": "Required. The name of the EC2 key pair used to login into cluster machines.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Optional. The SSH configuration.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "taints": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "effect": {
+                            "type": "string",
+                            "description": "Required. The taint effect. Possible values: EFFECT_UNSPECIFIED, NO_SCHEDULE, PREFER_NO_SCHEDULE, NO_EXECUTE",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Required. Key for the taint.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "value": {
+                            "type": "string",
+                            "description": "Required. Value for the taint.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Optional. The initial taints assigned to nodes of this node pool.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "Required. The configuration of the node pool.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "max_pods_constraint": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "max_pods_per_node": {
+                      "type": "number",
+                      "description": "Required. The maximum number of pods to schedule on a single node.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Required. The constraint on the maximum number of pods that can be run simultaneously on a node in the node pool.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_container_azure_client": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "application_id": {
+                "type": "string",
+                "description": "Required. The Azure Active Directory Application ID.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "certificate": {
+                "type": "string",
+                "description": "Output only. The PEM encoded x509 certificate.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time at which this resource was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of this resource.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "tenant_id": {
+                "type": "string",
+                "description": "Required. The Azure Active Directory Tenant ID.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. A globally unique identifier for the client.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_container_azure_cluster": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "annotations": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. Annotations on the cluster. This field has the same restrictions as Kubernetes annotations. The total size of all keys and values combined is limited to 256k. Keys can have 2 segments: prefix (optional) and name (required), separated by a slash (/). Prefix must be a DNS subdomain. Name must be 63 characters or less, begin and end with alphanumerics, with dashes (-), underscores (_), dots (.), and alphanumerics between.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "azure_region": {
+                "type": "string",
+                "description": "Required. The Azure region where the cluster runs. Each Google Cloud region supports a subset of nearby Azure regions. You can call to list all supported Azure regions within a given Google Cloud region.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "client": {
+                "type": "string",
+                "description": "Required. Name of the AzureClient. The `AzureClient` resource must reside on the same GCP project and region as the `AzureCluster`. `AzureClient` names are formatted as `projects/<project-number>/locations/<region>/azureClients/<client-id>`. See Resource Names (https:cloud.google.com/apis/design/resource_names) for more details on Google Cloud resource names.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time at which this cluster was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional. A human readable description of this cluster. Cannot be longer than 255 UTF-8 encoded bytes.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "endpoint": {
+                "type": "string",
+                "description": "Output only. The endpoint of the cluster's API server.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "etag": {
+                "type": "string",
+                "description": "Allows clients to perform consistent read-modify-writes through optimistic concurrency control. May be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of this resource.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "reconciling": {
+                "type": "bool",
+                "description": "Output only. If set, there are currently changes in flight to the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "resource_group_id": {
+                "type": "string",
+                "description": "Required. The ARM ID of the resource group where the cluster resources are deployed. For example: `/subscriptions/*/resourceGroups/*`",
+                "description_kind": "plain",
+                "required": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. The current state of the cluster. Possible values: STATE_UNSPECIFIED, PROVISIONING, RUNNING, RECONCILING, STOPPING, ERROR, DEGRADED",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. A globally unique identifier for the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time at which this cluster was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "workload_identity_config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "identity_provider": "string",
+                      "issuer_uri": "string",
+                      "workload_pool": "string"
+                    }
+                  ]
+                ],
+                "description": "Output only. Workload Identity settings.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "authorization": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "admin_users": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "username": {
+                            "type": "string",
+                            "description": "Required. The name of the user, e.g. `my-gcp-id@gmail.com`.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. Users that can perform operations as a cluster admin. A new ClusterRoleBinding will be created to grant the cluster-admin ClusterRole to the users. At most one user can be specified. For more info on RBAC, see https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1
+                    }
+                  },
+                  "description": "Required. Configuration related to the cluster RBAC settings.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "control_plane": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "subnet_id": {
+                      "type": "string",
+                      "description": "Required. The ARM ID of the subnet where the control plane VMs are deployed. Example: `/subscriptions//resourceGroups//providers/Microsoft.Network/virtualNetworks//subnets/default`.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "tags": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "Optional. A set of tags to apply to all underlying control plane Azure resources.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "Required. The Kubernetes version to run on control plane replicas (e.g. `1.19.10-gke.1000`). You can list all supported versions on a given Google Cloud region by calling GetAzureServerConfig.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "vm_size": {
+                      "type": "string",
+                      "description": "Optional. The Azure VM size name. Example: `Standard_DS2_v2`. For available VM sizes, see https://docs.microsoft.com/en-us/azure/virtual-machines/vm-naming-conventions. When unspecified, it defaults to `Standard_DS2_v2`.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "database_encryption": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "key_id": {
+                            "type": "string",
+                            "description": "The ARM ID of the Azure Key Vault key to encrypt / decrypt data. For example: `/subscriptions/<subscription-id>/resourceGroups/<resource-group-id>/providers/Microsoft.KeyVault/vaults/<key-vault-id>/keys/<key-name>` Encryption will always take the latest version of the key and hence specific version is not supported.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Optional. Configuration related to application-layer secrets encryption.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "main_volume": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "size_gib": {
+                            "type": "number",
+                            "description": "Optional. The size of the disk, in GiBs. When unspecified, a default value is provided. See the specific reference in the parent resource.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Optional. Configuration related to the main volume provisioned for each control plane replica. The main volume is in charge of storing all of the cluster's etcd state. When unspecified, it defaults to a 8-GiB Azure Disk.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "proxy_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "resource_group_id": {
+                            "type": "string",
+                            "description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>`",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "secret_id": {
+                            "type": "string",
+                            "description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:<key-vault-name>.vault.azure.net/secrets/<secret-name>/<secret-version>`.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Proxy configuration for outbound HTTP(S) traffic.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "replica_placements": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "azure_availability_zone": {
+                            "type": "string",
+                            "description": "For a given replica, the Azure availability zone where to provision the control plane VM and the ETCD disk.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "subnet_id": {
+                            "type": "string",
+                            "description": "For a given replica, the ARM ID of the subnet where the control plane VM is deployed. Make sure it's a subnet under the virtual network in the cluster configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Configuration for where to place the control plane replicas. Up to three replica placement instances can be specified. If replica_placements is set, the replica placement instances will be applied to the three control plane replicas as evenly as possible.",
+                        "description_kind": "plain"
+                      }
+                    },
+                    "root_volume": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "size_gib": {
+                            "type": "number",
+                            "description": "Optional. The size of the disk, in GiBs. When unspecified, a default value is provided. See the specific reference in the parent resource.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Optional. Configuration related to the root volume provisioned for each control plane replica. When unspecified, it defaults to 32-GiB Azure Disk.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "ssh_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "authorized_key": {
+                            "type": "string",
+                            "description": "Required. The SSH public key data for VMs managed by Anthos. This accepts the authorized_keys file format used in OpenSSH according to the sshd(8) manual page.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. SSH configuration for how to access the underlying control plane machines.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Required. Configuration related to the cluster control plane.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "fleet": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "membership": {
+                      "type": "string",
+                      "description": "The name of the managed Hub Membership resource associated to this cluster. Membership names are formatted as projects/<project-number>/locations/global/membership/<cluster-id>.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "project": {
+                      "type": "string",
+                      "description": "The number of the Fleet host project where this cluster will be registered.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "description": "Fleet configuration.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "networking": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "pod_address_cidr_blocks": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Required. The IP address range of the pods in this cluster, in CIDR notation (e.g. `10.96.0.0/14`). All pods in the cluster get assigned a unique RFC1918 IPv4 address from these ranges. Only a single range is supported. This field cannot be changed after creation.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "service_address_cidr_blocks": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Required. The IP address range for services in this cluster, in CIDR notation (e.g. `10.96.0.0/14`). All services in the cluster get assigned a unique RFC1918 IPv4 address from these ranges. Only a single range is supported. This field cannot be changed after creating a cluster.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "virtual_network_id": {
+                      "type": "string",
+                      "description": "Required. The Azure Resource Manager (ARM) ID of the VNet associated with your cluster. All components in the cluster (i.e. control plane and node pools) run on a single VNet. Example: `/subscriptions/*/resourceGroups/*/providers/Microsoft.Network/virtualNetworks/*` This field cannot be changed after creation.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Required. Cluster-wide networking configuration.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_container_azure_node_pool": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "annotations": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. Annotations on the node pool. This field has the same restrictions as Kubernetes annotations. The total size of all keys and values combined is limited to 256k. Keys can have 2 segments: prefix (optional) and name (required), separated by a slash (/). Prefix must be a DNS subdomain. Name must be 63 characters or less, begin and end with alphanumerics, with dashes (-), underscores (_), dots (.), and alphanumerics between.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "azure_availability_zone": {
+                "type": "string",
+                "description": "Optional. The Azure availability zone of the nodes in this nodepool. When unspecified, it defaults to `1`.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "cluster": {
+                "type": "string",
+                "description": "The azureCluster for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time at which this node pool was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "etag": {
+                "type": "string",
+                "description": "Allows clients to perform consistent read-modify-writes through optimistic concurrency control. May be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of this resource.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "reconciling": {
+                "type": "bool",
+                "description": "Output only. If set, there are currently pending changes to the node pool.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. The current state of the node pool. Possible values: STATE_UNSPECIFIED, PROVISIONING, RUNNING, RECONCILING, STOPPING, ERROR, DEGRADED",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "subnet_id": {
+                "type": "string",
+                "description": "Required. The ARM ID of the subnet where the node pool VMs run. Make sure it's a subnet under the virtual network in the cluster configuration.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. A globally unique identifier for the node pool.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time at which this node pool was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "version": {
+                "type": "string",
+                "description": "Required. The Kubernetes version (e.g. `1.19.10-gke.1000`) running on this node pool.",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "autoscaling": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "max_node_count": {
+                      "type": "number",
+                      "description": "Required. Maximum number of nodes in the node pool. Must be >= min_node_count.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "min_node_count": {
+                      "type": "number",
+                      "description": "Required. Minimum number of nodes in the node pool. Must be >= 1 and <= max_node_count.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Required. Autoscaler configuration for this node pool.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "tags": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "Optional. A set of tags to apply to all underlying Azure resources for this node pool. This currently only includes Virtual Machine Scale Sets. Specify at most 50 pairs containing alphanumerics, spaces, and symbols (.+-=_:@/). Keys can be up to 127 Unicode characters. Values can be up to 255 Unicode characters.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "vm_size": {
+                      "type": "string",
+                      "description": "Optional. The Azure VM size name. Example: `Standard_DS2_v2`. See (/anthos/clusters/docs/azure/reference/supported-vms) for options. When unspecified, it defaults to `Standard_DS2_v2`.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "root_volume": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "size_gib": {
+                            "type": "number",
+                            "description": "Optional. The size of the disk, in GiBs. When unspecified, a default value is provided. See the specific reference in the parent resource.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          }
+                        },
+                        "description": "Optional. Configuration related to the root volume provisioned for each node pool machine. When unspecified, it defaults to a 32-GiB Azure Disk.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "ssh_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "authorized_key": {
+                            "type": "string",
+                            "description": "Required. The SSH public key data for VMs managed by Anthos. This accepts the authorized_keys file format used in OpenSSH according to the sshd(8) manual page.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Required. SSH configuration for how to access the node pool machines.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Required. The node configuration of the node pool.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "max_pods_constraint": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "max_pods_per_node": {
+                      "type": "number",
+                      "description": "Required. The maximum number of pods to schedule on a single node.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Required. The constraint on the maximum number of pods that can be run simultaneously on a node in the node pool.",
+                  "description_kind": "plain"
+                },
+                "min_items": 1,
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_container_cluster": {
           "version": 1,
           "block": {
@@ -32321,6 +34107,34 @@
                 },
                 "max_items": 1
               },
+              "dns_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "cluster_dns": {
+                      "type": "string",
+                      "description": "Which in-cluster DNS provider should be used.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "cluster_dns_domain": {
+                      "type": "string",
+                      "description": "The suffix used for all cluster service records.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "cluster_dns_scope": {
+                      "type": "string",
+                      "description": "The scope of access to cluster DNS records.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Configuration for Cloud DNS for Kubernetes Engine.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "ip_allocation_policy": {
                 "nesting_mode": "list",
                 "block": {
@@ -32582,6 +34396,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "boot_disk_kms_key": {
+                      "type": "string",
+                      "description": "The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "disk_size_gb": {
                       "type": "number",
                       "description": "Size of the disk attached to each node, specified in GB. The smallest allowed disk size is 10GB.",
@@ -32901,6 +34721,12 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "boot_disk_kms_key": {
+                            "type": "string",
+                            "description": "The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
                           "disk_size_gb": {
                             "type": "number",
                             "description": "Size of the disk attached to each node, specified in GB. The smallest allowed disk size is 10GB.",
@@ -33463,6 +35289,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "boot_disk_kms_key": {
+                      "type": "string",
+                      "description": "The Customer Managed Encryption Key used to encrypt the boot disk attached to each node in the node pool.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "disk_size_gb": {
                       "type": "number",
                       "description": "Size of the disk attached to each node, specified in GB. The smallest allowed disk size is 10GB.",
@@ -34777,7 +36609,7 @@
                                               "nesting_mode": "list",
                                               "block": {
                                                 "attributes": {
-                                                  "character_to_skip": {
+                                                  "characters_to_skip": {
                                                     "type": "string",
                                                     "description": "Characters to not transform when masking.",
                                                     "description_kind": "plain",
@@ -50392,6 +52224,40 @@
               }
             },
             "block_types": {
+              "alert_strategy": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "auto_close": {
+                      "type": "string",
+                      "description": "If an alert policy that was active has no data for this long, any open incidents will close.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "block_types": {
+                    "notification_rate_limit": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "period": {
+                            "type": "string",
+                            "description": "Not more than one notification per period.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "Required for alert policies with a LogMatch condition.\nThis limit is not implemented for alert policies that are not log-based.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Control over how this alert policy's notification channels are notified.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "conditions": {
                 "nesting_mode": "list",
                 "block": {
@@ -50488,6 +52354,31 @@
                           }
                         },
                         "description": "A condition that checks that a time series\ncontinues to receive new data points.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "condition_matched_log": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "filter": {
+                            "type": "string",
+                            "description": "A logs-based filter.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "label_extractors": {
+                            "type": [
+                              "map",
+                              "string"
+                            ],
+                            "description": "A map from a label key to an extractor expression, which is used to\nextract the value for this label key. Each entry in this map is\na specification for how data should be extracted from log entries that\nmatch filter. Each combination of extracted values is treated as\na separate rule for the purposes of triggering notifications.\nLabel keys and corresponding values can be used in notifications\ngenerated by this condition.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "A condition that checks for log messages matching given constraints.\nIf set, no other conditions can be present.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -51960,6 +53851,304 @@
                     }
                   },
                   "description": "Contains information needed to make a TCP check.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_network_connectivity_hub": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time the hub was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "An optional description of the hub.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional labels in key:value format. For more information about labels, see [Requirements for labels](https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements).",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Immutable. The name of the hub. Hub names must be unique. They use the following form: `projects/{project_number}/locations/global/hubs/{hub_id}`",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "routing_vpcs": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "uri": "string"
+                    }
+                  ]
+                ],
+                "description": "The VPC network associated with this hub's spokes. All of the VPN tunnels, VLAN attachments, and router appliance instances referenced by this hub's spokes must belong to this VPC network. This field is read-only. Network Connectivity Center automatically populates it based on the set of spokes attached to the hub.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. The current lifecycle state of this hub. Possible values: STATE_UNSPECIFIED, CREATING, ACTIVE, DELETING",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "unique_id": {
+                "type": "string",
+                "description": "Output only. The Google-generated UUID for the hub. This value is unique across all hub resources. If a hub is deleted and another with the same name is created, the new hub is assigned a different unique_id.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time the hub was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_network_connectivity_spoke": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time the spoke was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "An optional description of the spoke.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "hub": {
+                "type": "string",
+                "description": "Immutable. The URI of the hub that this spoke is attached to.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional labels in key:value format. For more information about labels, see [Requirements for labels](https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements).",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Immutable. The name of the spoke. Spoke names must be unique.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. The current lifecycle state of this spoke. Possible values: STATE_UNSPECIFIED, CREATING, ACTIVE, DELETING",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "unique_id": {
+                "type": "string",
+                "description": "Output only. The Google-generated UUID for the spoke. This value is unique across all spoke resources. If a spoke is deleted and another with the same name is created, the new spoke is assigned a different unique_id.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time the spoke was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "linked_interconnect_attachments": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "site_to_site_data_transfer": {
+                      "type": "bool",
+                      "description": "A value that controls whether site-to-site data transfer is enabled for these resources. Note that data transfer is available only in supported locations.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "uris": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "The URIs of linked interconnect attachment resources",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "A collection of VLAN attachment resources. These resources should be redundant attachments that all advertise the same prefixes to Google Cloud. Alternatively, in active/passive configurations, all attachments should be capable of advertising the same prefixes.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "linked_router_appliance_instances": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "site_to_site_data_transfer": {
+                      "type": "bool",
+                      "description": "A value that controls whether site-to-site data transfer is enabled for these resources. Note that data transfer is available only in supported locations.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "instances": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "ip_address": {
+                            "type": "string",
+                            "description": "The IP address on the VM to use for peering.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "virtual_machine": {
+                            "type": "string",
+                            "description": "The URI of the virtual machine resource",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "The list of router appliance instances",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1
+                    }
+                  },
+                  "description": "The URIs of linked Router appliance resources",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "linked_vpn_tunnels": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "site_to_site_data_transfer": {
+                      "type": "bool",
+                      "description": "A value that controls whether site-to-site data transfer is enabled for these resources. Note that data transfer is available only in supported locations.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "uris": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "The URIs of linked VPN tunnel resources.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "The URIs of linked VPN tunnel resources",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -55561,13 +57750,13 @@
                                                     "max_items": 1
                                                   }
                                                 },
-                                                "description": "Required. A deb package.",
+                                                "description": "A remote or local file.",
                                                 "description_kind": "plain"
                                               },
                                               "max_items": 1
                                             }
                                           },
-                                          "description": "Required. What to run to validate this resource is in the desired state. An exit code of 100 indicates \"in desired state\", and exit code of 101 indicates \"not in desired state\". Any other exit code indicates a failure running validate.",
+                                          "description": "What to run to bring this resource into the desired state. An exit code of 100 indicates \"success\", any other exit code indicates a failure running enforce.",
                                           "description_kind": "plain"
                                         },
                                         "max_items": 1
@@ -55674,7 +57863,7 @@
                                                     "max_items": 1
                                                   }
                                                 },
-                                                "description": "Required. A deb package.",
+                                                "description": "A remote or local file.",
                                                 "description_kind": "plain"
                                               },
                                               "max_items": 1
@@ -55791,7 +57980,7 @@
                                               "max_items": 1
                                             }
                                           },
-                                          "description": "Required. A deb package.",
+                                          "description": "A remote or local source.",
                                           "description_kind": "plain"
                                         },
                                         "max_items": 1
@@ -56023,7 +58212,7 @@
                                                     "max_items": 1
                                                   }
                                                 },
-                                                "description": "Required. A deb package.",
+                                                "description": "Required. The MSI package.",
                                                 "description_kind": "plain"
                                               },
                                               "min_items": 1,
@@ -56116,7 +58305,7 @@
                                                     "max_items": 1
                                                   }
                                                 },
-                                                "description": "Required. A deb package.",
+                                                "description": "Required. An rpm package.",
                                                 "description_kind": "plain"
                                               },
                                               "min_items": 1,
@@ -60876,11 +63065,6 @@
                       "type": "string",
                       "description_kind": "plain",
                       "optional": true
-                    },
-                    "update": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
                     }
                   },
                   "description_kind": "plain"
@@ -65062,6 +67246,29 @@
                 },
                 "max_items": 1
               },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              },
               "versioning": {
                 "nesting_mode": "list",
                 "block": {
@@ -66129,7 +68336,6 @@
                   "description": "Schedule specification defining when the Transfer Job should be scheduled to start, end and what time to run.",
                   "description_kind": "plain"
                 },
-                "min_items": 1,
                 "max_items": 1
               },
               "transfer_spec": {
@@ -67939,12 +70145,14 @@
                                     [
                                       "object",
                                       {
+                                        "default_mode": "number",
                                         "items": [
                                           "list",
                                           [
                                             "object",
                                             {
                                               "key": "string",
+                                              "mode": "number",
                                               "path": "string"
                                             }
                                           ]
@@ -68083,6 +70291,12 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "min_instances": {
+                "type": "number",
+                "description": "The limit on the minimum number of function instances that may coexist at a given time.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "name": {
                 "type": "string",
                 "description": "A user-defined name of the function. Function names must be unique globally.",
@@ -68180,6 +70394,25 @@
                     {
                       "airflow_uri": "string",
                       "dag_gcs_prefix": "string",
+                      "database_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "machine_type": "string"
+                          }
+                        ]
+                      ],
+                      "encryption_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "kms_key_name": "string"
+                          }
+                        ]
+                      ],
+                      "environment_size": "string",
                       "gke_cluster": "string",
                       "node_config": [
                         "list",
@@ -68222,6 +70455,7 @@
                         [
                           "object",
                           {
+                            "cloud_composer_network_ipv4_cidr_block": "string",
                             "cloud_sql_ipv4_cidr_block": "string",
                             "enable_private_endpoint": "bool",
                             "master_ipv4_cidr_block": "string",
@@ -68249,6 +70483,77 @@
                             ],
                             "python_version": "string",
                             "scheduler_count": "number"
+                          }
+                        ]
+                      ],
+                      "web_server_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "machine_type": "string"
+                          }
+                        ]
+                      ],
+                      "web_server_network_access_control": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "allowed_ip_range": [
+                              "set",
+                              [
+                                "object",
+                                {
+                                  "description": "string",
+                                  "value": "string"
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ],
+                      "workloads_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "scheduler": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "count": "number",
+                                  "cpu": "number",
+                                  "memory_gb": "number",
+                                  "storage_gb": "number"
+                                }
+                              ]
+                            ],
+                            "web_server": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "cpu": "number",
+                                  "memory_gb": "number",
+                                  "storage_gb": "number"
+                                }
+                              ]
+                            ],
+                            "worker": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "cpu": "number",
+                                  "max_count": "number",
+                                  "memory_gb": "number",
+                                  "min_count": "number",
+                                  "storage_gb": "number"
+                                }
+                              ]
+                            ]
                           }
                         ]
                       ]
@@ -68695,13 +71000,13 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Indicates whether the backend service will be used with internal or\nexternal load balancing. A backend service created for one type of\nload balancing cannot be used with the other. Default value: \"EXTERNAL\" Possible values: [\"EXTERNAL\", \"INTERNAL_SELF_MANAGED\"]",
+                "description": "Indicates whether the backend service will be used with internal or\nexternal load balancing. A backend service created for one type of\nload balancing cannot be used with the other. For more information, refer to\n[Choosing a load balancer](https://cloud.google.com/load-balancing/docs/backend-service). Default value: \"EXTERNAL\" Possible values: [\"EXTERNAL\", \"INTERNAL_SELF_MANAGED\", \"EXTERNAL_MANAGED\"]",
                 "description_kind": "plain",
                 "computed": true
               },
               "locality_lb_policy": {
                 "type": "string",
-                "description": "The load balancing algorithm used within the scope of the locality.\nThe possible values are -\n\n* ROUND_ROBIN - This is a simple policy in which each healthy backend\n                is selected in round robin order.\n\n* LEAST_REQUEST - An O(1) algorithm which selects two random healthy\n                  hosts and picks the host which has fewer active requests.\n\n* RING_HASH - The ring/modulo hash load balancer implements consistent\n              hashing to backends. The algorithm has the property that the\n              addition/removal of a host from a set of N hosts only affects\n              1/N of the requests.\n\n* RANDOM - The load balancer selects a random healthy host.\n\n* ORIGINAL_DESTINATION - Backend host is selected based on the client\n                         connection metadata, i.e., connections are opened\n                         to the same address as the destination address of\n                         the incoming connection before the connection\n                         was redirected to the load balancer.\n\n* MAGLEV - used as a drop in replacement for the ring hash load balancer.\n           Maglev is not as stable as ring hash but has faster table lookup\n           build times and host selection times. For more information about\n           Maglev, refer to https://ai.google/research/pubs/pub44824\n\nThis field is applicable only when the load_balancing_scheme is set to\nINTERNAL_SELF_MANAGED. Possible values: [\"ROUND_ROBIN\", \"LEAST_REQUEST\", \"RING_HASH\", \"RANDOM\", \"ORIGINAL_DESTINATION\", \"MAGLEV\"]",
+                "description": "The load balancing algorithm used within the scope of the locality.\nThe possible values are:\n\n* 'ROUND_ROBIN': This is a simple policy in which each healthy backend\n                 is selected in round robin order.\n\n* 'LEAST_REQUEST': An O(1) algorithm which selects two random healthy\n                   hosts and picks the host which has fewer active requests.\n\n* 'RING_HASH': The ring/modulo hash load balancer implements consistent\n               hashing to backends. The algorithm has the property that the\n               addition/removal of a host from a set of N hosts only affects\n               1/N of the requests.\n\n* 'RANDOM': The load balancer selects a random healthy host.\n\n* 'ORIGINAL_DESTINATION': Backend host is selected based on the client\n                          connection metadata, i.e., connections are opened\n                          to the same address as the destination address of\n                          the incoming connection before the connection\n                          was redirected to the load balancer.\n\n* 'MAGLEV': used as a drop in replacement for the ring hash load balancer.\n            Maglev is not as stable as ring hash but has faster table lookup\n            build times and host selection times. For more information about\n            Maglev, refer to https://ai.google/research/pubs/pub44824\n\n\nThis field is applicable to either:\n\n* A regional backend service with the service_protocol set to HTTP, HTTPS, or HTTP2,\n  and loadBalancingScheme set to INTERNAL_MANAGED.\n* A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.\n\n\nIf session_affinity is not NONE, and this field is not set to MAGLEV or RING_HASH,\nsession affinity settings will not take effect.\n\nOnly ROUND_ROBIN and RING_HASH are supported when the backend service is referenced\nby a URL map that is bound to target gRPC proxy that has validate_for_proxyless\nfield set to true. Possible values: [\"ROUND_ROBIN\", \"LEAST_REQUEST\", \"RING_HASH\", \"RANDOM\", \"ORIGINAL_DESTINATION\", \"MAGLEV\"]",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -68927,7 +71232,7 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL",
+                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n*   `EXTERNAL_MANAGED` is used for:\n    *   Global external HTTP(S) load balancers \n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL, EXTERNAL_MANAGED",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -69101,7 +71406,7 @@
               },
               "load_balancing_scheme": {
                 "type": "string",
-                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL",
+                "description": "Specifies the forwarding rule type.\n\n*   `EXTERNAL` is used for:\n    *   Classic Cloud VPN gateways\n    *   Protocol forwarding to VMs from an external IP address\n    *   The following load balancers: HTTP(S), SSL Proxy, TCP Proxy, and Network TCP/UDP\n*   `INTERNAL` is used for:\n    *   Protocol forwarding to VMs from an internal IP address\n    *   Internal TCP/UDP load balancers\n*   `INTERNAL_MANAGED` is used for:\n    *   Internal HTTP(S) load balancers\n*   `INTERNAL_SELF_MANAGED` is used for:\n    *   Traffic Director\n*   `EXTERNAL_MANAGED` is used for:\n    *   Global external HTTP(S) load balancers \n\nFor more information about forwarding rules, refer to [Forwarding rule concepts](/load-balancing/docs/forwarding-rule-concepts). Possible values: INVALID, INTERNAL, INTERNAL_MANAGED, INTERNAL_SELF_MANAGED, EXTERNAL, EXTERNAL_MANAGED",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -71484,6 +73789,86 @@
             "description_kind": "plain"
           }
         },
+        "google_container_aws_versions": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "supported_regions": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "computed": true
+              },
+              "valid_versions": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_container_azure_versions": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "supported_regions": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "computed": true
+              },
+              "valid_versions": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_container_cluster": {
           "version": 1,
           "block": {
@@ -71654,6 +74039,22 @@
               "description": {
                 "type": "string",
                 "description": " Description of the cluster.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "dns_config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "cluster_dns": "string",
+                      "cluster_dns_domain": "string",
+                      "cluster_dns_scope": "string"
+                    }
+                  ]
+                ],
+                "description": "Configuration for Cloud DNS for Kubernetes Engine.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -71936,6 +74337,7 @@
                   [
                     "object",
                     {
+                      "boot_disk_kms_key": "string",
                       "disk_size_gb": "number",
                       "disk_type": "string",
                       "gcfs_config": [
@@ -72070,6 +74472,7 @@
                         [
                           "object",
                           {
+                            "boot_disk_kms_key": "string",
                             "disk_size_gb": "number",
                             "disk_type": "string",
                             "gcfs_config": [
