@@ -10564,20 +10564,20 @@
                                     "attributes": {
                                       "container_port": {
                                         "type": "number",
-                                        "description": "Port number.",
+                                        "description": "Port number the container listens on. This must be a valid port number, 0 < x < 65536.",
                                         "description_kind": "plain",
-                                        "required": true
+                                        "optional": true
                                       },
                                       "name": {
                                         "type": "string",
-                                        "description": "Name of the port.",
+                                        "description": "If specified, used to specify which protocol to use. Allowed values are \"http1\" and \"h2c\".",
                                         "description_kind": "plain",
                                         "optional": true,
                                         "computed": true
                                       },
                                       "protocol": {
                                         "type": "string",
-                                        "description": "Protocol used on port. Defaults to TCP.",
+                                        "description": "Protocol for port. Must be \"TCP\". Defaults to \"TCP\".",
                                         "description_kind": "plain",
                                         "optional": true
                                       }
@@ -12591,6 +12591,91 @@
                   "description_kind": "plain"
                 },
                 "max_items": 1
+              },
+              "secret_environment_variables": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "key": {
+                      "type": "string",
+                      "description": "Name of the environment variable.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "project_id": {
+                      "type": "string",
+                      "description": "Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "secret": {
+                      "type": "string",
+                      "description": "ID of the secret in secret manager (not the full resource name).",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "Version of the secret (version number or the string \"latest\"). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new clones start.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Secret environment variables configuration",
+                  "description_kind": "plain"
+                }
+              },
+              "secret_volumes": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "mount_path": {
+                      "type": "string",
+                      "description": "The path within the container to mount the secret volume. For example, setting the mount_path as \"/etc/secrets\" would mount the secret value files under the \"/etc/secrets\" directory. This directory will also be completely shadowed and unavailable to mount any other secrets. Recommended mount paths: \"/etc/secrets\" Restricted mount paths: \"/cloudsql\", \"/dev/log\", \"/pod\", \"/proc\", \"/var/log\".",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "project_id": {
+                      "type": "string",
+                      "description": "Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "secret": {
+                      "type": "string",
+                      "description": "ID of the secret in secret manager (not the full resource name).",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "versions": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "path": {
+                            "type": "string",
+                            "description": "Relative path of the file under the mount path where the secret value for this version will be fetched and made available. For example, setting the mount_path as \"/etc/secrets\" and path as \"/secret_foo\" would mount the secret value file at \"/etc/secrets/secret_foo\".",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "description": "Version of the secret (version number or the string \"latest\"). It is preferable to use \"latest\" version with secret volumes as secret value changes are reflected immediately.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "List of secret versions to mount for this secret. If empty, the \"latest\" version of the secret will be made available in a file named after the secret under the mount point.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "Secret volumes configuration.",
+                  "description_kind": "plain"
+                }
               },
               "source_repository": {
                 "nesting_mode": "list",
@@ -15024,6 +15109,31 @@
                 },
                 "max_items": 1
               },
+              "security_settings": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "client_tls_policy": {
+                      "type": "string",
+                      "description": "ClientTlsPolicy is a resource that specifies how a client should authenticate\nconnections to backends of a service. This resource itself does not affect\nconfiguration unless it is attached to a backend service resource.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "subject_alt_names": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "A list of alternate names to verify the subject identity in the certificate.\nIf specified, the client will verify that the server certificate's subject\nalt name matches one of the specified values.",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "The security settings that apply to this backend service. This field is applicable to either\na regional backend service with the service_protocol set to HTTP, HTTPS, or HTTP2, and\nload_balancing_scheme set to INTERNAL_MANAGED; or a global backend service with the\nload_balancing_scheme set to INTERNAL_SELF_MANAGED.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -15046,6 +15156,176 @@
                   },
                   "description_kind": "plain"
                 }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_compute_backend_service_iam_binding": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "members": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_compute_backend_service_iam_member": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "member": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_compute_backend_service_iam_policy": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "policy_data": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
               }
             },
             "description_kind": "plain"
@@ -24336,7 +24616,7 @@
                       "optional": true
                     }
                   },
-                  "description": "Only valid when networkEndpointType is \"SERVERLESS\".\nOnly one of cloud_run, app_engine or cloud_function may be set.",
+                  "description": "Only valid when networkEndpointType is \"SERVERLESS\".\nOnly one of cloud_run, app_engine, cloud_function or serverless_deployment may be set.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -24358,7 +24638,7 @@
                       "optional": true
                     }
                   },
-                  "description": "Only valid when networkEndpointType is \"SERVERLESS\".\nOnly one of cloud_run, app_engine or cloud_function may be set.",
+                  "description": "Only valid when networkEndpointType is \"SERVERLESS\".\nOnly one of cloud_run, app_engine, cloud_function or serverless_deployment may be set.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -24386,7 +24666,7 @@
                       "optional": true
                     }
                   },
-                  "description": "Only valid when networkEndpointType is \"SERVERLESS\".\nOnly one of cloud_run, app_engine or cloud_function may be set.",
+                  "description": "Only valid when networkEndpointType is \"SERVERLESS\".\nOnly one of cloud_run, app_engine, cloud_function or serverless_deployment may be set.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -33915,6 +34195,21 @@
                       },
                       "max_items": 1
                     },
+                    "gcp_filestore_csi_driver_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "enabled": {
+                            "type": "bool",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The status of the Filestore CSI driver addon, which allows the usage of filestore instance as volumes. Defaults to disabled; set enabled = true to enable.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "horizontal_pod_autoscaling": {
                       "nesting_mode": "list",
                       "block": {
@@ -33998,6 +34293,12 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "image_type": {
+                            "type": "string",
+                            "description": "The default image type used by NAP once a new node pool is being created.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
                           "oauth_scopes": {
                             "type": [
                               "list",
@@ -64100,6 +64401,122 @@
               }
             },
             "block_types": {
+              "maintenance_policy": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "create_time": {
+                      "type": "string",
+                      "description": "Output only. The time when the policy was created.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional. Description of what this policy is for.\nCreate/Update methods return INVALID_ARGUMENT if the\nlength is greater than 512.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update_time": {
+                      "type": "string",
+                      "description": "Output only. The time when the policy was last updated.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "weekly_maintenance_window": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "day": {
+                            "type": "string",
+                            "description": "Required. The day of week that maintenance updates occur.\n\n- DAY_OF_WEEK_UNSPECIFIED: The day of the week is unspecified.\n- MONDAY: Monday\n- TUESDAY: Tuesday\n- WEDNESDAY: Wednesday\n- THURSDAY: Thursday\n- FRIDAY: Friday\n- SATURDAY: Saturday\n- SUNDAY: Sunday Possible values: [\"DAY_OF_WEEK_UNSPECIFIED\", \"MONDAY\", \"TUESDAY\", \"WEDNESDAY\", \"THURSDAY\", \"FRIDAY\", \"SATURDAY\", \"SUNDAY\"]",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "duration": {
+                            "type": "string",
+                            "description": "Output only. Duration of the maintenance window.\nThe current window is fixed at 1 hour.\nA duration in seconds with up to nine fractional digits,\nterminated by 's'. Example: \"3.5s\".",
+                            "description_kind": "plain",
+                            "computed": true
+                          }
+                        },
+                        "block_types": {
+                          "start_time": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "hours": {
+                                  "type": "number",
+                                  "description": "Hours of day in 24 hour format. Should be from 0 to 23.\nAn API may choose to allow the value \"24:00:00\" for scenarios like business closing time.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "minutes": {
+                                  "type": "number",
+                                  "description": "Minutes of hour of day. Must be from 0 to 59.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "nanos": {
+                                  "type": "number",
+                                  "description": "Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "seconds": {
+                                  "type": "number",
+                                  "description": "Seconds of minutes of the time. Must normally be from 0 to 59.\nAn API may allow the value 60 if it allows leap-seconds.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "Required. Start time of the window in UTC time.",
+                              "description_kind": "plain"
+                            },
+                            "min_items": 1,
+                            "max_items": 1
+                          }
+                        },
+                        "description": "Optional. Maintenance window that is applied to resources covered by this policy.\nMinimum 1. For the current version, the maximum number\nof weekly_window is expected to be one.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "Maintenance policy for an instance.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "maintenance_schedule": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "end_time": {
+                      "type": "string",
+                      "description": "Output only. The end time of any upcoming scheduled maintenance for this instance.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "schedule_deadline_time": {
+                      "type": "string",
+                      "description": "Output only. The deadline that the maintenance schedule start time\ncan not go beyond, including reschedule.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "start_time": {
+                      "type": "string",
+                      "description": "Output only. The start time of any upcoming scheduled maintenance for this instance.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "description": "Upcoming maintenance schedule.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -66246,6 +66663,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "allocated_ip_range": {
+                      "type": "string",
+                      "description": "The name of the allocated ip range for the private ip CloudSQL instance. For example: \"google-managed-services-default\". If set, the cloned instance ip will be created in the allocated range. The range name must comply with [RFC 1035](https://tools.ietf.org/html/rfc1035). Specifically, the name must be 1-63 characters long and match the regular expression [a-z]([-a-z0-9]*[a-z0-9])?.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "point_in_time": {
                       "type": "string",
                       "description": "The timestamp of the point in time that should be restored.",
@@ -66965,6 +67388,7 @@
             "attributes": {
               "default_event_based_hold": {
                 "type": "bool",
+                "description": "Whether or not to automatically apply an eventBasedHold to new objects added to the bucket.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -68351,6 +68775,12 @@
                             "description": "S3 Bucket name.",
                             "description_kind": "plain",
                             "required": true
+                          },
+                          "role_arn": {
+                            "type": "string",
+                            "description": "The Amazon Resource Name (ARN) of the role to support temporary credentials via 'AssumeRoleWithWebIdentity'. For more information about ARNs, see [IAM ARNs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns). When a role ARN is provided, Transfer Service fetches temporary credentials for the session using a 'AssumeRoleWithWebIdentity' call for the provided role using the [GoogleServiceAccount][] for this project.",
+                            "description_kind": "plain",
+                            "optional": true
                           }
                         },
                         "block_types": {
@@ -68376,7 +68806,6 @@
                               "description": "AWS credentials block.",
                               "description_kind": "plain"
                             },
-                            "min_items": 1,
                             "max_items": 1
                           }
                         },
@@ -68532,6 +68961,38 @@
                           }
                         },
                         "description": "Only objects that satisfy these object conditions are included in the set of data source and data sink objects. Object conditions based on objects' last_modification_time do not exclude objects in a data sink.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "posix_data_sink": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "root_directory": {
+                            "type": "string",
+                            "description": "Root directory path to the filesystem.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "A POSIX filesystem data sink.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "posix_data_source": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "root_directory": {
+                            "type": "string",
+                            "description": "Root directory path to the filesystem.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "A POSIX filesystem data source.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -69379,7 +69840,7 @@
               },
               "network": {
                 "type": "string",
-                "description": "Name of the VPC network. Required if 'ip_cidr_range' is set.",
+                "description": "Name or self_link of the VPC network. Required if 'ip_cidr_range' is set.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -70321,6 +70782,49 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "secret_environment_variables": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "key": "string",
+                      "project_id": "string",
+                      "secret": "string",
+                      "version": "string"
+                    }
+                  ]
+                ],
+                "description": "Secret environment variables configuration",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "secret_volumes": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "mount_path": "string",
+                      "project_id": "string",
+                      "secret": "string",
+                      "versions": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "path": "string",
+                            "version": "string"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "Secret volumes configuration.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "service_account_email": {
                 "type": "string",
                 "description": " If provided, the self-provided service account to run the function with.",
@@ -71093,6 +71597,24 @@
               "security_policy": {
                 "type": "string",
                 "description": "The security policy associated with this backend service.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "security_settings": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "client_tls_policy": "string",
+                      "subject_alt_names": [
+                        "list",
+                        "string"
+                      ]
+                    }
+                  ]
+                ],
+                "description": "The security settings that apply to this backend service. This field is applicable to either\na regional backend service with the service_protocol set to HTTP, HTTPS, or HTTP2, and\nload_balancing_scheme set to INTERNAL_MANAGED; or a global backend service with the\nload_balancing_scheme set to INTERNAL_SELF_MANAGED.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -72637,7 +73159,7 @@
                 "type": "string",
                 "description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
               },
               "region": {
                 "type": "string",
@@ -73889,6 +74411,15 @@
                           }
                         ]
                       ],
+                      "gcp_filestore_csi_driver_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "enabled": "bool"
+                          }
+                        ]
+                      ],
                       "horizontal_pod_autoscaling": [
                         "list",
                         [
@@ -73948,6 +74479,7 @@
                         [
                           "object",
                           {
+                            "image_type": "string",
                             "oauth_scopes": [
                               "list",
                               "string"
@@ -76614,6 +77146,60 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "maintenance_policy": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "create_time": "string",
+                      "description": "string",
+                      "update_time": "string",
+                      "weekly_maintenance_window": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "day": "string",
+                            "duration": "string",
+                            "start_time": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "hours": "number",
+                                  "minutes": "number",
+                                  "nanos": "number",
+                                  "seconds": "number"
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "Maintenance policy for an instance.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "maintenance_schedule": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "end_time": "string",
+                      "schedule_deadline_time": "string",
+                      "start_time": "string"
+                    }
+                  ]
+                ],
+                "description": "Upcoming maintenance schedule.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "memory_size_gb": {
                 "type": "number",
                 "description": "Redis memory size in GiB.",
@@ -77334,6 +77920,7 @@
                   [
                     "object",
                     {
+                      "allocated_ip_range": "string",
                       "point_in_time": "string",
                       "source_instance_name": "string"
                     }
@@ -77651,6 +78238,7 @@
               },
               "default_event_based_hold": {
                 "type": "bool",
+                "description": "Whether or not to automatically apply an eventBasedHold to new objects added to the bucket.",
                 "description_kind": "plain",
                 "computed": true
               },
