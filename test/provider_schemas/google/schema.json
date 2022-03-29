@@ -31,6 +31,11 @@
               "description_kind": "plain",
               "optional": true
             },
+            "apikeys_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
             "app_engine_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
@@ -167,6 +172,11 @@
               "optional": true
             },
             "data_catalog_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "data_fusion_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -2835,6 +2845,76 @@
             "description_kind": "plain"
           }
         },
+        "google_apigee_endpoint_attachment": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "endpoint_attachment_id": {
+                "type": "string",
+                "description": "ID of the endpoint attachment.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "host": {
+                "type": "string",
+                "description": "Host that can be used in either HTTP Target Endpoint directly, or as the host in Target Server.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "Location of the endpoint attachment.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the Endpoint Attachment in the following format:\norganizations/{organization}/endpointAttachments/{endpointAttachment}.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "org_id": {
+                "type": "string",
+                "description": "The Apigee Organization associated with the Apigee instance,\nin the format 'organizations/{{org_name}}'.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "service_attachment": {
+                "type": "string",
+                "description": "Format: projects/*/regions/*/serviceAttachments/*",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_apigee_envgroup": {
           "version": 0,
           "block": {
@@ -3340,6 +3420,13 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "billing_type": {
+                "type": "string",
+                "description": "Billing type of the Apigee organization. See [Apigee pricing](https://cloud.google.com/apigee/pricing).",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
               "ca_certificate": {
                 "type": "string",
                 "description": "Output only. Base64-encoded public certificate for the root CA of the Apigee organization.\nValid only when 'RuntimeType' is CLOUD. A base64-encoded string.",
@@ -3396,6 +3483,194 @@
               }
             },
             "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_apikeys_key": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "display_name": {
+                "type": "string",
+                "description": "Human-readable display name of this API key. Modifiable by user.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "key_string": {
+                "type": "string",
+                "description": "Output only. An encrypted and signed value held by this key. This field can be accessed only through the `GetKeyString` method.",
+                "description_kind": "plain",
+                "computed": true,
+                "sensitive": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The resource name of the key. The name must be unique within the project, must conform with RFC-1034, is restricted to lower-cased letters, and has a maximum length of 63 characters. In another word, the name must match the regular expression: [a-z]([a-z0-9-]{0,61}[a-z0-9])?.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "block_types": {
+              "restrictions": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "android_key_restrictions": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "block_types": {
+                          "allowed_applications": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "package_name": {
+                                  "type": "string",
+                                  "description": "The package name of the application.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                },
+                                "sha1_fingerprint": {
+                                  "type": "string",
+                                  "description": "The SHA1 fingerprint of the application. For example, both sha1 formats are acceptable : DA:39:A3:EE:5E:6B:4B:0D:32:55:BF:EF:95:60:18:90:AF:D8:07:09 or DA39A3EE5E6B4B0D3255BFEF95601890AFD80709. Output format is the latter.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                }
+                              },
+                              "description": "A list of Android applications that are allowed to make API calls with this key.",
+                              "description_kind": "plain"
+                            },
+                            "min_items": 1
+                          }
+                        },
+                        "description": "The Android apps that are allowed to use the key.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "api_targets": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "methods": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Optional. List of one or more methods that can be called. If empty, all methods for the service are allowed. A wildcard (*) can be used as the last symbol. Valid examples: `google.cloud.translate.v2.TranslateService.GetSupportedLanguage` `TranslateText` `Get*` `translate.googleapis.com.Get*`",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "service": {
+                            "type": "string",
+                            "description": "The service for this restriction. It should be the canonical service name, for example: `translate.googleapis.com`. You can use `gcloud services list` to get a list of services that are enabled in the project.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "A restriction for a specific service and optionally one or more specific methods. Requests are allowed if they match any of these restrictions. If no restrictions are specified, all targets are allowed.",
+                        "description_kind": "plain"
+                      }
+                    },
+                    "browser_key_restrictions": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "allowed_referrers": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "A list of regular expressions for the referrer URLs that are allowed to make API calls with this key.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The HTTP referrers (websites) that are allowed to use the key.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "ios_key_restrictions": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "allowed_bundle_ids": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "A list of bundle IDs that are allowed when making API calls with this key.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The iOS apps that are allowed to use the key.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "server_key_restrictions": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "allowed_ips": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "A list of the caller IP addresses that are allowed to make API calls with this key.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The IP addresses of callers that are allowed to use the key.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Key restrictions.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -5764,6 +6039,50 @@
                     }
                   },
                   "block_types": {
+                    "dataset": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "target_types": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Which resources in the dataset this entry applies to. Currently, only views are supported,\nbut additional target types may be added in the future. Possible values: VIEWS",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "block_types": {
+                          "dataset": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "dataset_id": {
+                                  "type": "string",
+                                  "description": "The ID of the dataset containing this table.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                },
+                                "project_id": {
+                                  "type": "string",
+                                  "description": "The ID of the project containing this table.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                }
+                              },
+                              "description": "The dataset this entry applies to",
+                              "description_kind": "plain"
+                            },
+                            "min_items": 1,
+                            "max_items": 1
+                          }
+                        },
+                        "description": "Grants all resources of particular types in a particular dataset read access to the current dataset.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "view": {
                       "nesting_mode": "list",
                       "block": {
@@ -5906,6 +6225,50 @@
               }
             },
             "block_types": {
+              "dataset": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "target_types": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Which resources in the dataset this entry applies to. Currently, only views are supported,\nbut additional target types may be added in the future. Possible values: VIEWS",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "dataset": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "dataset_id": {
+                            "type": "string",
+                            "description": "The ID of the dataset containing this table.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "project_id": {
+                            "type": "string",
+                            "description": "The ID of the project containing this table.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The dataset this entry applies to",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Grants all resources of particular types in a particular dataset read access to the current dataset.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -6938,6 +7301,84 @@
             "description_kind": "plain"
           }
         },
+        "google_bigquery_reservation_assignment": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "assignee": {
+                "type": "string",
+                "description": "The resource which will use the reservation. E.g. projects/myproject, folders/123, organizations/456.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "job_type": {
+                "type": "string",
+                "description": "Types of job, which could be specified when using the reservation. Possible values: JOB_TYPE_UNSPECIFIED, PIPELINE, QUERY",
+                "description_kind": "plain",
+                "required": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Output only. The resource name of the assignment.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "reservation": {
+                "type": "string",
+                "description": "The reservation for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Assignment will remain in PENDING state if no active capacity commitment is present. It will become ACTIVE when some capacity commitment becomes active. Possible values: STATE_UNSPECIFIED, PENDING, ACTIVE",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_bigquery_routine": {
           "version": 0,
           "block": {
@@ -7754,6 +8195,15 @@
               "instance": {
                 "type": "string",
                 "description": "The name of the instance to create the app profile within.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "multi_cluster_routing_cluster_ids": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "The set of clusters to route to. The order is ignored; clusters will be tried in order of distance. If left empty, all clusters are eligible.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -10637,7 +11087,7 @@
                                   }
                                 }
                               },
-                              "description": "Container defines the unit of execution for this Revision.\nIn the context of a Revision, we disallow a number of the fields of\nthis Container, including: name, ports, and volumeMounts.\nThe runtime contract is documented here:\nhttps://github.com/knative/serving/blob/master/docs/runtime-contract.md",
+                              "description": "Container defines the unit of execution for this Revision.\nIn the context of a Revision, we disallow a number of the fields of\nthis Container, including: name, ports, and volumeMounts.\nThe runtime contract is documented here:\nhttps://github.com/knative/serving/blob/main/docs/runtime-contract.md",
                               "description_kind": "plain"
                             }
                           },
@@ -10717,7 +11167,7 @@
                       "max_items": 1
                     }
                   },
-                  "description": "template holds the latest specification for the Revision to\nbe stamped out. The template references the container image, and may also\ninclude labels and annotations that should be attached to the Revision.\nTo correlate a Revision, and/or to force a Revision to be created when the\nspec doesn't otherwise change, a nonce label may be provided in the\ntemplate metadata. For more details, see:\nhttps://github.com/knative/serving/blob/master/docs/client-conventions.md#associate-modifications-with-revisions\n\nCloud Run does not currently support referencing a build that is\nresponsible for materializing the container image from source.",
+                  "description": "template holds the latest specification for the Revision to\nbe stamped out. The template references the container image, and may also\ninclude labels and annotations that should be attached to the Revision.\nTo correlate a Revision, and/or to force a Revision to be created when the\nspec doesn't otherwise change, a nonce label may be provided in the\ntemplate metadata. For more details, see:\nhttps://github.com/knative/serving/blob/main/docs/client-conventions.md#associate-modifications-with-revisions\n\nCloud Run does not currently support referencing a build that is\nresponsible for materializing the container image from source.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -11478,7 +11928,13 @@
               },
               "filename": {
                 "type": "string",
-                "description": "Path, from the source root, to a file whose contents is used for the template. Either a filename or build template must be provided.",
+                "description": "Path, from the source root, to a file whose contents is used for the template. \nEither a filename or build template must be provided. Set this only when using trigger_template or github.\nWhen using Pub/Sub, Webhook or Manual set the file name using git_file_source instead.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "filter": {
+                "type": "string",
+                "description": "A Common Expression Language string. Used only with Pub/Sub and Webhook.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -12037,6 +12493,40 @@
                 },
                 "max_items": 1
               },
+              "git_file_source": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "path": {
+                      "type": "string",
+                      "description": "The path of the file, with the repo root as the root of the path.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "repo_type": {
+                      "type": "string",
+                      "description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "revision": {
+                      "type": "string",
+                      "description": "The branch, tag, arbitrary ref, or SHA version of the repo to use when resolving the \nfilename (optional). This field respects the same syntax/resolution as described here: https://git-scm.com/docs/gitrevisions \nIf unspecified, the revision from which the trigger invocation originated is assumed to be the revision from which to read the specified path.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "uri": {
+                      "type": "string",
+                      "description": "The URI of the repo (optional). If unspecified, the repo from which the trigger \ninvocation originated is assumed to be the repo from which to read the specified path.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "The file source describing the local or remote Build template.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "github": {
                 "nesting_mode": "list",
                 "block": {
@@ -12146,7 +12636,35 @@
                       "required": true
                     }
                   },
-                  "description": "PubsubConfig describes the configuration of a trigger that creates \na build whenever a Pub/Sub message is published.\n\nOne of 'trigger_template', 'github', 'pubsub_config' or 'webhook_config' must be provided.",
+                  "description": "PubsubConfig describes the configuration of a trigger that creates \na build whenever a Pub/Sub message is published.\n\nOne of 'trigger_template', 'github', 'pubsub_config' 'webhook_config' or 'source_to_build' must be provided.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "source_to_build": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "ref": {
+                      "type": "string",
+                      "description": "The branch or tag to use. Must start with \"refs/\" (required).",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "repo_type": {
+                      "type": "string",
+                      "description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "uri": {
+                      "type": "string",
+                      "description": "The URI of the repo (required).",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "The repo and ref of the repository from which to build. \nThis field is used only for those triggers that do not respond to SCM events. \nTriggers that respond to such events build source at whatever commit caused the event. \nThis field is currently only used by Webhook, Pub/Sub, Manual, and Cron triggers.\n\nOne of 'trigger_template', 'github', 'pubsub_config' 'webhook_config' or 'source_to_build' must be provided.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -12222,7 +12740,7 @@
                       "optional": true
                     }
                   },
-                  "description": "Template describing the types of source changes to trigger a build.\n\nBranch and tag names in trigger templates are interpreted as regular\nexpressions. Any branch or tag change that matches that regular\nexpression will trigger a build.\n\nOne of 'trigger_template', 'github', 'pubsub_config' or 'webhook_config' must be provided.",
+                  "description": "Template describing the types of source changes to trigger a build.\n\nBranch and tag names in trigger templates are interpreted as regular\nexpressions. Any branch or tag change that matches that regular\nexpression will trigger a build.\n\nOne of 'trigger_template', 'github', 'pubsub_config', 'webhook_config' or 'source_to_build' must be provided.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -12244,7 +12762,7 @@
                       "computed": true
                     }
                   },
-                  "description": "WebhookConfig describes the configuration of a trigger that creates \na build whenever a webhook is sent to a trigger's webhook URL.\n\nOne of 'trigger_template', 'github', 'pubsub_config' or 'webhook_config' must be provided.",
+                  "description": "WebhookConfig describes the configuration of a trigger that creates \na build whenever a webhook is sent to a trigger's webhook URL.\n\nOne of 'trigger_template', 'github', 'pubsub_config' 'webhook_config' or 'source_to_build' must be provided.",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -12388,7 +12906,8 @@
                       "type": "bool",
                       "description": "If true, workers are created without any public address, which prevents network egress to public IPs.",
                       "description_kind": "plain",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     }
                   },
                   "description": "Configuration to be used for a creating workers in the `WorkerPool`.",
@@ -13333,7 +13852,8 @@
                 "type": "string",
                 "description": "The location or Compute Engine region for the environment.",
                 "description_kind": "plain",
-                "optional": true
+                "optional": true,
+                "computed": true
               }
             },
             "block_types": {
@@ -13403,6 +13923,34 @@
                           }
                         },
                         "description": "The encryption options for the Composer environment and its dependencies. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "maintenance_window": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "end_time": {
+                            "type": "string",
+                            "description": "Maintenance window end time. It is used only to calculate the duration of the maintenance window. The value for end-time must be in the future, relative to 'start_time'.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "recurrence": {
+                            "type": "string",
+                            "description": "Maintenance window recurrence. Format is a subset of RFC-5545 (https://tools.ietf.org/html/rfc5545) 'RRULE'. The only allowed values for 'FREQ' field are 'FREQ=DAILY' and 'FREQ=WEEKLY;BYDAY=...'. Example values: 'FREQ=WEEKLY;BYDAY=TU,WE', 'FREQ=DAILY'.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "start_time": {
+                            "type": "string",
+                            "description": "Start time of the first recurrence of the maintenance window.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The configuration for Cloud Composer maintenance window.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -13500,6 +14048,13 @@
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
+                          "cloud_composer_connection_subnetwork": {
+                            "type": "string",
+                            "description": "When specified, the environment will use Private Service Connect instead of VPC peerings to connect to Cloud SQL in the Tenant Project, and the PSC endpoint in the Customer Project will use an IP address from this subnetwork. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
                           "cloud_composer_network_ipv4_cidr_block": {
                             "type": "string",
                             "description": "The CIDR block from which IP range for Cloud Composer Network in tenant project will be reserved. Needs to be disjoint from private_cluster_config.master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
@@ -13558,7 +14113,7 @@
                               "map",
                               "string"
                             ],
-                            "description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                            "description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -13796,7 +14351,7 @@
             "attributes": {
               "address": {
                 "type": "string",
-                "description": "The static external IP address represented by this resource. Only\nIPv4 is supported. An address may only be specified for INTERNAL\naddress types. The IP address must be inside the specified subnetwork,\nif any.",
+                "description": "The static external IP address represented by this resource. Only\nIPv4 is supported. An address may only be specified for INTERNAL\naddress types. The IP address must be inside the specified subnetwork,\nif any. Set by the API if undefined.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -15156,176 +15711,6 @@
                   },
                   "description_kind": "plain"
                 }
-              }
-            },
-            "description_kind": "plain"
-          }
-        },
-        "google_compute_backend_service_iam_binding": {
-          "version": 0,
-          "block": {
-            "attributes": {
-              "etag": {
-                "type": "string",
-                "description_kind": "plain",
-                "computed": true
-              },
-              "id": {
-                "type": "string",
-                "description_kind": "plain",
-                "optional": true,
-                "computed": true
-              },
-              "members": {
-                "type": [
-                  "set",
-                  "string"
-                ],
-                "description_kind": "plain",
-                "required": true
-              },
-              "name": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              },
-              "project": {
-                "type": "string",
-                "description_kind": "plain",
-                "optional": true,
-                "computed": true
-              },
-              "role": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              }
-            },
-            "block_types": {
-              "condition": {
-                "nesting_mode": "list",
-                "block": {
-                  "attributes": {
-                    "description": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
-                    },
-                    "expression": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "required": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "required": true
-                    }
-                  },
-                  "description_kind": "plain"
-                },
-                "max_items": 1
-              }
-            },
-            "description_kind": "plain"
-          }
-        },
-        "google_compute_backend_service_iam_member": {
-          "version": 0,
-          "block": {
-            "attributes": {
-              "etag": {
-                "type": "string",
-                "description_kind": "plain",
-                "computed": true
-              },
-              "id": {
-                "type": "string",
-                "description_kind": "plain",
-                "optional": true,
-                "computed": true
-              },
-              "member": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              },
-              "name": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              },
-              "project": {
-                "type": "string",
-                "description_kind": "plain",
-                "optional": true,
-                "computed": true
-              },
-              "role": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              }
-            },
-            "block_types": {
-              "condition": {
-                "nesting_mode": "list",
-                "block": {
-                  "attributes": {
-                    "description": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "optional": true
-                    },
-                    "expression": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "required": true
-                    },
-                    "title": {
-                      "type": "string",
-                      "description_kind": "plain",
-                      "required": true
-                    }
-                  },
-                  "description_kind": "plain"
-                },
-                "max_items": 1
-              }
-            },
-            "description_kind": "plain"
-          }
-        },
-        "google_compute_backend_service_iam_policy": {
-          "version": 0,
-          "block": {
-            "attributes": {
-              "etag": {
-                "type": "string",
-                "description_kind": "plain",
-                "computed": true
-              },
-              "id": {
-                "type": "string",
-                "description_kind": "plain",
-                "optional": true,
-                "computed": true
-              },
-              "name": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              },
-              "policy_data": {
-                "type": "string",
-                "description_kind": "plain",
-                "required": true
-              },
-              "project": {
-                "type": "string",
-                "description_kind": "plain",
-                "optional": true,
-                "computed": true
               }
             },
             "description_kind": "plain"
@@ -21358,7 +21743,7 @@
                 "type": "string",
                 "description": "The name for a specific VM instance that the IP address belongs to.\nThis is required for network endpoints of type GCE_VM_IP_PORT.\nThe instance must be in the same zone of network endpoint group.",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
               },
               "ip_address": {
                 "type": "string",
@@ -21451,7 +21836,7 @@
               },
               "network_endpoint_type": {
                 "type": "string",
-                "description": "Type of network endpoints in this network endpoint group. Default value: \"GCE_VM_IP_PORT\" Possible values: [\"GCE_VM_IP_PORT\"]",
+                "description": "Type of network endpoints in this network endpoint group.\nNON_GCP_PRIVATE_IP_PORT is used for hybrid connectivity network\nendpoint groups (see https://cloud.google.com/load-balancing/docs/hybrid).\nNote that NON_GCP_PRIVATE_IP_PORT can only be used with Backend Services\nthat 1) have the following load balancing schemes: EXTERNAL, EXTERNAL_MANAGED,\nINTERNAL_MANAGED, and INTERNAL_SELF_MANAGED and 2) support the RATE or\nCONNECTION balancing modes. Default value: \"GCE_VM_IP_PORT\" Possible values: [\"GCE_VM_IP_PORT\", \"NON_GCP_PRIVATE_IP_PORT\"]",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -27279,6 +27664,12 @@
                       "description": "Local BGP Autonomous System Number (ASN). Must be an RFC6996\nprivate ASN, either 16-bit or 32-bit. The value will be fixed for\nthis router resource. All VPN tunnels that link to this router\nwill have the same local ASN.",
                       "description_kind": "plain",
                       "required": true
+                    },
+                    "keepalive_interval": {
+                      "type": "number",
+                      "description": "The interval in seconds between BGP keepalive messages that are sent to the peer.\nHold time is three times the interval at which keepalive messages are sent, and the hold time is the\nmaximum number of seconds allowed to elapse between successive keepalive messages that BGP receives from a peer.\nBGP will use the smaller of either the local hold time value or the peer's hold time value as the hold time for\nthe BGP connection between the two peers. If set, this value must be between 20 and 60. The default is 20.",
+                      "description_kind": "plain",
+                      "optional": true
                     }
                   },
                   "block_types": {
@@ -27825,7 +28216,7 @@
                   "attributes": {
                     "action": {
                       "type": "string",
-                      "description": "Action to take when match matches the request. Valid values:   \"allow\" : allow access to target, \"deny(status)\" : deny access to target, returns the HTTP response code specified (valid values are 403, 404 and 502)",
+                      "description": "Action to take when match matches the request.",
                       "description_kind": "plain",
                       "required": true
                     },
@@ -34854,6 +35245,22 @@
                       },
                       "max_items": 1
                     },
+                    "gvnic": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "enabled": {
+                            "type": "bool",
+                            "description": "Whether or not gvnic is enabled",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Enable or disable gvnic in the node pool.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "shielded_instance_config": {
                       "nesting_mode": "list",
                       "block": {
@@ -35175,6 +35582,22 @@
                                 }
                               },
                               "description": "GCFS configuration for this node.",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          },
+                          "gvnic": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "enabled": {
+                                  "type": "bool",
+                                  "description": "Whether or not gvnic is enabled",
+                                  "description_kind": "plain",
+                                  "required": true
+                                }
+                              },
+                              "description": "Enable or disable gvnic in the node pool.",
                               "description_kind": "plain"
                             },
                             "max_items": 1
@@ -35743,6 +36166,22 @@
                           }
                         },
                         "description": "GCFS configuration for this node.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
+                    "gvnic": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "enabled": {
+                            "type": "bool",
+                            "description": "Whether or not gvnic is enabled",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Enable or disable gvnic in the node pool.",
                         "description_kind": "plain"
                       },
                       "max_items": 1
@@ -36802,6 +37241,189 @@
                 "type": "string",
                 "description_kind": "plain",
                 "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_data_fusion_instance": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "create_time": {
+                "type": "string",
+                "description": "The time the instance was created in RFC3339 UTC \"Zulu\" format, accurate to nanoseconds.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "dataproc_service_account": {
+                "type": "string",
+                "description": "User-managed service account to set on Dataproc when Cloud Data Fusion creates Dataproc to run data processing pipelines.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "description": {
+                "type": "string",
+                "description": "An optional description of the instance.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "enable_stackdriver_logging": {
+                "type": "bool",
+                "description": "Option to enable Stackdriver Logging.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "enable_stackdriver_monitoring": {
+                "type": "bool",
+                "description": "Option to enable Stackdriver Monitoring.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "gcs_bucket": {
+                "type": "string",
+                "description": "Cloud Storage bucket generated by Data Fusion in the customer project.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "The resource labels for instance to use to annotate any related underlying resources,\nsuch as Compute Engine VMs.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The ID of the instance or a fully qualified identifier for the instance.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "options": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Map of additional options used to configure the behavior of Data Fusion instance.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "private_instance": {
+                "type": "bool",
+                "description": "Specifies whether the Data Fusion instance should be private. If set to\ntrue, all Data Fusion nodes will have private IP addresses and will not be\nable to access the public internet.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "region": {
+                "type": "string",
+                "description": "The region of the Data Fusion instance.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "service_endpoint": {
+                "type": "string",
+                "description": "Endpoint on which the Data Fusion UI and REST APIs are accessible.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "The current state of this Data Fusion instance.\n- CREATING: Instance is being created\n- RUNNING: Instance is running and ready for requests\n- FAILED: Instance creation failed\n- DELETING: Instance is being deleted\n- UPGRADING: Instance is being upgraded\n- RESTARTING: Instance is being restarted",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state_message": {
+                "type": "string",
+                "description": "Additional information about the current state of this Data Fusion instance if available.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "tenant_project_id": {
+                "type": "string",
+                "description": "The name of the tenant project.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "type": {
+                "type": "string",
+                "description": "Represents the type of Data Fusion instance. Each type is configured with\nthe default settings for processing and memory.\n- BASIC: Basic Data Fusion instance. In Basic type, the user will be able to create data pipelines\nusing point and click UI. However, there are certain limitations, such as fewer number\nof concurrent pipelines, no support for streaming pipelines, etc.\n- ENTERPRISE: Enterprise Data Fusion instance. In Enterprise type, the user will have more features\navailable, such as support for streaming pipelines, higher number of concurrent pipelines, etc.\n- DEVELOPER: Developer Data Fusion instance. In Developer type, the user will have all features available but\nwith restrictive capabilities. This is to help enterprises design and develop their data ingestion and integration \npipelines at low cost. Possible values: [\"BASIC\", \"ENTERPRISE\", \"DEVELOPER\"]",
+                "description_kind": "plain",
+                "required": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "The time the instance was last updated in RFC3339 UTC \"Zulu\" format, accurate to nanoseconds.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "version": {
+                "type": "string",
+                "description": "Current version of the Data Fusion.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "block_types": {
+              "network_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "ip_allocation": {
+                      "type": "string",
+                      "description": "The IP range in CIDR notation to use for the managed Data Fusion instance\nnodes. This range must not overlap with any other ranges used in the Data Fusion instance network.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "network": {
+                      "type": "string",
+                      "description": "Name of the network in the project with which the tenant project\nwill be peered for executing pipelines. In case of shared VPC where the network resides in another host\nproject the network should specified in the form of projects/{host-project-id}/global/networks/{network}",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description": "Network configuration options. These are required when a private Data Fusion instance is to be created.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
               }
             },
             "description_kind": "plain"
@@ -39233,6 +39855,12 @@
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
+                          },
+                          "preemptibility": {
+                            "type": "string",
+                            "description": "Specifies the preemptibility of the secondary nodes. Defaults to PREEMPTIBLE.",
+                            "description_kind": "plain",
+                            "optional": true
                           }
                         },
                         "block_types": {
@@ -41861,7 +42489,7 @@
                                         "max_items": 1
                                       }
                                     },
-                                    "description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
+                                    "description": "Optional. The Compute Engine config settings for the master instance in a cluster.",
                                     "description_kind": "plain"
                                   },
                                   "max_items": 1
@@ -41984,7 +42612,7 @@
                                         "max_items": 1
                                       }
                                     },
-                                    "description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
+                                    "description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
                                     "description_kind": "plain"
                                   },
                                   "max_items": 1
@@ -45205,7 +45833,7 @@
               },
               "name": {
                 "type": "string",
-                "description": "Required. The resource name of the trigger. Must be unique within the location on the project and must be in `projects/{project}/locations/{location}/triggers/{trigger}` format.",
+                "description": "Required. The resource name of the trigger. Must be unique within the location on the project.",
                 "description_kind": "plain",
                 "required": true
               },
@@ -45218,7 +45846,7 @@
               },
               "service_account": {
                 "type": "string",
-                "description": "Optional. The IAM service account email associated with the trigger. The service account represents the identity of the trigger. The principal who calls this API must have `iam.serviceAccounts.actAs` permission in the service account. See https://cloud.google.com/iam/docs/understanding-service-accounts?hl=en#sa_common for more information. For Cloud Run destinations, this service account is used to generate identity tokens when invoking the service. See https://cloud.google.com/run/docs/triggering/pubsub-push#create-service-account for information on how to invoke authenticated Cloud Run services. In order to create Audit Log triggers, the service account should also have `roles/eventarc.eventReceiver` IAM role.",
+                "description": "Optional. The IAM service account email associated with the trigger. The service account represents the identity of the trigger. The principal who calls this API must have `iam.serviceAccounts.actAs` permission in the service account. See https://cloud.google.com/iam/docs/understanding-service-accounts#sa_common for more information. For Cloud Run destinations, this service account is used to generate identity tokens when invoking the service. See https://cloud.google.com/run/docs/triggering/pubsub-push#create-service-account for information on how to invoke authenticated Cloud Run services. In order to create Audit Log triggers, the service account should also have `roles/eventarc.eventReceiver` IAM role.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -45242,7 +45870,7 @@
                   "attributes": {
                     "cloud_function": {
                       "type": "string",
-                      "description": "The Cloud Function resource name. Only Cloud Functions V2 is supported. Format: projects/{project}/locations/{location}/functions/{function}",
+                      "description": "[WARNING] Configuring a Cloud Function in Trigger is not supported as of today. The Cloud Function resource name. Format: projects/{project}/locations/{location}/functions/{function}",
                       "description_kind": "plain",
                       "optional": true
                     }
@@ -45345,7 +45973,7 @@
                           },
                           "topic": {
                             "type": "string",
-                            "description": "Optional. The name of the Pub/Sub topic created and managed by Eventarc system as a transport for the event delivery. Format: `projects/{PROJECT_ID}/topics/{TOPIC_NAME You may set an existing topic for triggers of the type google.cloud.pubsub.topic.v1.messagePublished` only. The topic you provide here will not be deleted by Eventarc at trigger deletion.",
+                            "description": "Optional. The name of the Pub/Sub topic created and managed by Eventarc system as a transport for the event delivery. Format: `projects/{PROJECT_ID}/topics/{TOPIC_NAME}. You may set an existing topic for triggers of the type google.cloud.pubsub.topic.v1.messagePublished` only. The topic you provide here will not be deleted by Eventarc at trigger deletion.",
                             "description_kind": "plain",
                             "optional": true
                           }
@@ -51510,6 +52138,95 @@
             "description_kind": "plain"
           }
         },
+        "google_logging_log_view": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "bucket": {
+                "type": "string",
+                "description": "The bucket of the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The creation timestamp of the view.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Describes this view.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "filter": {
+                "type": "string",
+                "description": "Filter that restricts which log entries in a bucket are visible in this view. Filters are restricted to be a logical AND of ==/!= of any of the following: - originating project/folder/organization/billing account. - resource type - log id For example: SOURCE(\"projects/myproject\") AND resource.type = \"gce_instance\" AND LOG_ID(\"stdout\")",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location of the resource. The supported locations are: global, us-central1, us-east1, us-west1, asia-east1, europe-west1.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The resource name of the view. For example: `projects/my-project/locations/global/buckets/my-bucket/views/my-view`",
+                "description_kind": "plain",
+                "required": true
+              },
+              "parent": {
+                "type": "string",
+                "description": "The parent of the resource.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The last update timestamp of the view.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_logging_metric": {
           "version": 0,
           "block": {
@@ -54773,7 +55490,7 @@
               },
               "max_attempts": {
                 "type": "number",
-                "description": "The maximum number of attempts to cache fill from this origin. Another attempt is made when a cache fill fails with one of the retryConditions.\n\nOnce maxAttempts to this origin have failed the failoverOrigin will be used, if one is specified. That failoverOrigin may specify its own maxAttempts,\nretryConditions and failoverOrigin to control its own cache fill failures.\n\nThe total number of allowed attempts to cache fill across this and failover origins is limited to four.\nThe total time allowed for cache fill attempts across this and failover origins can be controlled with maxAttemptsTimeout.\n\nThe last valid response from an origin will be returned to the client.\nIf no origin returns a valid response, an HTTP 503 will be returned to the client.\n\nDefaults to 1. Must be a value greater than 0 and less than 4.",
+                "description": "The maximum number of attempts to cache fill from this origin. Another attempt is made when a cache fill fails with one of the retryConditions.\n\nOnce maxAttempts to this origin have failed the failoverOrigin will be used, if one is specified. That failoverOrigin may specify its own maxAttempts,\nretryConditions and failoverOrigin to control its own cache fill failures.\n\nThe total number of allowed attempts to cache fill across this and failover origins is limited to four.\nThe total time allowed for cache fill attempts across this and failover origins can be controlled with maxAttemptsTimeout.\n\nThe last valid, non-retried response from all origins will be returned to the client.\nIf no origin returns a valid response, an HTTP 502 will be returned to the client.\n\nDefaults to 1. Must be a value greater than 0 and less than 4.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -54785,7 +55502,7 @@
               },
               "origin_address": {
                 "type": "string",
-                "description": "A fully qualified domain name (FQDN) or IP address reachable over the public Internet, or the address of a Google Cloud Storage bucket.\n\nThis address will be used as the origin for cache requests - e.g. FQDN: media-backend.example.com IPv4:35.218.1.1 IPv6:[2607:f8b0:4012:809::200e] Cloud Storage: gs://bucketname\n\nWhen providing an FQDN (hostname), it must be publicly resolvable (e.g. via Google public DNS) and IP addresses must be publicly routable.\nIf a Cloud Storage bucket is provided, it must be in the canonical \"gs://bucketname\" format. Other forms, such as \"storage.googleapis.com\", will be rejected.",
+                "description": "A fully qualified domain name (FQDN) or IP address reachable over the public Internet, or the address of a Google Cloud Storage bucket.\n\nThis address will be used as the origin for cache requests - e.g. FQDN: media-backend.example.com, IPv4: 35.218.1.1, IPv6: 2607:f8b0:4012:809::200e, Cloud Storage: gs://bucketname\n\nWhen providing an FQDN (hostname), it must be publicly resolvable (e.g. via Google public DNS) and IP addresses must be publicly routable.  It must not contain a protocol (e.g., https://) and it must not contain any slashes.\nIf a Cloud Storage bucket is provided, it must be in the canonical \"gs://bucketname\" format. Other forms, such as \"storage.googleapis.com\", will be rejected.",
                 "description_kind": "plain",
                 "required": true
               },
@@ -54814,7 +55531,7 @@
                   "list",
                   "string"
                 ],
-                "description": "Specifies one or more retry conditions for the configured origin.\n\nIf the failure mode during a connection attempt to the origin matches the configured retryCondition(s),\nthe origin request will be retried up to maxAttempts times. The failoverOrigin, if configured, will then be used to satisfy the request.\n\nThe default retryCondition is \"CONNECT_FAILURE\".\n\nretryConditions apply to this origin, and not subsequent failoverOrigin(s),\nwhich may specify their own retryConditions and maxAttempts.\n\nValid values are:\n\n- CONNECT_FAILURE: Retry on failures connecting to origins, for example due to connection timeouts.\n- HTTP_5XX: Retry if the origin responds with any 5xx response code, or if the origin does not respond at all, example: disconnects, reset, read timeout, connection failure, and refused streams.\n- GATEWAY_ERROR: Similar to 5xx, but only applies to response codes 502, 503 or 504.\n- RETRIABLE_4XX: Retry for retriable 4xx response codes, which include HTTP 409 (Conflict) and HTTP 429 (Too Many Requests)\n- NOT_FOUND: Retry if the origin returns a HTTP 404 (Not Found). This can be useful when generating video content, and the segment is not available yet. Possible values: [\"CONNECT_FAILURE\", \"HTTP_5XX\", \"GATEWAY_ERROR\", \"RETRIABLE_4XX\", \"NOT_FOUND\"]",
+                "description": "Specifies one or more retry conditions for the configured origin.\n\nIf the failure mode during a connection attempt to the origin matches the configured retryCondition(s),\nthe origin request will be retried up to maxAttempts times. The failoverOrigin, if configured, will then be used to satisfy the request.\n\nThe default retryCondition is \"CONNECT_FAILURE\".\n\nretryConditions apply to this origin, and not subsequent failoverOrigin(s),\nwhich may specify their own retryConditions and maxAttempts.\n\nValid values are:\n\n- CONNECT_FAILURE: Retry on failures connecting to origins, for example due to connection timeouts.\n- HTTP_5XX: Retry if the origin responds with any 5xx response code, or if the origin does not respond at all, example: disconnects, reset, read timeout, connection failure, and refused streams.\n- GATEWAY_ERROR: Similar to 5xx, but only applies to response codes 502, 503 or 504.\n- RETRIABLE_4XX: Retry for retriable 4xx response codes, which include HTTP 409 (Conflict) and HTTP 429 (Too Many Requests)\n- NOT_FOUND: Retry if the origin returns a HTTP 404 (Not Found). This can be useful when generating video content, and the segment is not available yet.\n- FORBIDDEN: Retry if the origin returns a HTTP 403 (Forbidden). Possible values: [\"CONNECT_FAILURE\", \"HTTP_5XX\", \"GATEWAY_ERROR\", \"RETRIABLE_4XX\", \"NOT_FOUND\", \"FORBIDDEN\"]",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -54827,19 +55544,25 @@
                   "attributes": {
                     "connect_timeout": {
                       "type": "string",
-                      "description": "The maximum duration to wait for the origin connection to be established, including DNS lookup, TLS handshake and TCP/QUIC connection establishment.\n\nDefaults to 5 seconds. The timeout must be a value between 1s and 15s.",
+                      "description": "The maximum duration to wait for a single origin connection to be established, including DNS lookup, TLS handshake and TCP/QUIC connection establishment.\n\nDefaults to 5 seconds. The timeout must be a value between 1s and 15s.\n\nThe connectTimeout capped by the deadline set by the request's maxAttemptsTimeout.  The last connection attempt may have a smaller connectTimeout in order to adhere to the overall maxAttemptsTimeout.",
                       "description_kind": "plain",
                       "optional": true
                     },
                     "max_attempts_timeout": {
                       "type": "string",
-                      "description": "The maximum time across all connection attempts to the origin, including failover origins, before returning an error to the client. A HTTP 503 will be returned if the timeout is reached before a response is returned.\n\nDefaults to 5 seconds. The timeout must be a value between 1s and 15s.",
+                      "description": "The maximum time across all connection attempts to the origin, including failover origins, before returning an error to the client. A HTTP 504 will be returned if the timeout is reached before a response is returned.\n\nDefaults to 15 seconds. The timeout must be a value between 1s and 30s.\n\nIf a failoverOrigin is specified, the maxAttemptsTimeout of the first configured origin sets the deadline for all connection attempts across all failoverOrigins.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "read_timeout": {
+                      "type": "string",
+                      "description": "The maximum duration to wait between reads of a single HTTP connection/stream.\n\nDefaults to 15 seconds.  The timeout must be a value between 1s and 30s.\n\nThe readTimeout is capped by the responseTimeout.  All reads of the HTTP connection/stream must be completed by the deadline set by the responseTimeout.\n\nIf the response headers have already been written to the connection, the response will be truncated and logged.",
                       "description_kind": "plain",
                       "optional": true
                     },
                     "response_timeout": {
                       "type": "string",
-                      "description": "The maximum duration to wait for data to arrive when reading from the HTTP connection/stream.\n\nDefaults to 5 seconds. The timeout must be a value between 1s and 30s.",
+                      "description": "The maximum duration to wait for the last byte of a response to arrive when reading from the HTTP connection/stream.\n\nDefaults to 30 seconds. The timeout must be a value between 1s and 120s.\n\nThe responseTimeout starts after the connection has been established.\n\nThis also applies to HTTP Chunked Transfer Encoding responses, and/or when an open-ended Range request is made to the origin. Origins that take longer to write additional bytes to the response than the configured responseTimeout will result in an error being returned to the client.\n\nIf the response headers have already been written to the connection, the response will be truncated and logged.",
                       "description_kind": "plain",
                       "optional": true
                     }
@@ -54883,6 +55606,12 @@
               "description": {
                 "type": "string",
                 "description": "A human-readable description of the resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "disable_http2": {
+                "type": "bool",
+                "description": "Disables HTTP/2.\n\nHTTP/2 (h2) is enabled by default and recommended for performance. HTTP/2 improves connection re-use and reduces connection setup overhead by sending multiple streams over the same connection.\n\nSome legacy HTTP clients may have issues with HTTP/2 connections due to broken HTTP/2 implementations. Setting this to true will prevent HTTP/2 from being advertised and negotiated.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -55010,7 +55739,7 @@
                               "list",
                               "string"
                             ],
-                            "description": "The list of host patterns to match.\n\nHost patterns must be valid hostnames with optional port numbers in the format host:port. * matches any string of ([a-z0-9-.]*).\nThe only accepted ports are :80 and :443.\n\nHosts are matched against the HTTP Host header, or for HTTP/2 and HTTP/3, the \":authority\" header, from the incoming request.",
+                            "description": "The list of host patterns to match.\n\nHost patterns must be valid hostnames. Ports are not allowed. Wildcard hosts are supported in the suffix or prefix form. * matches any string of ([a-z0-9-.]*). It does not match the empty string.\n\nWhen multiple hosts are specified, hosts are matched in the following priority:\n\n  1. Exact domain names: ''www.foo.com''.\n  2. Suffix domain wildcards: ''*.foo.com'' or ''*-bar.foo.com''.\n  3. Prefix domain wildcards: ''foo.*'' or ''foo-*''.\n  4. Special wildcard ''*'' matching any domain.\n\n  Notes:\n\n    The wildcard will not match the empty string. e.g. ''*-bar.foo.com'' will match ''baz-bar.foo.com'' but not ''-bar.foo.com''. The longest wildcards match first. Only a single host in the entire service can match on ''*''. A domain must be unique across all configured hosts within a service.\n\n    Hosts are matched against the HTTP Host header, or for HTTP/2 and HTTP/3, the \":authority\" header, from the incoming request.\n\n    You may specify up to 10 hosts.",
                             "description_kind": "plain",
                             "required": true
                           },
@@ -55299,20 +56028,20 @@
                                             },
                                             "client_ttl": {
                                               "type": "string",
-                                              "description": "Specifies a separate client (e.g. browser client) TTL, separate from the TTL used by the edge caches. Leaving this empty will use the same cache TTL for both the CDN and the client-facing response.\n\n- The TTL must be > 0 and <= 86400s (1 day)\n- The clientTtl cannot be larger than the defaultTtl (if set)\n- Fractions of a second are not allowed.\n- Omit this field to use the defaultTtl, or the max-age set by the origin, as the client-facing TTL.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\nA duration in seconds with up to nine fractional digits, terminated by 's'. Example: \"3.5s\".",
+                                              "description": "Specifies a separate client (e.g. browser client) TTL, separate from the TTL used by the edge caches. Leaving this empty will use the same cache TTL for both the CDN and the client-facing response.\n\n- The TTL must be > 0 and <= 86400s (1 day)\n- The clientTtl cannot be larger than the defaultTtl (if set)\n- Fractions of a second are not allowed.\n\nOmit this field to use the defaultTtl, or the max-age set by the origin, as the client-facing TTL.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                               "description_kind": "plain",
                                               "optional": true
                                             },
                                             "default_ttl": {
                                               "type": "string",
-                                              "description": "Specifies the default TTL for cached content served by this origin for responses that do not have an existing valid TTL (max-age or s-max-age).\n\nDefaults to 3600s (1 hour).\n\n- The TTL must be >= 0 and <= 2592000s (1 month)\n- Setting a TTL of \"0\" means \"always revalidate\" (equivalent to must-revalidate)\n- The value of defaultTTL cannot be set to a value greater than that of maxTTL.\n- Fractions of a second are not allowed.\n- When the cacheMode is set to FORCE_CACHE_ALL, the defaultTTL will overwrite the TTL set in all responses.\n\nNote that infrequently accessed objects may be evicted from the cache before the defined TTL. Objects that expire will be revalidated with the origin.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds with up to nine fractional digits, terminated by 's'. Example: \"3.5s\".",
+                                              "description": "Specifies the default TTL for cached content served by this origin for responses that do not have an existing valid TTL (max-age or s-max-age).\n\nDefaults to 3600s (1 hour).\n\n- The TTL must be >= 0 and <= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\" (equivalent to must-revalidate)\n- The value of defaultTTL cannot be set to a value greater than that of maxTTL.\n- Fractions of a second are not allowed.\n- When the cacheMode is set to FORCE_CACHE_ALL, the defaultTTL will overwrite the TTL set in all responses.\n\nNote that infrequently accessed objects may be evicted from the cache before the defined TTL. Objects that expire will be revalidated with the origin.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                               "description_kind": "plain",
                                               "optional": true,
                                               "computed": true
                                             },
                                             "max_ttl": {
                                               "type": "string",
-                                              "description": "Specifies the maximum allowed TTL for cached content served by this origin.\n\nDefaults to 86400s (1 day).\n\nCache directives that attempt to set a max-age or s-maxage higher than this, or an Expires header more than maxTtl seconds in the future will be capped at the value of maxTTL, as if it were the value of an s-maxage Cache-Control directive.\n\n- The TTL must be >= 0 and <= 2592000s (1 month)\n- Setting a TTL of \"0\" means \"always revalidate\"\n- The value of maxTtl must be equal to or greater than defaultTtl.\n- Fractions of a second are not allowed.\n- When the cache mode is set to \"USE_ORIGIN_HEADERS\", \"FORCE_CACHE_ALL\", or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds with up to nine fractional digits, terminated by 's'. Example: \"3.5s\".",
+                                              "description": "Specifies the maximum allowed TTL for cached content served by this origin.\n\nDefaults to 86400s (1 day).\n\nCache directives that attempt to set a max-age or s-maxage higher than this, or an Expires header more than maxTtl seconds in the future will be capped at the value of maxTTL, as if it were the value of an s-maxage Cache-Control directive.\n\n- The TTL must be >= 0 and <= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\"\n- The value of maxTtl must be equal to or greater than defaultTtl.\n- Fractions of a second are not allowed.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\", \"FORCE_CACHE_ALL\", or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                               "description_kind": "plain",
                                               "optional": true,
                                               "computed": true
@@ -55354,7 +56083,7 @@
                                                 "attributes": {
                                                   "exclude_host": {
                                                     "type": "bool",
-                                                    "description": "If true, requests to different hosts will be cached separately.\n\nNote: this should only be enabled if hosts share the same origin and content Removing the host from the cache key may inadvertently result in different objects being cached than intended, depending on which route the first user matched.",
+                                                    "description": "If true, requests to different hosts will be cached separately.\n\nNote: this should only be enabled if hosts share the same origin and content. Removing the host from the cache key may inadvertently result in different objects being cached than intended, depending on which route the first user matched.",
                                                     "description_kind": "plain",
                                                     "optional": true,
                                                     "computed": true
@@ -70631,7 +71360,7 @@
                     }
                   ]
                 ],
-                "description": "template holds the latest specification for the Revision to\nbe stamped out. The template references the container image, and may also\ninclude labels and annotations that should be attached to the Revision.\nTo correlate a Revision, and/or to force a Revision to be created when the\nspec doesn't otherwise change, a nonce label may be provided in the\ntemplate metadata. For more details, see:\nhttps://github.com/knative/serving/blob/master/docs/client-conventions.md#associate-modifications-with-revisions\n\nCloud Run does not currently support referencing a build that is\nresponsible for materializing the container image from source.",
+                "description": "template holds the latest specification for the Revision to\nbe stamped out. The template references the container image, and may also\ninclude labels and annotations that should be attached to the Revision.\nTo correlate a Revision, and/or to force a Revision to be created when the\nspec doesn't otherwise change, a nonce label may be provided in the\ntemplate metadata. For more details, see:\nhttps://github.com/knative/serving/blob/main/docs/client-conventions.md#associate-modifications-with-revisions\n\nCloud Run does not currently support referencing a build that is\nresponsible for materializing the container image from source.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -70918,6 +71647,17 @@
                       ],
                       "environment_size": "string",
                       "gke_cluster": "string",
+                      "maintenance_window": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "end_time": "string",
+                            "recurrence": "string",
+                            "start_time": "string"
+                          }
+                        ]
+                      ],
                       "node_config": [
                         "list",
                         [
@@ -70959,6 +71699,7 @@
                         [
                           "object",
                           {
+                            "cloud_composer_connection_subnetwork": "string",
                             "cloud_composer_network_ipv4_cidr_block": "string",
                             "cloud_sql_ipv4_cidr_block": "string",
                             "enable_private_endpoint": "bool",
@@ -73397,7 +74138,7 @@
               },
               "network_endpoint_type": {
                 "type": "string",
-                "description": "Type of network endpoints in this network endpoint group. Default value: \"GCE_VM_IP_PORT\" Possible values: [\"GCE_VM_IP_PORT\"]",
+                "description": "Type of network endpoints in this network endpoint group.\nNON_GCP_PRIVATE_IP_PORT is used for hybrid connectivity network\nendpoint groups (see https://cloud.google.com/load-balancing/docs/hybrid).\nNote that NON_GCP_PRIVATE_IP_PORT can only be used with Backend Services\nthat 1) have the following load balancing schemes: EXTERNAL, EXTERNAL_MANAGED,\nINTERNAL_MANAGED, and INTERNAL_SELF_MANAGED and 2) support the RATE or\nCONNECTION balancing modes. Default value: \"GCE_VM_IP_PORT\" Possible values: [\"GCE_VM_IP_PORT\", \"NON_GCP_PRIVATE_IP_PORT\"]",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -73842,7 +74583,8 @@
                           }
                         ]
                       ],
-                      "asn": "number"
+                      "asn": "number",
+                      "keepalive_interval": "number"
                     }
                   ]
                 ],
@@ -74892,6 +75634,15 @@
                           }
                         ]
                       ],
+                      "gvnic": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "enabled": "bool"
+                          }
+                        ]
+                      ],
                       "image_type": "string",
                       "labels": [
                         "map",
@@ -75024,6 +75775,15 @@
                                   "count": "number",
                                   "gpu_partition_size": "string",
                                   "type": "string"
+                                }
+                              ]
+                            ],
+                            "gvnic": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "enabled": "bool"
                                 }
                               ]
                             ],
@@ -75537,6 +76297,53 @@
                 "type": "string",
                 "description_kind": "plain",
                 "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_dns_record_set": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "managed_zone": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "rrdatas": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "computed": true
+              },
+              "ttl": {
+                "type": "number",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "type": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
               }
             },
             "description_kind": "plain"
@@ -76756,6 +77563,317 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_privateca_certificate_authority": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "access_urls": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "ca_certificate_access_url": "string",
+                      "crl_access_urls": [
+                        "list",
+                        "string"
+                      ]
+                    }
+                  ]
+                ],
+                "description": "URLs for accessing content published by this CA, such as the CA certificate and CRLs.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "certificate_authority_id": {
+                "type": "string",
+                "description": "The user provided Resource ID for this Certificate Authority.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "config": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "subject_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "subject": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "common_name": "string",
+                                  "country_code": "string",
+                                  "locality": "string",
+                                  "organization": "string",
+                                  "organizational_unit": "string",
+                                  "postal_code": "string",
+                                  "province": "string",
+                                  "street_address": "string"
+                                }
+                              ]
+                            ],
+                            "subject_alt_name": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "dns_names": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "email_addresses": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "ip_addresses": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "uris": [
+                                    "list",
+                                    "string"
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ],
+                      "x509_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "additional_extensions": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "critical": "bool",
+                                  "object_id": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "object_id_path": [
+                                          "list",
+                                          "number"
+                                        ]
+                                      }
+                                    ]
+                                  ],
+                                  "value": "string"
+                                }
+                              ]
+                            ],
+                            "aia_ocsp_servers": [
+                              "list",
+                              "string"
+                            ],
+                            "ca_options": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "is_ca": "bool",
+                                  "max_issuer_path_length": "number",
+                                  "non_ca": "bool",
+                                  "zero_max_issuer_path_length": "bool"
+                                }
+                              ]
+                            ],
+                            "key_usage": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "base_key_usage": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "cert_sign": "bool",
+                                        "content_commitment": "bool",
+                                        "crl_sign": "bool",
+                                        "data_encipherment": "bool",
+                                        "decipher_only": "bool",
+                                        "digital_signature": "bool",
+                                        "encipher_only": "bool",
+                                        "key_agreement": "bool",
+                                        "key_encipherment": "bool"
+                                      }
+                                    ]
+                                  ],
+                                  "extended_key_usage": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "client_auth": "bool",
+                                        "code_signing": "bool",
+                                        "email_protection": "bool",
+                                        "ocsp_signing": "bool",
+                                        "server_auth": "bool",
+                                        "time_stamping": "bool"
+                                      }
+                                    ]
+                                  ],
+                                  "unknown_extended_key_usages": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "object_id_path": [
+                                          "list",
+                                          "number"
+                                        ]
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
+                            ],
+                            "policy_ids": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "object_id_path": [
+                                    "list",
+                                    "number"
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "The config used to create a self-signed X.509 certificate or CSR.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "The time at which this CertificateAuthority was created.\n\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution and up to nine\nfractional digits. Examples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "gcs_bucket": {
+                "type": "string",
+                "description": "The name of a Cloud Storage bucket where this CertificateAuthority will publish content,\nsuch as the CA certificate and CRLs. This must be a bucket name, without any prefixes\n(such as 'gs://') or suffixes (such as '.googleapis.com'). For example, to use a bucket named\nmy-bucket, you would simply specify 'my-bucket'. If not specified, a managed bucket will be\ncreated.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "ignore_active_certificates_on_deletion": {
+                "type": "bool",
+                "description": "This field allows the CA to be deleted even if the CA has active certs. Active certs include both unrevoked and unexpired certs.\nUse with care. Defaults to 'false'.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "key_spec": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "algorithm": "string",
+                      "cloud_kms_key_version": "string"
+                    }
+                  ]
+                ],
+                "description": "Used when issuing certificates for this CertificateAuthority. If this CertificateAuthority\nis a self-signed CertificateAuthority, this key is also used to sign the self-signed CA\ncertificate. Otherwise, it is used to sign a CSR.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels with user-defined metadata.\n\nAn object containing a list of \"key\": value pairs. Example: { \"name\": \"wrench\", \"mass\":\n\"1.3kg\", \"count\": \"3\" }.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "lifetime": {
+                "type": "string",
+                "description": "The desired lifetime of the CA certificate. Used to create the \"notBeforeTime\" and\n\"notAfterTime\" fields inside an X.509 certificate. A duration in seconds with up to nine\nfractional digits, terminated by 's'. Example: \"3.5s\".",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "Location of the CertificateAuthority. A full list of valid locations can be found by\nrunning 'gcloud privateca locations list'.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The resource name for this CertificateAuthority in the format\nprojects/*/locations/*/certificateAuthorities/*.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "pem_ca_certificates": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "This CertificateAuthority's certificate chain, including the current\nCertificateAuthority's certificate. Ordered such that the root issuer is the final\nelement (consistent with RFC 5246). For a self-signed CA, this will only list the current\nCertificateAuthority's certificate.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "pem_csr": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "pool": {
+                "type": "string",
+                "description": "The name of the CaPool this Certificate Authority belongs to.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "state": {
+                "type": "string",
+                "description": "The State for this CertificateAuthority.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "type": {
+                "type": "string",
+                "description": "The Type of this CertificateAuthority.\n\n~> **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe manually activated (via Cloud Console of 'gcloud') before they can\nissue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "The time at which this CertificateAuthority was updated.\n\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution and up to nine\nfractional digits. Examples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
+                "description_kind": "plain",
+                "computed": true
               }
             },
             "description_kind": "plain"
@@ -78845,6 +79963,11 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "subject_id": {
+                "type": "string",
+                "description_kind": "plain",
                 "computed": true
               }
             },
