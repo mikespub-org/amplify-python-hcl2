@@ -51,6 +51,11 @@
               "description_kind": "plain",
               "optional": true
             },
+            "bigquery_connection_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
             "bigquery_data_transfer_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
@@ -77,6 +82,11 @@
               "optional": true
             },
             "binary_authorization_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "certificate_manager_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -132,6 +142,11 @@
               "optional": true
             },
             "cloud_tasks_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "clouddeploy_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -409,7 +424,7 @@
               "description_kind": "plain",
               "optional": true
             },
-            "resource_manager_v2_custom_endpoint": {
+            "resource_manager_v3_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -1227,6 +1242,15 @@
                 "description_kind": "plain",
                 "required": true
               },
+              "scopes": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "Folder or project on which this policy is applicable.\nFormat: folders/{{folder_id}} or projects/{{project_id}}",
+                "description_kind": "plain",
+                "optional": true
+              },
               "title": {
                 "type": "string",
                 "description": "Human readable title. Does not affect behavior.",
@@ -1263,6 +1287,158 @@
                   },
                   "description_kind": "plain"
                 }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_access_context_manager_access_policy_iam_binding": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "members": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_access_context_manager_access_policy_iam_member": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "member": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_access_context_manager_access_policy_iam_policy": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "policy_data": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
               }
             },
             "description_kind": "plain"
@@ -3036,6 +3212,20 @@
           "version": 0,
           "block": {
             "attributes": {
+              "api_proxy_type": {
+                "type": "string",
+                "description": "Optional. API Proxy type supported by the environment. The type can be set when creating\nthe Environment and cannot be changed. Possible values: [\"API_PROXY_TYPE_UNSPECIFIED\", \"PROGRAMMABLE\", \"CONFIGURABLE\"]",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "deployment_type": {
+                "type": "string",
+                "description": "Optional. Deployment type supported by the environment. The deployment type can be\nset when creating the environment and cannot be changed. When you enable archive\ndeployment, you will be prevented from performing a subset of actions within the\nenvironment, including:\nManaging the deployment of API proxy or shared flow revisions;\nCreating, updating, or deleting resource files;\nCreating, updating, or deleting target servers. Possible values: [\"DEPLOYMENT_TYPE_UNSPECIFIED\", \"PROXY\", \"ARCHIVE\"]",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
               "description": {
                 "type": "string",
                 "description": "Description of the environment.",
@@ -3266,6 +3456,16 @@
           "version": 0,
           "block": {
             "attributes": {
+              "consumer_accept_list": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "Optional. Customer accept list represents the list of projects (id/number) on customer\nside that can privately connect to the service attachment. It is an optional field\nwhich the customers can provide during the instance creation. By default, the customer\nproject associated with the Apigee organization will be included to the list.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
               "description": {
                 "type": "string",
                 "description": "Description of the instance.",
@@ -3304,7 +3504,7 @@
               },
               "location": {
                 "type": "string",
-                "description": "Compute Engine location where the instance resides. For trial organization\nsubscriptions, the location must be a Compute Engine zone. For paid organization\nsubscriptions, it should correspond to a Compute Engine region.",
+                "description": "Required. Compute Engine location where the instance resides.",
                 "description_kind": "plain",
                 "required": true
               },
@@ -3330,6 +3530,12 @@
               "port": {
                 "type": "string",
                 "description": "Output only. Port number of the exposed Apigee endpoint.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "service_attachment": {
+                "type": "string",
+                "description": "Output only. Resource name of the service attachment created for the instance in\nthe format: projects/*/regions/*/serviceAttachments/* Apigee customers can privately\nforward traffic to this service attachment using the PSC endpoints.",
                 "description_kind": "plain",
                 "computed": true
               }
@@ -5714,6 +5920,158 @@
                   "description": "Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional.",
                   "description_kind": "plain"
                 }
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_bigquery_connection": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "connection_id": {
+                "type": "string",
+                "description": "Optional connection id that should be assigned to the created connection.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "A descriptive description for the connection",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "friendly_name": {
+                "type": "string",
+                "description": "A descriptive name for the connection",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "has_credential": {
+                "type": "bool",
+                "description": "True if the connection has credential assigned.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The geographic location where the connection should reside.\nCloud SQL instance must be in the same location as the connection\nwith following exceptions: Cloud SQL us-central1 maps to BigQuery US, Cloud SQL europe-west1 maps to BigQuery EU.\nExamples: US, EU, asia-northeast1, us-central1, europe-west1. The default value is US.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The resource name of the connection in the form of: \n\"projects/{project_id}/locations/{location_id}/connections/{connectionId}\"",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "block_types": {
+              "cloud_resource": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "service_account_id": {
+                      "type": "string",
+                      "description": "The account ID of the service created for the purpose of this connection.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "description": "Cloud Resource properties.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "cloud_sql": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "database": {
+                      "type": "string",
+                      "description": "Database name.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "instance_id": {
+                      "type": "string",
+                      "description": "Cloud SQL instance ID in the form project:location:instance.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Type of the Cloud SQL database. Possible values: [\"DATABASE_TYPE_UNSPECIFIED\", \"POSTGRES\", \"MYSQL\"]",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "block_types": {
+                    "credential": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "password": {
+                            "type": "string",
+                            "description": "Password for database.",
+                            "description_kind": "plain",
+                            "required": true,
+                            "sensitive": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "description": "Username for database.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Cloud SQL properties.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Cloud SQL properties.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
               },
               "timeouts": {
                 "nesting_mode": "single",
@@ -8291,6 +8649,12 @@
                 "description_kind": "plain",
                 "required": true
               },
+              "gc_rules": {
+                "type": "string",
+                "description": "Serialized JSON string for garbage collection policy. Conflicts with \"mode\", \"max_age\" and \"max_version\".",
+                "description_kind": "plain",
+                "optional": true
+              },
               "id": {
                 "type": "string",
                 "description_kind": "plain",
@@ -9781,6 +10145,224 @@
             "description_kind": "plain"
           }
         },
+        "google_certificate_manager_certificate": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description": "A human-readable description of the resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Set of label tags associated with the EdgeCache resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "A user-defined name of the certificate. Certificate names must be unique\nThe name must be 1-64 characters long, and match the regular expression [a-zA-Z][a-zA-Z0-9_-]* which means the first character must be a letter,\nand all following characters must be a dash, underscore, letter or digit.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "scope": {
+                "type": "string",
+                "description": "The scope of the certificate.\n\nCertificates with default scope are served from core Google data centers.\nIf unsure, choose this option.\n\nCertificates with scope EDGE_CACHE are special-purposed certificates,\nserved from non-core Google data centers.\nCurrently allowed only for managed certificates. Default value: \"DEFAULT\" Possible values: [\"DEFAULT\", \"EDGE_CACHE\"]",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "block_types": {
+              "managed": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "dns_authorizations": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Authorizations that will be used for performing domain authorization",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "domains": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "The domains for which a managed SSL certificate will be generated.\nWildcard domains are only supported with DNS challenge resolution",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "state": {
+                      "type": "string",
+                      "description": "State of the managed certificate resource.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "description": "Configuration and state of a Managed Certificate.\nCertificate Manager provisions and renews Managed Certificates\nautomatically, for as long as it's authorized to do so.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "self_managed": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "certificate_pem": {
+                      "type": "string",
+                      "description": "The certificate chain in PEM-encoded form.\n\nLeaf certificate comes first, followed by intermediate ones if any.",
+                      "description_kind": "plain",
+                      "required": true,
+                      "sensitive": true
+                    },
+                    "private_key_pem": {
+                      "type": "string",
+                      "description": "The private key of the leaf certificate in PEM-encoded form.",
+                      "description_kind": "plain",
+                      "required": true,
+                      "sensitive": true
+                    }
+                  },
+                  "description": "Certificate data for a SelfManaged Certificate.\nSelfManaged Certificates are uploaded by the user. Updating such\ncertificates before they expire remains the user's responsibility.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_certificate_manager_dns_authorization": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description": "A human-readable description of the resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "dns_resource_record": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "data": "string",
+                      "name": "string",
+                      "type": "string"
+                    }
+                  ]
+                ],
+                "description": "The structure describing the DNS Resource Record that needs to be added\nto DNS configuration for the authorization to be usable by\ncertificate.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "domain": {
+                "type": "string",
+                "description": "A domain which is being authorized. A DnsAuthorization resource covers a\nsingle domain and its wildcard, e.g. authorization for \"example.com\" can\nbe used to issue certificates for \"example.com\" and \"*.example.com\".",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Set of label tags associated with the EdgeCache resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the resource; provided by the client when the resource is created.\nThe name must be 1-64 characters long, and match the regular expression [a-zA-Z][a-zA-Z0-9_-]* which means the first character must be a letter,\nand all following characters must be a dash, underscore, letter or digit.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_cloud_asset_folder_feed": {
           "version": 0,
           "block": {
@@ -10935,7 +11517,7 @@
                                                   },
                                                   "name": {
                                                     "type": "string",
-                                                    "description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nYou set the <alias> in this field, and create an annotation with the\nfollowing structure\n\"run.googleapis.com/secrets\" = \"<alias>:projects/<project-id|project-number>/secrets/<secret-name>\".\nIf multiple alias definitions are needed, they must be separated by\ncommas in the annotation field.",
+                                                    "description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/<project-id|project-number>/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation.",
                                                     "description_kind": "plain",
                                                     "required": true
                                                   }
@@ -11251,6 +11833,18 @@
                       "description": "RevisionName of a specific revision to which to send this portion of traffic.",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "tag": {
+                      "type": "string",
+                      "description": "Tag is optionally used to expose a dedicated url for referencing this target exclusively.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL displays the URL for accessing tagged traffic targets. URL is displayed in status, \nand is disallowed on spec. URL must contain a scheme (e.g. http://) and a hostname, \nbut may not contain anything else (e.g. basic auth, url path, etc.)",
+                      "description_kind": "plain",
+                      "computed": true
                     }
                   },
                   "description": "Traffic specifies how to distribute traffic over a collection of Knative Revisions\nand Configurations",
@@ -12042,6 +12636,22 @@
               }
             },
             "block_types": {
+              "approval_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "approval_required": {
+                      "type": "bool",
+                      "description": "Whether or not approval is needed. If this is set on a build, it will become pending when run, \nand will need to be explicitly approved to start.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Configuration for manual approval to start a build invocation of this BuildTrigger. \nBuilds created by this trigger will require approval before they execute. \nAny user with a Cloud Build Approver role for the project can approve a build.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "build": {
                 "nesting_mode": "list",
                 "block": {
@@ -12219,7 +12829,7 @@
                           },
                           "logging": {
                             "type": "string",
-                            "description": "Option to specify the logging mode, which determines if and where build logs are stored. Possible values: [\"LOGGING_UNSPECIFIED\", \"LEGACY\", \"GCS_ONLY\", \"STACKDRIVER_ONLY\", \"NONE\"]",
+                            "description": "Option to specify the logging mode, which determines if and where build logs are stored. Possible values: [\"LOGGING_UNSPECIFIED\", \"LEGACY\", \"GCS_ONLY\", \"STACKDRIVER_ONLY\", \"CLOUD_LOGGING_ONLY\", \"NONE\"]",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -12540,7 +13150,7 @@
                     },
                     "repo_type": {
                       "type": "string",
-                      "description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]",
+                      "description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). \nValues can be UNKNOWN, CLOUD_SOURCE_REPOSITORIES, GITHUB Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]",
                       "description_kind": "plain",
                       "required": true
                     },
@@ -12688,7 +13298,7 @@
                     },
                     "repo_type": {
                       "type": "string",
-                      "description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]",
+                      "description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL).\nValues can be UNKNOWN, CLOUD_SOURCE_REPOSITORIES, GITHUB Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]",
                       "description_kind": "plain",
                       "required": true
                     },
@@ -12954,6 +13564,375 @@
             "description_kind": "plain"
           }
         },
+        "google_clouddeploy_delivery_pipeline": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "annotations": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "User annotations. These attributes can only be set and used by the user, and not by Google Cloud Deploy. See https://google.aip.dev/128#annotations for more details such as format and size limitations.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "condition": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "pipeline_ready_condition": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "status": "bool",
+                            "update_time": "string"
+                          }
+                        ]
+                      ],
+                      "targets_present_condition": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "missing_targets": [
+                              "list",
+                              "string"
+                            ],
+                            "status": "bool",
+                            "update_time": "string"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ],
+                "description": "Output only. Information around the state of the Delivery Pipeline.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. Time at which the pipeline was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of the `DeliveryPipeline`. Max length is 255 characters.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "etag": {
+                "type": "string",
+                "description": "This checksum is computed by the server based on the value of other fields, and may be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the `DeliveryPipeline`. Format is [a-z][a-z0-9\\-]{0,62}.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. Unique identifier of the `DeliveryPipeline`.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. Most recent time at which the pipeline was updated.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "serial_pipeline": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "stages": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "profiles": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Skaffold profiles to use when rendering the manifest for this stage's `Target`.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "target_id": {
+                            "type": "string",
+                            "description": "The target_id to which this stage points. This field refers exclusively to the last segment of a target name. For example, this field would just be `my-target` (rather than `projects/project/locations/location/targets/my-target`). The location of the `Target` is inferred to be the same as the location of the `DeliveryPipeline` that contains this `Stage`.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "Each stage specifies configuration for a `Target`. The ordering of this list defines the promotion flow.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "SerialPipeline defines a sequential set of stages for a `DeliveryPipeline`.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_clouddeploy_target": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "annotations": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. User annotations. These attributes can only be set and used by the user, and not by Google Cloud Deploy. See https://google.aip.dev/128#annotations for more details such as format and size limitations.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. Time at which the `Target` was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional. Description of the `Target`. Max length is 255 characters.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "etag": {
+                "type": "string",
+                "description": "Optional. This checksum is computed by the server based on the value of other fields, and may be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the `Target`. Format is [a-z][a-z0-9\\-]{0,62}.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "require_approval": {
+                "type": "bool",
+                "description": "Optional. Whether or not the `Target` requires approval.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "target_id": {
+                "type": "string",
+                "description": "Output only. Resource id of the `Target`.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. Unique identifier of the `Target`.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. Most recent time at which the `Target` was updated.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "anthos_cluster": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "membership": {
+                      "type": "string",
+                      "description": "Membership of the GKE Hub-registered cluster to which to apply the Skaffold configuration. Format is `projects/{project}/locations/{location}/memberships/{membership_name}`.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Information specifying an Anthos Cluster.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "execution_configs": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "artifact_storage": {
+                      "type": "string",
+                      "description": "Optional. Cloud Storage location in which to store execution outputs. This can either be a bucket (\"gs://my-bucket\") or a path within a bucket (\"gs://my-bucket/my-dir\"). If unspecified, a default bucket located in the same region will be used.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "service_account": {
+                      "type": "string",
+                      "description": "Optional. Google service account to use for execution. If unspecified, the project execution service account (-compute@developer.gserviceaccount.com) is used.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "usages": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Required. Usages when this configuration should be applied.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "worker_pool": {
+                      "type": "string",
+                      "description": "Optional. The resource name of the `WorkerPool`, with the format `projects/{project}/locations/{location}/workerPools/{worker_pool}`. If this optional field is unspecified, the default Cloud Build pool will be used.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Configurations for all execution that relates to this `Target`. Each `ExecutionEnvironmentUsage` value may only be used in a single configuration; using the same value multiple times is an error. When one or more configurations are specified, they must include the `RENDER` and `DEPLOY` `ExecutionEnvironmentUsage` values. When no configurations are specified, execution will use the default specified in `DefaultPool`.",
+                  "description_kind": "plain"
+                }
+              },
+              "gke": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "cluster": {
+                      "type": "string",
+                      "description": "Information specifying a GKE Cluster. Format is `projects/{project_id}/locations/{location_id}/clusters/{cluster_id}.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "internal_ip": {
+                      "type": "bool",
+                      "description": "Optional. If true, `cluster` is accessed using the private IP address of the control plane endpoint. Otherwise, the default IP address of the control plane endpoint is used. The default IP address is the private IP address for clusters with private control-plane endpoints and the public IP address otherwise. Only specify this option when `cluster` is a [private GKE cluster](https://cloud.google.com/kubernetes-engine/docs/concepts/private-cluster-concept).",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Information specifying a GKE Cluster.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_cloudfunctions_function": {
           "version": 0,
           "block": {
@@ -12979,6 +13958,12 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "docker_repository": {
+                "type": "string",
+                "description": "User managed repository created in Artifact Registry optionally with a customer managed encryption key. If specified, deployments will use Artifact Registry for storing images built with Cloud Build.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "entry_point": {
                 "type": "string",
                 "description": "Name of the function that will be executed when the Google Cloud Function is triggered.",
@@ -12993,6 +13978,13 @@
                 "description": "A set of key/value environment variable pairs to assign to the function.",
                 "description_kind": "plain",
                 "optional": true
+              },
+              "https_trigger_security_level": {
+                "type": "string",
+                "description": "The security level for the function. Defaults to SECURE_OPTIONAL. Valid only if trigger_http is used.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
               },
               "https_trigger_url": {
                 "type": "string",
@@ -13010,6 +14002,12 @@
               "ingress_settings": {
                 "type": "string",
                 "description": "String value that controls what traffic can reach the function. Allowed values are ALLOW_ALL and ALLOW_INTERNAL_ONLY. Changes to this field will recreate the cloud function.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "kms_key_name": {
+                "type": "string",
+                "description": "Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -14154,7 +15152,7 @@
                           },
                           "image_version": {
                             "type": "string",
-                            "description": "The version of the software running in the environment. This encapsulates both the version of Cloud Composer functionality and the version of Apache Airflow. It must match the regular expression composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+\\.[0-9]+(\\.[0-9]+)?). The Cloud Composer portion of the image version is a full semantic version, or an alias in the form of major version number or 'latest'. The Apache Airflow portion of the image version is a full semantic version that points to one of the supported Apache Airflow versions, or an alias in the form of only major and minor versions specified. See documentation for more details and version list.",
+                            "description": "The version of the software running in the environment. This encapsulates both the version of Cloud Composer functionality and the version of Apache Airflow. It must match the regular expression composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?). The Cloud Composer portion of the image version is a full semantic version, or an alias in the form of major version number or 'latest'. The Apache Airflow portion of the image version is a full semantic version that points to one of the supported Apache Airflow versions, or an alias in the form of only major or major.minor versions specified. See documentation for more details and version list.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -17118,6 +18116,28 @@
               }
             },
             "block_types": {
+              "service_directory_registrations": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "namespace": {
+                      "type": "string",
+                      "description": "Service Directory namespace to register the forwarding rule under.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "service": {
+                      "type": "string",
+                      "description": "Service Directory service to register the forwarding rule under.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Service Directory resources to register this forwarding rule with. Currently, only supports a single Service Directory resource.",
+                  "description_kind": "plain"
+                }
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -18937,7 +19957,7 @@
                           },
                           "type": {
                             "type": "string",
-                            "description": "The Google Compute Engine disk type. One of pd-standard, pd-ssd or pd-balanced.",
+                            "description": "The Google Compute Engine disk type. Such as pd-standard, pd-ssd or pd-balanced.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -19195,6 +20215,13 @@
                       "description": "Whether the instance is preemptible.",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "provisioning_model": {
+                      "type": "string",
+                      "description": "Whether the instance is spot. If this is set as SPOT.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
                     }
                   },
                   "block_types": {
@@ -19696,7 +20723,7 @@
                           },
                           "type": {
                             "type": "string",
-                            "description": "The Google Compute Engine disk type. One of pd-standard, pd-ssd or pd-balanced.",
+                            "description": "The Google Compute Engine disk type. Such as pd-standard, pd-ssd or pd-balanced.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -19938,6 +20965,13 @@
                     "preemptible": {
                       "type": "bool",
                       "description": "Whether the instance is preemptible.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "provisioning_model": {
+                      "type": "string",
+                      "description": "Whether the instance is spot. If this is set as SPOT.",
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
@@ -20405,9 +21439,15 @@
                     },
                     "minimal_action": {
                       "type": "string",
-                      "description": "Minimal action to be taken on an instance. You can specify either RESTART to restart existing instances or REPLACE to delete and create new instances from the target template. If you specify a RESTART, the Updater will attempt to perform that action only. However, if the Updater determines that the minimal action you specify is not enough to perform the update, it might perform a more disruptive action.",
+                      "description": "Minimal action to be taken on an instance. You can specify either REFRESH to update without stopping instances, RESTART to restart existing instances or REPLACE to delete and create new instances from the target template. If you specify a REFRESH, the Updater will attempt to perform that action only. However, if the Updater determines that the minimal action you specify is not enough to perform the update, it might perform a more disruptive action.",
                       "description_kind": "plain",
                       "required": true
+                    },
+                    "most_disruptive_allowed_action": {
+                      "type": "string",
+                      "description": "Most disruptive action that is allowed to be taken on an instance. You can specify either NONE to forbid any actions, REFRESH to allow actions that do not need instance restart, RESTART to allow actions that can be applied without instance replacing or REPLACE to allow all possible actions. If the Updater determines that the minimal update action needed is more disruptive than most disruptive allowed action you specify it will not perform the update at all.",
+                      "description_kind": "plain",
+                      "optional": true
                     },
                     "replacement_method": {
                       "type": "string",
@@ -20928,7 +21968,7 @@
                     },
                     "disk_type": {
                       "type": "string",
-                      "description": "The Google Compute Engine disk type. Can be either \"pd-ssd\", \"local-ssd\", \"pd-balanced\" or \"pd-standard\".",
+                      "description": "The Google Compute Engine disk type. Such as \"pd-ssd\", \"local-ssd\", \"pd-balanced\" or \"pd-standard\".",
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
@@ -21107,7 +22147,7 @@
                           },
                           "network_tier": {
                             "type": "string",
-                            "description": "The networking tier used for configuring this instance template. This field can take the following values: PREMIUM or STANDARD. If this field is not specified, it is assumed to be PREMIUM.",
+                            "description": "The networking tier used for configuring this instance template. This field can take the following values: PREMIUM, STANDARD, FIXED_STANDARD. If this field is not specified, it is assumed to be PREMIUM.",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -21253,6 +22293,13 @@
                       "description": "Allows instance to be preempted. This defaults to false.",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "provisioning_model": {
+                      "type": "string",
+                      "description": "Whether the instance is spot. If this is set as SPOT.",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
                     }
                   },
                   "block_types": {
@@ -24900,9 +25947,15 @@
                     },
                     "minimal_action": {
                       "type": "string",
-                      "description": "Minimal action to be taken on an instance. You can specify either RESTART to restart existing instances or REPLACE to delete and create new instances from the target template. If you specify a RESTART, the Updater will attempt to perform that action only. However, if the Updater determines that the minimal action you specify is not enough to perform the update, it might perform a more disruptive action.",
+                      "description": "Minimal action to be taken on an instance. You can specify either REFRESH to update without stopping instances, RESTART to restart existing instances or REPLACE to delete and create new instances from the target template. If you specify a REFRESH, the Updater will attempt to perform that action only. However, if the Updater determines that the minimal action you specify is not enough to perform the update, it might perform a more disruptive action.",
                       "description_kind": "plain",
                       "required": true
+                    },
+                    "most_disruptive_allowed_action": {
+                      "type": "string",
+                      "description": "Most disruptive action that is allowed to be taken on an instance. You can specify either NONE to forbid any actions, REFRESH to allow actions that do not need instance restart, RESTART to allow actions that can be applied without instance replacing or REPLACE to allow all possible actions. If the Updater determines that the minimal update action needed is more disruptive than most disruptive allowed action you specify it will not perform the update at all.",
+                      "description_kind": "plain",
+                      "optional": true
                     },
                     "replacement_method": {
                       "type": "string",
@@ -24996,7 +26049,7 @@
               },
               "network_endpoint_type": {
                 "type": "string",
-                "description": "Type of network endpoints in this network endpoint group. Defaults to SERVERLESS Default value: \"SERVERLESS\" Possible values: [\"SERVERLESS\"]",
+                "description": "Type of network endpoints in this network endpoint group. Defaults to SERVERLESS Default value: \"SERVERLESS\" Possible values: [\"SERVERLESS\", \"PRIVATE_SERVICE_CONNECT\"]",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -25005,6 +26058,12 @@
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
+              },
+              "psc_target_service": {
+                "type": "string",
+                "description": "The target service url used to set up private service connection to\na Google API or a PSC Producer Service Attachment.",
+                "description_kind": "plain",
+                "optional": true
               },
               "region": {
                 "type": "string",
@@ -27859,6 +28918,12 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "enable_dynamic_port_allocation": {
+                "type": "bool",
+                "description": "Enable Dynamic Port Allocation.\nIf minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. \nIf minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.\n\nMutually exclusive with enableEndpointIndependentMapping.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "enable_endpoint_independent_mapping": {
                 "type": "bool",
                 "description": "Specifies if endpoint independent mapping is enabled. This is enabled by default. For more information\nsee the [official documentation](https://cloud.google.com/nat/docs/overview#specs-rfcs).",
@@ -28412,6 +29477,15 @@
               "description": {
                 "type": "string",
                 "description": "An optional description of this resource.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "domain_names": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "If specified, the domain name will be used during the integration between\nthe PSC connected endpoints and the Cloud DNS. For example, this is a\nvalid domain name: \"p.mycompany.com.\". Current max number of domain names\nsupported is 1.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -33044,7 +34118,7 @@
                             "required": true
                           }
                         },
-                        "description": "Users to perform operations as a cluster admin. A managed ClusterRoleBinding will be created to grant the `cluster-admin` ClusterRole to the users. At most one user can be specified. For more info on RBAC, see https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles",
+                        "description": "Users to perform operations as a cluster admin. A managed ClusterRoleBinding will be created to grant the `cluster-admin` ClusterRole to the users. Up to ten admin users can be provided. For more info on RBAC, see https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles",
                         "description_kind": "plain"
                       },
                       "min_items": 1
@@ -33551,6 +34625,28 @@
                       "min_items": 1,
                       "max_items": 1
                     },
+                    "proxy_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "secret_arn": {
+                            "type": "string",
+                            "description": "The ARN of the AWS Secret Manager secret that contains the HTTP(S) proxy configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "secret_version": {
+                            "type": "string",
+                            "description": "The version string of the AWS Secret Manager secret that contains the HTTP(S) proxy configuration.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Proxy configuration for outbound HTTP(S) traffic.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "root_volume": {
                       "nesting_mode": "list",
                       "block": {
@@ -33902,7 +34998,7 @@
                             "required": true
                           }
                         },
-                        "description": "Users that can perform operations as a cluster admin. A new ClusterRoleBinding will be created to grant the cluster-admin ClusterRole to the users. At most one user can be specified. For more info on RBAC, see https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles",
+                        "description": "Users that can perform operations as a cluster admin. A new ClusterRoleBinding will be created to grant the cluster-admin ClusterRole to the users. Up to ten admin users can be provided. For more info on RBAC, see https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles",
                         "description_kind": "plain"
                       },
                       "min_items": 1
@@ -34297,6 +35393,28 @@
                     }
                   },
                   "block_types": {
+                    "proxy_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "resource_group_id": {
+                            "type": "string",
+                            "description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>`",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "secret_id": {
+                            "type": "string",
+                            "description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:<key-vault-name>.vault.azure.net/secrets/<secret-name>/<secret-version>`.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Proxy configuration for outbound HTTP(S) traffic.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "root_volume": {
                       "nesting_mode": "list",
                       "block": {
@@ -34976,6 +36094,24 @@
                             "required": true
                           }
                         },
+                        "block_types": {
+                          "exclusion_options": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "scope": {
+                                  "type": "string",
+                                  "description": "The scope of automatic upgrades to restrict in the exclusion window.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                }
+                              },
+                              "description": "Maintenance exclusion related options.",
+                              "description_kind": "plain"
+                            },
+                            "max_items": 1
+                          }
+                        },
                         "description": "Exceptions to maintenance window. Non-emergency maintenance should not occur in these windows.",
                         "description_kind": "plain"
                       },
@@ -35151,7 +36287,7 @@
                     },
                     "disk_type": {
                       "type": "string",
-                      "description": "Type of the disk attached to each node.",
+                      "description": "Type of the disk attached to each node. Such as pd-standard, pd-balanced or pd-ssd",
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
@@ -35492,7 +36628,7 @@
                           },
                           "disk_type": {
                             "type": "string",
-                            "description": "Type of the disk attached to each node.",
+                            "description": "Type of the disk attached to each node. Such as pd-standard, pd-balanced or pd-ssd",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -35741,7 +36877,8 @@
                       "type": "string",
                       "description": "The IP range in CIDR notation to use for the hosted master network. This range will be used for assigning private IP addresses to the cluster master(s) and the ILB VIP. This range must not overlap with any other ranges in use within the cluster's network, and it must be a /28 subnet. See Private Cluster Limitations for more details. This field only applies to private clusters, when enable_private_nodes is true.",
                       "description_kind": "plain",
-                      "optional": true
+                      "optional": true,
+                      "computed": true
                     },
                     "peering_name": {
                       "type": "string",
@@ -36076,7 +37213,7 @@
                     },
                     "disk_type": {
                       "type": "string",
-                      "description": "Type of the disk attached to each node.",
+                      "description": "Type of the disk attached to each node. Such as pd-standard, pd-balanced or pd-ssd",
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
@@ -39317,6 +40454,12 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "skip_wait_on_job_termination": {
+                "type": "bool",
+                "description": "If true, treat DRAINING and CANCELLING as terminal job states and do not wait for further changes before removing from terraform state and moving on. WARNING: this will lead to job name conflicts if you do not ensure that the job names are different, e.g. by embedding a release ID or by using a random_id.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "state": {
                 "type": "string",
                 "description": "The current state of the resource, selected from the JobState enum.",
@@ -39861,7 +41004,7 @@
                                 },
                                 "boot_disk_type": {
                                   "type": "string",
-                                  "description": "The disk type of the primary disk attached to each node. One of \"pd-ssd\" or \"pd-standard\". Defaults to \"pd-standard\".",
+                                  "description": "The disk type of the primary disk attached to each node. Such as \"pd-ssd\" or \"pd-standard\". Defaults to \"pd-standard\".",
                                   "description_kind": "plain",
                                   "optional": true
                                 },
@@ -39925,7 +41068,7 @@
                                 },
                                 "boot_disk_type": {
                                   "type": "string",
-                                  "description": "The disk type of the primary disk attached to each preemptible worker node. One of \"pd-ssd\" or \"pd-standard\". Defaults to \"pd-standard\".",
+                                  "description": "The disk type of the primary disk attached to each preemptible worker node. Such as \"pd-ssd\" or \"pd-standard\". Defaults to \"pd-standard\".",
                                   "description_kind": "plain",
                                   "optional": true
                                 },
@@ -40180,7 +41323,7 @@
                                 },
                                 "boot_disk_type": {
                                   "type": "string",
-                                  "description": "The disk type of the primary disk attached to each node. One of \"pd-ssd\" or \"pd-standard\". Defaults to \"pd-standard\".",
+                                  "description": "The disk type of the primary disk attached to each node. Such as \"pd-ssd\" or \"pd-standard\". Defaults to \"pd-standard\".",
                                   "description_kind": "plain",
                                   "optional": true
                                 },
@@ -40739,6 +41882,82 @@
                   "description_kind": "plain"
                 },
                 "min_items": 1,
+                "max_items": 1
+              },
+              "presto_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "client_tags": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Presto client tags to attach to this query.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "continue_on_failure": {
+                      "type": "bool",
+                      "description": "Whether to continue executing queries if a query fails. Setting to true can be useful when executing independent parallel queries. Defaults to false.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "output_format": {
+                      "type": "string",
+                      "description": "The format in which query output will be displayed. See the Presto documentation for supported output formats.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "properties": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "A mapping of property names to values. Used to set Presto session properties Equivalent to using the --session flag in the Presto CLI.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "query_file_uri": {
+                      "type": "string",
+                      "description": "The HCFS URI of the script that contains SQL queries. Conflicts with query_list",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "query_list": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "The list of SQL queries or statements to execute as part of the job. Conflicts with query_file_uri",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "block_types": {
+                    "logging_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "driver_log_levels": {
+                            "type": [
+                              "map",
+                              "string"
+                            ],
+                            "description": "Optional. The per-package log levels for the driver. This may include 'root' package name to configure rootLogger. Examples: 'com.google = FATAL', 'root = INFO', 'org.apache = DEBUG'.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The runtime logging config of the job",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    }
+                  },
+                  "description": "The config of presto job",
+                  "description_kind": "plain"
+                },
                 "max_items": 1
               },
               "pyspark_config": {
@@ -45475,7 +46694,7 @@
                 ],
                 "description": "The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \\\" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \\\"\\\" inside the Terraform configuration string (e.g. \"first255characters\\\"\\\"morecharacters\").",
                 "description_kind": "plain",
-                "required": true
+                "optional": true
               },
               "ttl": {
                 "type": "number",
@@ -45488,6 +46707,64 @@
                 "description": "The DNS record set type.",
                 "description_kind": "plain",
                 "required": true
+              }
+            },
+            "block_types": {
+              "routing_policy": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "geo": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "location": {
+                            "type": "string",
+                            "description": "The location name defined in Google Cloud.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "rrdatas": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The configuration for Geo location based routing policy.",
+                        "description_kind": "plain"
+                      }
+                    },
+                    "wrr": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "rrdatas": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "weight": {
+                            "type": "number",
+                            "description": "The ratio of traffic routed to the target.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "The configuration for Weighted Round Robin based routing policy.",
+                        "description_kind": "plain"
+                      }
+                    }
+                  },
+                  "description": "The configuration for steering traffic based on query. You can specify either Weighted Round Robin(WRR) type or Geolocation(GEO) type.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
               }
             },
             "description_kind": "plain"
@@ -45613,6 +46890,173 @@
                   },
                   "description_kind": "plain"
                 }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_endpoints_service_consumers_iam_binding": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "consumer_project": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "members": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "service_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_endpoints_service_consumers_iam_member": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "consumer_project": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "member": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "service_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_endpoints_service_consumers_iam_policy": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "consumer_project": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "policy_data": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "service_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
               }
             },
             "description_kind": "plain"
@@ -46024,7 +47468,7 @@
                     },
                     "value": {
                       "type": "string",
-                      "description": "Required. The value for the attribute.",
+                      "description": "Required. The value for the attribute. See https://cloud.google.com/eventarc/docs/creating-triggers#trigger-gcloud for available values.",
                       "description_kind": "plain",
                       "required": true
                     }
@@ -46121,6 +47565,12 @@
                 "optional": true,
                 "computed": true
               },
+              "kms_key_name": {
+                "type": "string",
+                "description": "KMS key name used for data encryption.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "labels": {
                 "type": [
                   "map",
@@ -46151,7 +47601,7 @@
               },
               "tier": {
                 "type": "string",
-                "description": "The service tier of the instance.\nPossible values include: STANDARD, PREMIUM, BASIC_HDD, BASIC_SSD, HIGH_SCALE_SSD and ENTERPRISE (beta only)",
+                "description": "The service tier of the instance.\nPossible values include: STANDARD, PREMIUM, BASIC_HDD, BASIC_SSD, HIGH_SCALE_SSD and ENTERPRISE",
                 "description_kind": "plain",
                 "required": true
               },
@@ -46182,6 +47632,51 @@
                       "required": true
                     }
                   },
+                  "block_types": {
+                    "nfs_export_options": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "access_mode": {
+                            "type": "string",
+                            "description": "Either READ_ONLY, for allowing only read requests on the exported directory,\nor READ_WRITE, for allowing both read and write requests. The default is READ_WRITE. Default value: \"READ_WRITE\" Possible values: [\"READ_ONLY\", \"READ_WRITE\"]",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "anon_gid": {
+                            "type": "number",
+                            "description": "An integer representing the anonymous group id with a default value of 65534.\nAnon_gid may only be set with squashMode of ROOT_SQUASH. An error will be returned\nif this field is specified for other squashMode settings.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "anon_uid": {
+                            "type": "number",
+                            "description": "An integer representing the anonymous user id with a default value of 65534.\nAnon_uid may only be set with squashMode of ROOT_SQUASH. An error will be returned\nif this field is specified for other squashMode settings.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "ip_ranges": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "List of either IPv4 addresses, or ranges in CIDR notation which may mount the file share.\nOverlapping IP ranges are not allowed, both within and across NfsExportOptions. An error will be returned.\nThe limit is 64 IP ranges/addresses for each FileShareConfig among all NfsExportOptions.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "squash_mode": {
+                            "type": "string",
+                            "description": "Either NO_ROOT_SQUASH, for allowing root access on the exported directory, or ROOT_SQUASH,\nfor not allowing root access. The default is NO_ROOT_SQUASH. Default value: \"NO_ROOT_SQUASH\" Possible values: [\"NO_ROOT_SQUASH\", \"ROOT_SQUASH\"]",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "Nfs Export Options. There is a limit of 10 export options per file share.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 10
+                    }
+                  },
                   "description": "File system shares on the instance. For this version, only a\nsingle file share is supported.",
                   "description_kind": "plain"
                 },
@@ -46192,6 +47687,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "connect_mode": {
+                      "type": "string",
+                      "description": "The network connect mode of the Filestore instance.\nIf not provided, the connect mode defaults to\nDIRECT_PEERING. Default value: \"DIRECT_PEERING\" Possible values: [\"DIRECT_PEERING\", \"PRIVATE_SERVICE_ACCESS\"]",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "ip_addresses": {
                       "type": [
                         "list",
@@ -46718,6 +48219,18 @@
           "version": 0,
           "block": {
             "attributes": {
+              "active_key_version": {
+                "type": "string",
+                "description": "The asymmetric crypto key version to use for signing approval requests.\nEmpty active_key_version indicates that a Google-managed key should be used for signing.\nThis property will be ignored if set by an ancestor of the resource, and new non-empty values may not be set.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "ancestor_has_active_key_version": {
+                "type": "bool",
+                "description": "If the field is true, that indicates that an ancestor of this Folder has set active_key_version.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "enrolled_ancestor": {
                 "type": "bool",
                 "description": "If the field is true, that indicates that at least one service is enrolled for Access Approval in one or more ancestors of the Folder.",
@@ -46734,6 +48247,12 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "invalid_key_version": {
+                "type": "bool",
+                "description": "If the field is true, that indicates that there is some configuration issue with the active_key_version\nconfigured on this Folder (e.g. it doesn't exist or the Access Approval service account doesn't have the\ncorrect permissions on it, etc.) This key version is not necessarily the effective key version at this level,\nas key versions are inherited top-down.",
+                "description_kind": "plain",
                 "computed": true
               },
               "name": {
@@ -48685,7 +50204,7 @@
                                 },
                                 "schema_type": {
                                   "type": "string",
-                                  "description": "Specifies the output schema type. Only ANALYTICS is supported at this time.\n * ANALYTICS: Analytics schema defined by the FHIR community.\n  See https://github.com/FHIR/sql-on-fhir/blob/master/sql-on-fhir.md. Default value: \"ANALYTICS\" Possible values: [\"ANALYTICS\"]",
+                                  "description": "Specifies the output schema type.\n * ANALYTICS: Analytics schema defined by the FHIR community.\n  See https://github.com/FHIR/sql-on-fhir/blob/master/sql-on-fhir.md.\n * ANALYTICS_V2: Analytics V2, similar to schema defined by the FHIR community, with added support for extensions with one or more occurrences and contained resources in stringified JSON.\n * LOSSLESS: A data-driven schema generated from the fields present in the FHIR data being exported, with no additional simplification. Default value: \"ANALYTICS\" Possible values: [\"ANALYTICS\", \"ANALYTICS_V2\", \"LOSSLESS\"]",
                                   "description_kind": "plain",
                                   "optional": true
                                 }
@@ -48987,7 +50506,7 @@
                     },
                     "version": {
                       "type": "string",
-                      "description": "The version of the unschematized parser to be used when a custom 'schema' is not set. Default value: \"V1\" Possible values: [\"V1\", \"V2\"]",
+                      "description": "The version of the unschematized parser to be used when a custom 'schema' is not set. Default value: \"V1\" Possible values: [\"V1\", \"V2\", \"V3\"]",
                       "description_kind": "plain",
                       "optional": true
                     }
@@ -54935,6 +56454,13 @@
           "version": 0,
           "block": {
             "attributes": {
+              "checker_type": {
+                "type": "string",
+                "description": "The checker type to use for the check. If the monitored resource type is servicedirectory_service, checkerType must be set to VPC_CHECKERS. Possible values: [\"STATIC_IP_CHECKERS\", \"VPC_CHECKERS\"]",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
               "display_name": {
                 "type": "string",
                 "description": "A human-friendly name for the uptime check configuration. The display name should be unique within a Stackdriver Workspace in order to make it easier to identify; however, uniqueness is not enforced.",
@@ -58203,6 +59729,18 @@
           "version": 0,
           "block": {
             "attributes": {
+              "active_key_version": {
+                "type": "string",
+                "description": "The asymmetric crypto key version to use for signing approval requests.\nEmpty active_key_version indicates that a Google-managed key should be used for signing.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "ancestor_has_active_key_version": {
+                "type": "bool",
+                "description": "This field will always be unset for the organization since organizations do not have ancestors.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "enrolled_ancestor": {
                 "type": "bool",
                 "description": "This field will always be unset for the organization since organizations do not have ancestors.",
@@ -58213,6 +59751,12 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "invalid_key_version": {
+                "type": "bool",
+                "description": "If the field is true, that indicates that there is some configuration issue with the active_key_version\nconfigured on this Organization (e.g. it doesn't exist or the Access Approval service account doesn't have the\ncorrect permissions on it, etc.).",
+                "description_kind": "plain",
                 "computed": true
               },
               "name": {
@@ -60067,6 +61611,12 @@
                 "nesting_mode": "list",
                 "block": {
                   "attributes": {
+                    "mig_instances_allowed": {
+                      "type": "bool",
+                      "description": "Allows the patch job to run on Managed instance groups (MIGs).",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "reboot_config": {
                       "type": "string",
                       "description": "Post-patch reboot settings. Possible values: [\"DEFAULT\", \"ALWAYS\", \"NEVER\"]",
@@ -61706,6 +63256,113 @@
                             "key_id": "string"
                           }
                         ]
+                      ],
+                      "x509_description": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "additional_extensions": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "critical": "bool",
+                                  "object_id": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "object_id_path": [
+                                          "list",
+                                          "number"
+                                        ]
+                                      }
+                                    ]
+                                  ],
+                                  "value": "string"
+                                }
+                              ]
+                            ],
+                            "aia_ocsp_servers": [
+                              "list",
+                              "string"
+                            ],
+                            "ca_options": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "is_ca": "bool",
+                                  "max_issuer_path_length": "number"
+                                }
+                              ]
+                            ],
+                            "key_usage": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "base_key_usage": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "cert_sign": "bool",
+                                        "content_commitment": "bool",
+                                        "crl_sign": "bool",
+                                        "data_encipherment": "bool",
+                                        "decipher_only": "bool",
+                                        "digital_signature": "bool",
+                                        "encipher_only": "bool",
+                                        "key_agreement": "bool",
+                                        "key_encipherment": "bool"
+                                      }
+                                    ]
+                                  ],
+                                  "extended_key_usage": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "client_auth": "bool",
+                                        "code_signing": "bool",
+                                        "email_protection": "bool",
+                                        "ocsp_signing": "bool",
+                                        "server_auth": "bool",
+                                        "time_stamping": "bool"
+                                      }
+                                    ]
+                                  ],
+                                  "unknown_extended_key_usages": [
+                                    "list",
+                                    [
+                                      "object",
+                                      {
+                                        "object_id_path": [
+                                          "list",
+                                          "number"
+                                        ]
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
+                            ],
+                            "policy_ids": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "object_id_path": [
+                                    "list",
+                                    "number"
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -61730,6 +63387,12 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "issuer_certificate_authority": {
+                "type": "string",
+                "description": "The resource name of the issuing CertificateAuthority in the format projects/*/locations/*/caPools/*/certificateAuthorities/*.",
+                "description_kind": "plain",
                 "computed": true
               },
               "labels": {
@@ -61765,6 +63428,15 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "pem_certificate_chain": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "The chain that may be used to verify the X.509 certificate. Expected to be in issuer-to-root order according to RFC 5246.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "pem_certificates": {
                 "type": [
                   "list",
@@ -61772,6 +63444,7 @@
                 ],
                 "description": "Required. Expected to be in leaf-to-root order according to RFC 5246.",
                 "description_kind": "plain",
+                "deprecated": true,
                 "computed": true
               },
               "pem_csr": {
@@ -62235,6 +63908,11 @@
                       "type": "string",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
                     }
                   },
                   "description_kind": "plain"
@@ -62277,6 +63955,16 @@
                 "description": "The time at which this CertificateAuthority was created.\n\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution and up to nine\nfractional digits. Examples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
                 "description_kind": "plain",
                 "computed": true
+              },
+              "deletion_protection": {
+                "type": "bool",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "desired_state": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
               },
               "gcs_bucket": {
                 "type": "string",
@@ -62786,6 +64474,11 @@
                       "type": "string",
                       "description_kind": "plain",
                       "optional": true
+                    },
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
                     }
                   },
                   "description_kind": "plain"
@@ -63219,6 +64912,194 @@
             "description_kind": "plain"
           }
         },
+        "google_privateca_certificate_template_iam_binding": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "certificate_template": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "members": {
+                "type": [
+                  "set",
+                  "string"
+                ],
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_privateca_certificate_template_iam_member": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "certificate_template": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "member": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "role": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "condition": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "description": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "expression": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "required": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_privateca_certificate_template_iam_policy": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "certificate_template": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "etag": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "location": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "policy_data": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_project": {
           "version": 1,
           "block": {
@@ -63325,6 +65206,18 @@
           "version": 0,
           "block": {
             "attributes": {
+              "active_key_version": {
+                "type": "string",
+                "description": "The asymmetric crypto key version to use for signing approval requests.\nEmpty active_key_version indicates that a Google-managed key should be used for signing.\nThis property will be ignored if set by an ancestor of the resource, and new non-empty values may not be set.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "ancestor_has_active_key_version": {
+                "type": "bool",
+                "description": "If the field is true, that indicates that an ancestor of this Project has set active_key_version.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "enrolled_ancestor": {
                 "type": "bool",
                 "description": "If the field is true, that indicates that at least one service is enrolled for Access Approval in one or more ancestors of the Project.",
@@ -63335,6 +65228,12 @@
                 "type": "string",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "invalid_key_version": {
+                "type": "bool",
+                "description": "If the field is true, that indicates that there is some configuration issue with the active_key_version\nconfigured on this Project (e.g. it doesn't exist or the Access Approval service account doesn't have the\ncorrect permissions on it, etc.) This key version is not necessarily the effective key version at this level,\nas key versions are inherited top-down.",
+                "description_kind": "plain",
                 "computed": true
               },
               "name": {
@@ -64417,6 +66316,12 @@
                 "optional": true,
                 "computed": true
               },
+              "enable_exactly_once_delivery": {
+                "type": "bool",
+                "description": "If 'true', Pub/Sub provides the following guarantees for the delivery\nof a message with a given value of messageId on this Subscriptions':\n\n- The message sent to a subscriber is guaranteed not to be resent before the message's acknowledgement deadline expires.\n\n- An acknowledged message will not be resent to a subscriber.\n\nNote that subscribers may still receive multiple copies of a message when 'enable_exactly_once_delivery'\nis true if the message was published multiple times by a publisher client. These copies are considered distinct by Pub/Sub and have distinct messageId values",
+                "description_kind": "plain",
+                "optional": true
+              },
               "enable_message_ordering": {
                 "type": "bool",
                 "description": "If 'true', messages published with the same orderingKey in PubsubMessage will be delivered to\nthe subscribers in the order in which they are received by the Pub/Sub system. Otherwise, they\nmay be delivered in any order.",
@@ -64446,7 +66351,7 @@
               },
               "message_retention_duration": {
                 "type": "string",
-                "description": "How long to retain unacknowledged messages in the subscription's\nbacklog, from the moment a message is published. If\nretainAckedMessages is true, then this also configures the retention\nof acknowledged messages, and thus configures how far back in time a\nsubscriptions.seek can be done. Defaults to 7 days. Cannot be more\nthan 7 days ('\"604800s\"') or less than 10 minutes ('\"600s\"').\n\nA duration in seconds with up to nine fractional digits, terminated\nby 's'. Example: '\"600.5s\"'.",
+                "description": "How long to retain unacknowledged messages in the subscription's\nbacklog, from the moment a message is published. If\nretain_acked_messages is true, then this also configures the retention\nof acknowledged messages, and thus configures how far back in time a\nsubscriptions.seek can be done. Defaults to 7 days. Cannot be more\nthan 7 days ('\"604800s\"') or less than 10 minutes ('\"600s\"').\n\nA duration in seconds with up to nine fractional digits, terminated\nby 's'. Example: '\"600.5s\"'.",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -65399,9 +67304,10 @@
               },
               "read_replicas_mode": {
                 "type": "string",
-                "description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the \ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance \ncan scale up and down the number of replicas. Default value: \"READ_REPLICAS_DISABLED\" Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
+                "description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the \ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance \ncan scale up and down the number of replicas. Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
                 "description_kind": "plain",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "redis_configs": {
                 "type": [
@@ -65436,6 +67342,13 @@
               "reserved_ip_range": {
                 "type": "string",
                 "description": "The CIDR range of internal addresses that are reserved for this\ninstance. If not provided, the service will choose an unused /29\nblock, for example, 10.0.0.0/29 or 192.168.0.0/29. Ranges must be\nunique and non-overlapping with existing subnets in an authorized\nnetwork.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "secondary_ip_range": {
+                "type": "string",
+                "description": "Optional. Additional IP range for node placement. Required when enabling read replicas on\nan existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or\n\"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address \nrange associated with the private service access connection, or \"auto\".",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -67881,7 +69794,7 @@
                     },
                     "availability_type": {
                       "type": "string",
-                      "description": "The availability type of the Cloud SQL instance, high availability\n(REGIONAL) or single zone (ZONAL). For MySQL instances, ensure that\nsettings.backup_configuration.enabled and\nsettings.backup_configuration.binary_log_enabled are both set to true.",
+                      "description": "The availability type of the Cloud SQL instance, high availability\n(REGIONAL) or single zone (ZONAL). For all instances, ensure that\nsettings.backup_configuration.enabled is set to true.\nFor MySQL instances, ensure that settings.backup_configuration.binary_log_enabled is set to true.\nFor Postgres instances, ensure that settings.backup_configuration.point_in_time_recovery_enabled\nis set to true.",
                       "description_kind": "plain",
                       "optional": true
                     },
@@ -67893,7 +69806,7 @@
                     },
                     "disk_autoresize": {
                       "type": "bool",
-                      "description": "Configuration to increase storage size automatically.  Note that future terraform apply calls will attempt to resize the disk to the value specified in disk_size - if this is set, do not set disk_size.",
+                      "description": "Enables auto-resizing of the storage size. Defaults to true. Set to false if you want to set disk_size.",
                       "description_kind": "plain",
                       "optional": true
                     },
@@ -67905,7 +69818,7 @@
                     },
                     "disk_size": {
                       "type": "number",
-                      "description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased.",
+                      "description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased. If you want to set this field, set disk_autoresize to false.",
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
@@ -67946,13 +69859,28 @@
                     }
                   },
                   "block_types": {
+                    "active_directory_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "domain": {
+                            "type": "string",
+                            "description": "Domain name of the Active Directory for SQL Server (e.g., mydomain.com).",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "backup_configuration": {
                       "nesting_mode": "list",
                       "block": {
                         "attributes": {
                           "binary_log_enabled": {
                             "type": "bool",
-                            "description": "True if binary logging is enabled. If settings.backup_configuration.enabled is false, this must be as well. Cannot be used with Postgres.",
+                            "description": "True if binary logging is enabled. If settings.backup_configuration.enabled is false, this must be as well. Can only be used with MySQL.",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -70928,7 +72856,8 @@
                 "type": "string",
                 "description": "Name or self_link of the VPC network. Required if 'ip_cidr_range' is set.",
                 "description_kind": "plain",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "project": {
                 "type": "string",
@@ -71098,6 +73027,93 @@
         }
       },
       "data_source_schemas": {
+        "google_access_approval_folder_service_account": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "account_email": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "folder_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_access_approval_organization_service_account": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "account_email": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "organization_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_access_approval_project_service_account": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "account_email": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_active_folder": {
           "version": 0,
           "block": {
@@ -71729,7 +73745,9 @@
                     {
                       "latest_revision": "bool",
                       "percent": "number",
-                      "revision_name": "string"
+                      "revision_name": "string",
+                      "tag": "string",
+                      "url": "string"
                     }
                   ]
                 ],
@@ -71763,6 +73781,12 @@
               "description": {
                 "type": "string",
                 "description": "Description of the function.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "docker_repository": {
+                "type": "string",
+                "description": "User managed repository created in Artifact Registry optionally with a customer managed encryption key. If specified, deployments will use Artifact Registry for storing images built with Cloud Build.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -71805,6 +73829,12 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "https_trigger_security_level": {
+                "type": "string",
+                "description": "The security level for the function. Defaults to SECURE_OPTIONAL. Valid only if trigger_http is used.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "https_trigger_url": {
                 "type": "string",
                 "description": "URL which triggers function execution. Returned only if trigger_http is used.",
@@ -71820,6 +73850,12 @@
               "ingress_settings": {
                 "type": "string",
                 "description": "String value that controls what traffic can reach the function. Allowed values are ALLOW_ALL and ALLOW_INTERNAL_ONLY. Changes to this field will recreate the cloud function.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "kms_key_name": {
+                "type": "string",
+                "description": "Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -72783,6 +74819,189 @@
             "description_kind": "plain"
           }
         },
+        "google_compute_disk": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "creation_timestamp": {
+                "type": "string",
+                "description": "Creation timestamp in RFC3339 text format.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "An optional description of this resource. Provide this property when\nyou create the resource.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "disk_encryption_key": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "kms_key_self_link": "string",
+                      "kms_key_service_account": "string",
+                      "raw_key": "string",
+                      "sha256": "string"
+                    }
+                  ]
+                ],
+                "description": "Encrypts the disk using a customer-supplied encryption key.\n\nAfter you encrypt a disk with a customer-supplied key, you must\nprovide the same key if you use the disk later (e.g. to create a disk\nsnapshot or an image, or to attach the disk to a virtual machine).\n\nCustomer-supplied encryption keys do not protect access to metadata of\nthe disk.\n\nIf you do not provide an encryption key when creating the disk, then\nthe disk will be encrypted using an automatically generated key and\nyou do not need to provide a key to use the disk later.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "image": {
+                "type": "string",
+                "description": "The image from which to initialize this disk. This can be\none of: the image's 'self_link', 'projects/{project}/global/images/{image}',\n'projects/{project}/global/images/family/{family}', 'global/images/{image}',\n'global/images/family/{family}', 'family/{family}', '{project}/{family}',\n'{project}/{image}', '{family}', or '{image}'. If referred by family, the\nimages names must include the family name. If they don't, use the\n[google_compute_image data source](/docs/providers/google/d/compute_image.html).\nFor instance, the image 'centos-6-v20180104' includes its family name 'centos-6'.\nThese images can be referred by family name here.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "label_fingerprint": {
+                "type": "string",
+                "description": "The fingerprint used for optimistic locking of this resource.  Used\ninternally during updates.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels to apply to this disk.  A list of key->value pairs.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "last_attach_timestamp": {
+                "type": "string",
+                "description": "Last attach timestamp in RFC3339 text format.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "last_detach_timestamp": {
+                "type": "string",
+                "description": "Last detach timestamp in RFC3339 text format.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035. Specifically, the name must be 1-63 characters long and match\nthe regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means the\nfirst character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the last\ncharacter, which cannot be a dash.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "physical_block_size_bytes": {
+                "type": "number",
+                "description": "Physical block size of the persistent disk, in bytes. If not present\nin a request, a default value is used. Currently supported sizes\nare 4096 and 16384, other sizes may be added in the future.\nIf an unsupported value is requested, the error message will list\nthe supported values for the caller's project.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "provisioned_iops": {
+                "type": "number",
+                "description": "Indicates how many IOPS must be provisioned for the disk.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "self_link": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "size": {
+                "type": "number",
+                "description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~>**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "snapshot": {
+                "type": "string",
+                "description": "The source snapshot used to create this disk. You can provide this as\na partial or full URL to the resource. If the snapshot is in another\nproject than this disk, you must supply a full URL. For example, the\nfollowing are valid values:\n\n* 'https://www.googleapis.com/compute/v1/projects/project/global/snapshots/snapshot'\n* 'projects/project/global/snapshots/snapshot'\n* 'global/snapshots/snapshot'\n* 'snapshot'",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "source_image_encryption_key": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "kms_key_self_link": "string",
+                      "kms_key_service_account": "string",
+                      "raw_key": "string",
+                      "sha256": "string"
+                    }
+                  ]
+                ],
+                "description": "The customer-supplied encryption key of the source image. Required if\nthe source image is protected by a customer-supplied encryption key.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "source_image_id": {
+                "type": "string",
+                "description": "The ID value of the image used to create this disk. This value\nidentifies the exact image that was used to create this persistent\ndisk. For example, if you created the persistent disk from an image\nthat was later deleted and recreated under the same name, the source\nimage ID would identify the exact version of the image that was used.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "source_snapshot_encryption_key": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "kms_key_self_link": "string",
+                      "kms_key_service_account": "string",
+                      "raw_key": "string",
+                      "sha256": "string"
+                    }
+                  ]
+                ],
+                "description": "The customer-supplied encryption key of the source snapshot. Required\nif the source snapshot is protected by a customer-supplied encryption\nkey.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "source_snapshot_id": {
+                "type": "string",
+                "description": "The unique ID of the snapshot used to create this disk. This value\nidentifies the exact snapshot that was used to create this persistent\ndisk. For example, if you created the persistent disk from a snapshot\nthat was later deleted and recreated under the same name, the source\nsnapshot ID would identify the exact version of the snapshot that was\nused.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "type": {
+                "type": "string",
+                "description": "URL of the disk type resource describing which disk type to use to\ncreate the disk. Provide this when creating the disk.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "users": {
+                "type": [
+                  "list",
+                  "string"
+                ],
+                "description": "Links to the users of the disk (attached instances) in form:\nproject/zones/zone/instances/instance",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "zone": {
+                "type": "string",
+                "description": "A reference to the zone where the disk resides.",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
         "google_compute_forwarding_rule": {
           "version": 0,
           "block": {
@@ -72910,6 +75129,21 @@
               "self_link": {
                 "type": "string",
                 "description": "[Output Only] Server-defined URL for the resource.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "service_directory_registrations": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "namespace": "string",
+                      "service": "string"
+                    }
+                  ]
+                ],
+                "description": "Service Directory resources to register this forwarding rule with. Currently, only supports a single Service Directory resource.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -73825,7 +76059,8 @@
                         ]
                       ],
                       "on_host_maintenance": "string",
-                      "preemptible": "bool"
+                      "preemptible": "bool",
+                      "provisioning_model": "string"
                     }
                   ]
                 ],
@@ -74321,7 +76556,8 @@
                         ]
                       ],
                       "on_host_maintenance": "string",
-                      "preemptible": "bool"
+                      "preemptible": "bool",
+                      "provisioning_model": "string"
                     }
                   ]
                 ],
@@ -75830,6 +78066,15 @@
                           {
                             "end_time": "string",
                             "exclusion_name": "string",
+                            "exclusion_options": [
+                              "list",
+                              [
+                                "object",
+                                {
+                                  "scope": "string"
+                                }
+                              ]
+                            ],
                             "start_time": "string"
                           }
                         ]
@@ -78135,6 +80380,16 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "deletion_protection": {
+                "type": "bool",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "desired_state": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
               "gcs_bucket": {
                 "type": "string",
                 "description": "The name of a Cloud Storage bucket where this CertificateAuthority will publish content,\nsuch as the CA certificate and CRLs. This must be a bucket name, without any prefixes\n(such as 'gs://') or suffixes (such as '.googleapis.com'). For example, to use a bucket named\nmy-bucket, you would simply specify 'my-bucket'. If not specified, a managed bucket will be\ncreated.",
@@ -78739,7 +80994,7 @@
               },
               "read_replicas_mode": {
                 "type": "string",
-                "description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the \ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance \ncan scale up and down the number of replicas. Default value: \"READ_REPLICAS_DISABLED\" Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
+                "description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the \ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance \ncan scale up and down the number of replicas. Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -78773,6 +81028,12 @@
               "reserved_ip_range": {
                 "type": "string",
                 "description": "The CIDR range of internal addresses that are reserved for this\ninstance. If not provided, the service will choose an unused /29\nblock, for example, 10.0.0.0/29 or 192.168.0.0/29. Ranges must be\nunique and non-overlapping with existing subnets in an authorized\nnetwork.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "secondary_ip_range": {
+                "type": "string",
+                "description": "Optional. Additional IP range for node placement. Required when enabling read replicas on\nan existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or\n\"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address \nrange associated with the private service access connection, or \"auto\".",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -79612,6 +81873,15 @@
                     "object",
                     {
                       "activation_policy": "string",
+                      "active_directory_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "domain": "string"
+                          }
+                        ]
+                      ],
                       "availability_type": "string",
                       "backup_configuration": [
                         "list",

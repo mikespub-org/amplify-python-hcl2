@@ -1,3 +1,3 @@
-Terraform v1.1.8
+Terraform v1.2.1
 on linux_amd64
-+ provider registry.terraform.io/hashicorp/local v2.2.2
++ provider registry.terraform.io/hashicorp/local v2.2.3
