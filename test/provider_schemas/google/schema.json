@@ -206,6 +206,11 @@
               "description_kind": "plain",
               "optional": true
             },
+            "dataplex_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
             "dataproc_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
@@ -232,6 +237,11 @@
               "optional": true
             },
             "dns_custom_endpoint": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            },
+            "document_ai_custom_endpoint": {
               "type": "string",
               "description_kind": "plain",
               "optional": true
@@ -1636,6 +1646,15 @@
                             "nesting_mode": "list",
                             "block": {
                               "attributes": {
+                                "external_resources": {
+                                  "type": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "description": "A list of external resources that are allowed to be accessed. A request\nmatches if it contains an external resource in this list (Example:\ns3://bucket/path). Currently '*' is not allowed.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
                                 "resources": {
                                   "type": [
                                     "list",
@@ -1909,6 +1928,15 @@
                             "nesting_mode": "list",
                             "block": {
                               "attributes": {
+                                "external_resources": {
+                                  "type": [
+                                    "list",
+                                    "string"
+                                  ],
+                                  "description": "A list of external resources that are allowed to be accessed. A request\nmatches if it contains an external resource in this list (Example:\ns3://bucket/path). Currently '*' is not allowed.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
                                 "resources": {
                                   "type": [
                                     "list",
@@ -2321,6 +2349,15 @@
                                   "nesting_mode": "list",
                                   "block": {
                                     "attributes": {
+                                      "external_resources": {
+                                        "type": [
+                                          "list",
+                                          "string"
+                                        ],
+                                        "description": "A list of external resources that are allowed to be accessed. A request\nmatches if it contains an external resource in this list (Example:\ns3://bucket/path). Currently '*' is not allowed.",
+                                        "description_kind": "plain",
+                                        "optional": true
+                                      },
                                       "resources": {
                                         "type": [
                                           "list",
@@ -2594,6 +2631,15 @@
                                   "nesting_mode": "list",
                                   "block": {
                                     "attributes": {
+                                      "external_resources": {
+                                        "type": [
+                                          "list",
+                                          "string"
+                                        ],
+                                        "description": "A list of external resources that are allowed to be accessed. A request\nmatches if it contains an external resource in this list (Example:\ns3://bucket/path). Currently '*' is not allowed.",
+                                        "description_kind": "plain",
+                                        "optional": true
+                                      },
                                       "resources": {
                                         "type": [
                                           "list",
@@ -5985,7 +6031,7 @@
               },
               "location": {
                 "type": "string",
-                "description": "The geographic location where the connection should reside.\nCloud SQL instance must be in the same location as the connection\nwith following exceptions: Cloud SQL us-central1 maps to BigQuery US, Cloud SQL europe-west1 maps to BigQuery EU.\nExamples: US, EU, asia-northeast1, us-central1, europe-west1. The default value is US.",
+                "description": "The geographic location where the connection should reside.\nCloud SQL instance must be in the same location as the connection\nwith following exceptions: Cloud SQL us-central1 maps to BigQuery US, Cloud SQL europe-west1 maps to BigQuery EU.\nExamples: US, EU, asia-northeast1, us-central1, europe-west1.\nSpanner Connections same as spanner region\nAWS allowed regions are aws-us-east-1\nAzure allowed regions are azure-eastus2",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -6003,6 +6049,79 @@
               }
             },
             "block_types": {
+              "aws": {
+                "nesting_mode": "list",
+                "block": {
+                  "block_types": {
+                    "access_role": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "iam_role_id": {
+                            "type": "string",
+                            "description": "The user\u2019s AWS IAM Role that trusts the Google-owned AWS IAM user Connection.",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "identity": {
+                            "type": "string",
+                            "description": "A unique Google-owned and Google-generated identity for the Connection. This identity will be used to access the user's AWS IAM Role.",
+                            "description_kind": "plain",
+                            "computed": true
+                          }
+                        },
+                        "description": "Authentication using Google owned service account to assume into customer's AWS IAM Role.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1,
+                      "max_items": 1
+                    }
+                  },
+                  "description": "Connection properties specific to Amazon Web Services.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "azure": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "application": {
+                      "type": "string",
+                      "description": "The name of the Azure Active Directory Application.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "client_id": {
+                      "type": "string",
+                      "description": "The client id of the Azure Active Directory Application.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "customer_tenant_id": {
+                      "type": "string",
+                      "description": "The id of customer's directory that host the data.",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "object_id": {
+                      "type": "string",
+                      "description": "The object id of the Azure Active Directory Application.",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "redirect_uri": {
+                      "type": "string",
+                      "description": "The URL user will be redirected to after granting consent during connection setup.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "description": "Container for connection properties specific to Azure.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "cloud_resource": {
                 "nesting_mode": "list",
                 "block": {
@@ -6014,7 +6133,29 @@
                       "computed": true
                     }
                   },
-                  "description": "Cloud Resource properties.",
+                  "description": "Container for connection properties for delegation of access to GCP resources.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "cloud_spanner": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "database": {
+                      "type": "string",
+                      "description": "Cloud Spanner database in the form 'project/instance/database'",
+                      "description_kind": "plain",
+                      "required": true
+                    },
+                    "use_parallelism": {
+                      "type": "bool",
+                      "description": "If parallelism should be used when reading from Cloud Spanner",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Connection properties specific to Cloud Spanner",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -6068,7 +6209,7 @@
                       "max_items": 1
                     }
                   },
-                  "description": "Cloud SQL properties.",
+                  "description": "A nested object resource",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -8065,6 +8206,12 @@
                     "compression": {
                       "type": "string",
                       "description": "The compression type of the data source. Valid values are \"NONE\" or \"GZIP\".",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "connection_id": {
+                      "type": "string",
+                      "description": "The connection specifying the credentials to be used to read external storage, such as Azure Blob, Cloud Storage, or S3. The connectionId can have the form \"{{project}}.{{location}}.{{connection_id}}\" or \"projects/{{project}}/locations/{{location}}/connections/{{connection_id}}\".",
                       "description_kind": "plain",
                       "optional": true
                     },
@@ -12582,6 +12729,12 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "include_build_logs": {
+                "type": "string",
+                "description": "Build logs will be sent back to GitHub as part of the checkrun\nresult.  Values can be INCLUDE_BUILD_LOGS_UNSPECIFIED or\nINCLUDE_BUILD_LOGS_WITH_STATUS Possible values: [\"INCLUDE_BUILD_LOGS_UNSPECIFIED\", \"INCLUDE_BUILD_LOGS_WITH_STATUS\"]",
+                "description_kind": "plain",
+                "optional": true
+              },
               "included_files": {
                 "type": [
                   "list",
@@ -13666,6 +13819,12 @@
                 "optional": true,
                 "computed": true
               },
+              "suspended": {
+                "type": "bool",
+                "description": "When suspended, no new releases or rollouts can be created, but in-progress ones will complete.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "uid": {
                 "type": "string",
                 "description": "Output only. Unique identifier of the `DeliveryPipeline`.",
@@ -13957,6 +14116,13 @@
                 "description": "Description of the function.",
                 "description_kind": "plain",
                 "optional": true
+              },
+              "docker_registry": {
+                "type": "string",
+                "description": "Docker Registry to use for storing the function's Docker images. Allowed values are CONTAINER_REGISTRY (default) and ARTIFACT_REGISTRY.",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
               },
               "docker_repository": {
                 "type": "string",
@@ -14988,6 +15154,45 @@
                       },
                       "max_items": 1
                     },
+                    "master_authorized_networks_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "enabled": {
+                            "type": "bool",
+                            "description": "Whether or not master authorized networks is enabled.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "block_types": {
+                          "cidr_blocks": {
+                            "nesting_mode": "set",
+                            "block": {
+                              "attributes": {
+                                "cidr_block": {
+                                  "type": "string",
+                                  "description": "cidr_block must be specified in CIDR notation.",
+                                  "description_kind": "plain",
+                                  "required": true
+                                },
+                                "display_name": {
+                                  "type": "string",
+                                  "description": "display_name is a field for users to identify CIDR blocks.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "cidr_blocks define up to 50 external networks that could access Kubernetes master through HTTPS.",
+                              "description_kind": "plain"
+                            }
+                          }
+                        },
+                        "description": "Configuration options for the master authorized networks feature. Enabled master authorized networks will disallow all external traffic to access Kubernetes master through HTTPS except traffic from the given CIDR blocks, Google Compute Engine Public IPs and Google Prod IPs.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "node_config": {
                       "nesting_mode": "list",
                       "block": {
@@ -14995,6 +15200,13 @@
                           "disk_size_gb": {
                             "type": "number",
                             "description": "The disk size in GB used for node VMs. Minimum size is 20GB. If unspecified, defaults to 100GB. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
+                          },
+                          "enable_ip_masq_agent": {
+                            "type": "bool",
+                            "description": "Deploys 'ip-masq-agent' daemon set in the GKE cluster and defines nonMasqueradeCIDRs equals to pod IP range so IP masquerading is used for all destination addresses, except between pods traffic. See: https://cloud.google.com/kubernetes-engine/docs/how-to/ip-masquerade-agent",
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
@@ -15107,6 +15319,13 @@
                             "description": "If true, access to the public endpoint of the GKE cluster is denied. If this field is set to true, ip_allocation_policy.use_ip_aliases must be set to true for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
                             "description_kind": "plain",
                             "optional": true
+                          },
+                          "enable_privately_used_public_ips": {
+                            "type": "bool",
+                            "description": "When enabled, IPs from public (non-RFC1918) ranges can be used for ip_allocation_policy.cluster_ipv4_cidr_block and ip_allocation_policy.service_ipv4_cidr_block.",
+                            "description_kind": "plain",
+                            "optional": true,
+                            "computed": true
                           },
                           "master_ipv4_cidr_block": {
                             "type": "string",
@@ -15971,6 +16190,34 @@
                     }
                   },
                   "block_types": {
+                    "cache_key_policy": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "include_http_headers": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Allows HTTP request headers (by name) to be used in the\ncache key.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "query_string_whitelist": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '&' and '=' will\nbe percent encoded and not treated as delimiters.",
+                            "description_kind": "plain",
+                            "optional": true
+                          }
+                        },
+                        "description": "The CacheKeyPolicy for this CdnPolicy.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
+                    },
                     "negative_caching_policy": {
                       "nesting_mode": "list",
                       "block": {
@@ -16365,6 +16612,15 @@
                           "include_host": {
                             "type": "bool",
                             "description": "If true requests to different hosts will be cached separately.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "include_named_cookies": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Names of cookies to include in cache keys.",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -18076,6 +18332,18 @@
                 "optional": true,
                 "computed": true
               },
+              "psc_connection_id": {
+                "type": "string",
+                "description": "The PSC connection id of the PSC Forwarding Rule.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "psc_connection_status": {
+                "type": "string",
+                "description": "The PSC connection status of the PSC Forwarding Rule. Possible values: STATUS_UNSPECIFIED, PENDING, ACCEPTED, REJECTED, CLOSED",
+                "description_kind": "plain",
+                "computed": true
+              },
               "region": {
                 "type": "string",
                 "description": "The location of this resource.",
@@ -18346,6 +18614,18 @@
                 "description": "The project this resource belongs in.",
                 "description_kind": "plain",
                 "optional": true,
+                "computed": true
+              },
+              "psc_connection_id": {
+                "type": "string",
+                "description": "The PSC connection id of the PSC Forwarding Rule.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "psc_connection_status": {
+                "type": "string",
+                "description": "The PSC connection status of the PSC Forwarding Rule. Possible values: STATUS_UNSPECIFIED, PENDING, ACCEPTED, REJECTED, CLOSED",
+                "description_kind": "plain",
                 "computed": true
               },
               "self_link": {
@@ -21090,7 +21370,7 @@
                   "set",
                   "string"
                 ],
-                "description": "List of instances in the group. They should be given as self_link URLs. When adding instances they must all be in the same network and zone as the instance group.",
+                "description": "The list of instances in the group, in self_link format. When adding instances they must all be in the same network and zone as the instance group.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -22745,6 +23025,12 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "enable_ula_internal_ipv6": {
+                "type": "bool",
+                "description": "Enable ULA internal ipv6 on this network. Enabling this feature will assign \na /48 from google defined ULA prefix fd20::/20.",
+                "description_kind": "plain",
+                "optional": true
+              },
               "gateway_ipv4": {
                 "type": "string",
                 "description": "The gateway address for default routing out of the network. This value\nis selected by GCP.",
@@ -22753,6 +23039,13 @@
               },
               "id": {
                 "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "internal_ipv6_range": {
+                "type": "string",
+                "description": "When enabling ula internal ipv6, caller optionally can specify the /48 range \nthey want from the google defined ULA prefix fd20::/20. The input must be a \nvalid /48 ULA IPv6 address and must be within the fd20::/20. Operation will \nfail if the speficied /48 is already in used by another resource. \nIf the field is not speficied, then a /48 range will be randomly allocated from fd20::/20 and returned via this field.",
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
@@ -24440,6 +24733,15 @@
                           "include_host": {
                             "type": "bool",
                             "description": "If true requests to different hosts will be cached separately.",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "include_named_cookies": {
+                            "type": [
+                              "list",
+                              "string"
+                            ],
+                            "description": "Names of cookies to include in cache keys.",
                             "description_kind": "plain",
                             "optional": true
                           },
@@ -28304,7 +28606,7 @@
                     },
                     "vm_count": {
                       "type": "number",
-                      "description": "Number of vms in this placement group.",
+                      "description": "Number of VMs in this placement group. Google does not recommend that you use this field\nunless you use a compact policy and you want your policy to work only if it contains this\nexact number of VMs.",
                       "description_kind": "plain",
                       "optional": true
                     }
@@ -28920,9 +29222,10 @@
               },
               "enable_dynamic_port_allocation": {
                 "type": "bool",
-                "description": "Enable Dynamic Port Allocation.\nIf minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. \nIf minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.\n\nMutually exclusive with enableEndpointIndependentMapping.",
+                "description": "Enable Dynamic Port Allocation.\nIf minPortsPerVm is set, minPortsPerVm must be set to a power of two greater than or equal to 32.\nIf minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.\nIf maxPortsPerVm is set, maxPortsPerVm must be set to a power of two greater than minPortsPerVm.\nIf maxPortsPerVm is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.\n\nMutually exclusive with enableEndpointIndependentMapping.",
                 "description_kind": "plain",
-                "optional": true
+                "optional": true,
+                "computed": true
               },
               "enable_endpoint_independent_mapping": {
                 "type": "bool",
@@ -28941,6 +29244,12 @@
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
+              },
+              "max_ports_per_vm": {
+                "type": "number",
+                "description": "Maximum number of ports allocated to a VM from this NAT.\nThis field can only be set when enableDynamicPortAllocation is enabled.",
+                "description_kind": "plain",
+                "optional": true
               },
               "min_ports_per_vm": {
                 "type": "number",
@@ -29323,6 +29632,30 @@
               }
             },
             "block_types": {
+              "advanced_options_config": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "json_parsing": {
+                      "type": "string",
+                      "description": "JSON body parsing. Supported values include: \"DISABLED\", \"STANDARD\".",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    },
+                    "log_level": {
+                      "type": "string",
+                      "description": "Logging level. Supported values include: \"NORMAL\", \"VERBOSE\".",
+                      "description_kind": "plain",
+                      "optional": true,
+                      "computed": true
+                    }
+                  },
+                  "description": "Advanced Options Config of this security policy.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "rule": {
                 "nesting_mode": "set",
                 "block": {
@@ -30117,7 +30450,7 @@
               },
               "ipv6_access_type": {
                 "type": "string",
-                "description": "The access type of IPv6 address this subnet holds. It's immutable and can only be specified during creation\nor the first time the subnet is updated into IPV4_IPV6 dual stack. If the ipv6_type is EXTERNAL then this subnet\ncannot enable direct path. Possible values: [\"EXTERNAL\"]",
+                "description": "The access type of IPv6 address this subnet holds. It's immutable and can only be specified during creation\nor the first time the subnet is updated into IPV4_IPV6 dual stack. If the ipv6_type is EXTERNAL then this subnet\ncannot enable direct path. Possible values: [\"EXTERNAL\", \"INTERNAL\"]",
                 "description_kind": "plain",
                 "optional": true
               },
@@ -36385,6 +36718,12 @@
                       "optional": true,
                       "computed": true
                     },
+                    "spot": {
+                      "type": "bool",
+                      "description": "Whether the nodes are created as spot VM instances.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "tags": {
                       "type": [
                         "list",
@@ -36725,6 +37064,12 @@
                             "description_kind": "plain",
                             "optional": true,
                             "computed": true
+                          },
+                          "spot": {
+                            "type": "bool",
+                            "description": "Whether the nodes are created as spot VM instances.",
+                            "description_kind": "plain",
+                            "optional": true
                           },
                           "tags": {
                             "type": [
@@ -37310,6 +37655,12 @@
                       "description_kind": "plain",
                       "optional": true,
                       "computed": true
+                    },
+                    "spot": {
+                      "type": "bool",
+                      "description": "Whether the nodes are created as spot VM instances.",
+                      "description_kind": "plain",
+                      "optional": true
                     },
                     "tags": {
                       "type": [
@@ -40511,6 +40862,164 @@
                 "nesting_mode": "single",
                 "block": {
                   "attributes": {
+                    "update": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_dataplex_lake": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "asset_status": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "active_assets": "number",
+                      "security_policy_applying_assets": "number",
+                      "update_time": "string"
+                    }
+                  ]
+                ],
+                "description": "Output only. Aggregated status of the underlying assets of the lake.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "create_time": {
+                "type": "string",
+                "description": "Output only. The time when the lake was created.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional. Description of the lake.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "display_name": {
+                "type": "string",
+                "description": "Optional. User friendly display name.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Optional. User-defined labels for the lake.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location for the resource",
+                "description_kind": "plain",
+                "required": true
+              },
+              "metastore_status": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "endpoint": "string",
+                      "message": "string",
+                      "state": "string",
+                      "update_time": "string"
+                    }
+                  ]
+                ],
+                "description": "Output only. Metastore status of the lake.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the lake.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "project": {
+                "type": "string",
+                "description": "The project for the resource",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "service_account": {
+                "type": "string",
+                "description": "Output only. Service account associated with this lake. This service account must be authorized to access or operate on resources managed by the lake.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "state": {
+                "type": "string",
+                "description": "Output only. Current state of the lake. Possible values: STATE_UNSPECIFIED, ACTIVE, CREATING, DELETING, ACTION_REQUIRED",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "uid": {
+                "type": "string",
+                "description": "Output only. System generated globally unique ID for the lake. This ID will be different if the lake is deleted and re-created with the same name.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "update_time": {
+                "type": "string",
+                "description": "Output only. The time when the lake was last updated.",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "block_types": {
+              "metastore": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "service": {
+                      "type": "string",
+                      "description": "Optional. A relative reference to the Dataproc Metastore (https://cloud.google.com/dataproc-metastore/docs) service associated with the lake: `projects/{project_id}/locations/{location_id}/services/{service_id}`",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description": "Optional. Settings to manage lake and Dataproc Metastore service instance association.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
                     "update": {
                       "type": "string",
                       "description_kind": "plain",
@@ -46305,6 +46814,12 @@
           "version": 0,
           "block": {
             "attributes": {
+              "creation_time": {
+                "type": "string",
+                "description": "The time that this resource was created on the server.\nThis is in RFC3339 text format.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "description": {
                 "type": "string",
                 "description": "A textual description field. Defaults to 'Managed by Terraform'.",
@@ -46336,6 +46851,12 @@
                 "description": "A set of key/value label pairs to assign to this ManagedZone.",
                 "description_kind": "plain",
                 "optional": true
+              },
+              "managed_zone_id": {
+                "type": "number",
+                "description": "Unique identifier for the resource; defined by the server.",
+                "description_kind": "plain",
+                "computed": true
               },
               "name": {
                 "type": "string",
@@ -46765,6 +47286,122 @@
                   "description_kind": "plain"
                 },
                 "max_items": 1
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_document_ai_processor": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "display_name": {
+                "type": "string",
+                "description": "The display name. Must be unique.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "kms_key_name": {
+                "type": "string",
+                "description": "The KMS key used for encryption/decryption in CMEK scenarios. See https://cloud.google.com/security-key-management.",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "location": {
+                "type": "string",
+                "description": "The location of the resource.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The resource name of the processor.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "project": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "type": {
+                "type": "string",
+                "description": "The type of processor. For possible types see the [official list](https://cloud.google.com/document-ai/docs/reference/rest/v1/projects.locations/fetchProcessorTypes#google.cloud.documentai.v1.DocumentProcessorService.FetchProcessorTypes)",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_document_ai_processor_default_version": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "processor": {
+                "type": "string",
+                "description": "The processor to set the version on.",
+                "description_kind": "plain",
+                "required": true
+              },
+              "version": {
+                "type": "string",
+                "description": "The version to set",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "block_types": {
+              "timeouts": {
+                "nesting_mode": "single",
+                "block": {
+                  "attributes": {
+                    "create": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "delete": {
+                      "type": "string",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                }
               }
             },
             "description_kind": "plain"
@@ -54739,6 +55376,22 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "maintenance_schedule": {
+                "type": [
+                  "list",
+                  [
+                    "object",
+                    {
+                      "end_time": "string",
+                      "schedule_deadline_time": "string",
+                      "start_time": "string"
+                    }
+                  ]
+                ],
+                "description": "Output only. Published maintenance schedule.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "memcache_full_version": {
                 "type": "string",
                 "description": "The full version of memcached server running on this instance.",
@@ -54806,6 +55459,95 @@
               }
             },
             "block_types": {
+              "maintenance_policy": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "create_time": {
+                      "type": "string",
+                      "description": "Output only. The time when the policy was created.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits",
+                      "description_kind": "plain",
+                      "computed": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional. Description of what this policy is for.\nCreate/Update methods return INVALID_ARGUMENT if the\nlength is greater than 512.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "update_time": {
+                      "type": "string",
+                      "description": "Output only. The time when the policy was updated.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond\nresolution and up to nine fractional digits.",
+                      "description_kind": "plain",
+                      "computed": true
+                    }
+                  },
+                  "block_types": {
+                    "weekly_maintenance_window": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "day": {
+                            "type": "string",
+                            "description": "Required. The day of week that maintenance updates occur.\n- DAY_OF_WEEK_UNSPECIFIED: The day of the week is unspecified.\n- MONDAY: Monday\n- TUESDAY: Tuesday\n- WEDNESDAY: Wednesday\n- THURSDAY: Thursday\n- FRIDAY: Friday\n- SATURDAY: Saturday\n- SUNDAY: Sunday Possible values: [\"DAY_OF_WEEK_UNSPECIFIED\", \"MONDAY\", \"TUESDAY\", \"WEDNESDAY\", \"THURSDAY\", \"FRIDAY\", \"SATURDAY\", \"SUNDAY\"]",
+                            "description_kind": "plain",
+                            "required": true
+                          },
+                          "duration": {
+                            "type": "string",
+                            "description": "Required. The length of the maintenance window, ranging from 3 hours to 8 hours.\nA duration in seconds with up to nine fractional digits,\nterminated by 's'. Example: \"3.5s\".",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "block_types": {
+                          "start_time": {
+                            "nesting_mode": "list",
+                            "block": {
+                              "attributes": {
+                                "hours": {
+                                  "type": "number",
+                                  "description": "Hours of day in 24 hour format. Should be from 0 to 23.\nAn API may choose to allow the value \"24:00:00\" for scenarios like business closing time.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "minutes": {
+                                  "type": "number",
+                                  "description": "Minutes of hour of day. Must be from 0 to 59.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "nanos": {
+                                  "type": "number",
+                                  "description": "Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                },
+                                "seconds": {
+                                  "type": "number",
+                                  "description": "Seconds of minutes of the time. Must normally be from 0 to 59.\nAn API may allow the value 60 if it allows leap-seconds.",
+                                  "description_kind": "plain",
+                                  "optional": true
+                                }
+                              },
+                              "description": "Required. Start time of the window in UTC time.",
+                              "description_kind": "plain"
+                            },
+                            "min_items": 1,
+                            "max_items": 1
+                          }
+                        },
+                        "description": "Required. Maintenance window that is applied to resources covered by this policy.\nMinimum 1. For the current version, the maximum number of weekly_maintenance_windows\nis expected to be one.",
+                        "description_kind": "plain"
+                      },
+                      "min_items": 1
+                    }
+                  },
+                  "description": "Maintenance policy for an instance.",
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "memcache_parameters": {
                 "nesting_mode": "list",
                 "block": {
@@ -55484,6 +56226,15 @@
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
+              },
+              "user_labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels which have been used to annotate the service. Label keys must start\nwith a letter. Label keys and values may contain lowercase letters,\nnumbers, underscores, and dashes. Label keys and values have a maximum\nlength of 63 characters, and must be less than 128 bytes in size. Up to 64\nlabel entries may be stored. For labels which do not have a semantic value,\nthe empty string may be supplied for the label value.",
+                "description_kind": "plain",
+                "optional": true
               }
             },
             "block_types": {
@@ -55996,6 +56747,15 @@
                 "description_kind": "plain",
                 "optional": true,
                 "computed": true
+              },
+              "user_labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "This field is intended to be used for organizing and identifying the AlertPolicy\nobjects.The field can contain up to 64 entries. Each key and value is limited\nto 63 Unicode characters or 128 bytes, whichever is smaller. Labels and values\ncan contain only lowercase letters, numerals, underscores, and dashes. Keys\nmust begin with a letter.",
+                "description_kind": "plain",
+                "optional": true
               }
             },
             "block_types": {
@@ -56526,9 +57286,33 @@
                     },
                     "matcher": {
                       "type": "string",
-                      "description": "The type of content matcher that will be applied to the server output, compared to the content string when the check is run. Default value: \"CONTAINS_STRING\" Possible values: [\"CONTAINS_STRING\", \"NOT_CONTAINS_STRING\", \"MATCHES_REGEX\", \"NOT_MATCHES_REGEX\"]",
+                      "description": "The type of content matcher that will be applied to the server output, compared to the content string when the check is run. Default value: \"CONTAINS_STRING\" Possible values: [\"CONTAINS_STRING\", \"NOT_CONTAINS_STRING\", \"MATCHES_REGEX\", \"NOT_MATCHES_REGEX\", \"MATCHES_JSON_PATH\", \"NOT_MATCHES_JSON_PATH\"]",
                       "description_kind": "plain",
                       "optional": true
+                    }
+                  },
+                  "block_types": {
+                    "json_path_matcher": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "json_matcher": {
+                            "type": "string",
+                            "description": "Options to perform JSONPath content matching. Default value: \"EXACT_MATCH\" Possible values: [\"EXACT_MATCH\", \"REGEX_MATCH\"]",
+                            "description_kind": "plain",
+                            "optional": true
+                          },
+                          "json_path": {
+                            "type": "string",
+                            "description": "JSONPath within the response output pointing to the expected 'ContentMatcher::content' to match against.",
+                            "description_kind": "plain",
+                            "required": true
+                          }
+                        },
+                        "description": "Information needed to perform a JSONPath content match. Used for 'ContentMatcherOption::MATCHES_JSON_PATH' and 'ContentMatcherOption::NOT_MATCHES_JSON_PATH'.",
+                        "description_kind": "plain"
+                      },
+                      "max_items": 1
                     }
                   },
                   "description": "The expected content on the page the check is run against. Currently, only the first entry in the list is supported, and other entries will be ignored. The server will look for an exact match of the string in the page response's content. This field is optional and should only be specified if a content match is required.",
@@ -56649,7 +57433,7 @@
                       "required": true
                     }
                   },
-                  "description": "The monitored resource (https://cloud.google.com/monitoring/api/resources) associated with the configuration. The following monitored resource types are supported for uptime checks:  uptime_url  gce_instance  gae_app  aws_ec2_instance  aws_elb_load_balancer",
+                  "description": "The monitored resource (https://cloud.google.com/monitoring/api/resources) associated with the configuration. The following monitored resource types are supported for uptime checks:  uptime_url  gce_instance  gae_app  aws_ec2_instance aws_elb_load_balancer  k8s_service  servicedirectory_service",
                   "description_kind": "plain"
                 },
                 "max_items": 1
@@ -69535,7 +70319,7 @@
               },
               "database_version": {
                 "type": "string",
-                "description": "The MySQL, PostgreSQL or SQL Server (beta) version to use. Supported values include MYSQL_5_6, MYSQL_5_7, MYSQL_8_0, POSTGRES_9_6, POSTGRES_10, POSTGRES_11, POSTGRES_12, POSTGRES_13, SQLSERVER_2017_STANDARD, SQLSERVER_2017_ENTERPRISE, SQLSERVER_2017_EXPRESS, SQLSERVER_2017_WEB. Database Version Policies includes an up-to-date reference of supported versions.",
+                "description": "The MySQL, PostgreSQL or SQL Server (beta) version to use. Supported values include MYSQL_5_6, MYSQL_5_7, MYSQL_8_0, POSTGRES_9_6, POSTGRES_10, POSTGRES_11, POSTGRES_12, POSTGRES_13, POSTGRES_14, SQLSERVER_2017_STANDARD, SQLSERVER_2017_ENTERPRISE, SQLSERVER_2017_EXPRESS, SQLSERVER_2017_WEB. Database Version Policies includes an up-to-date reference of supported versions.",
                 "description_kind": "plain",
                 "required": true
               },
@@ -70361,6 +71145,30 @@
               }
             },
             "block_types": {
+              "sql_server_user_details": {
+                "nesting_mode": "list",
+                "block": {
+                  "attributes": {
+                    "disabled": {
+                      "type": "bool",
+                      "description": "If the user has been disabled.",
+                      "description_kind": "plain",
+                      "optional": true
+                    },
+                    "server_roles": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "The server roles for this user in the database.",
+                      "description_kind": "plain",
+                      "optional": true
+                    }
+                  },
+                  "description_kind": "plain"
+                },
+                "max_items": 1
+              },
               "timeouts": {
                 "nesting_mode": "single",
                 "block": {
@@ -73784,6 +74592,12 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "docker_registry": {
+                "type": "string",
+                "description": "Docker Registry to use for storing the function's Docker images. Allowed values are CONTAINER_REGISTRY (default) and ARTIFACT_REGISTRY.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "docker_repository": {
                 "type": "string",
                 "description": "User managed repository created in Artifact Registry optionally with a customer managed encryption key. If specified, deployments will use Artifact Registry for storing images built with Cloud Build.",
@@ -74051,12 +74865,32 @@
                           }
                         ]
                       ],
+                      "master_authorized_networks_config": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "cidr_blocks": [
+                              "set",
+                              [
+                                "object",
+                                {
+                                  "cidr_block": "string",
+                                  "display_name": "string"
+                                }
+                              ]
+                            ],
+                            "enabled": "bool"
+                          }
+                        ]
+                      ],
                       "node_config": [
                         "list",
                         [
                           "object",
                           {
                             "disk_size_gb": "number",
+                            "enable_ip_masq_agent": "bool",
                             "ip_allocation_policy": [
                               "list",
                               [
@@ -74096,6 +74930,7 @@
                             "cloud_composer_network_ipv4_cidr_block": "string",
                             "cloud_sql_ipv4_cidr_block": "string",
                             "enable_private_endpoint": "bool",
+                            "enable_privately_used_public_ips": "bool",
                             "master_ipv4_cidr_block": "string",
                             "web_server_ipv4_cidr_block": "string"
                           }
@@ -74344,6 +75179,22 @@
                   [
                     "object",
                     {
+                      "cache_key_policy": [
+                        "list",
+                        [
+                          "object",
+                          {
+                            "include_http_headers": [
+                              "list",
+                              "string"
+                            ],
+                            "query_string_whitelist": [
+                              "list",
+                              "string"
+                            ]
+                          }
+                        ]
+                      ],
                       "cache_mode": "string",
                       "client_ttl": "number",
                       "default_ttl": "number",
@@ -74473,6 +75324,10 @@
                           "object",
                           {
                             "include_host": "bool",
+                            "include_named_cookies": [
+                              "list",
+                              "string"
+                            ],
                             "include_protocol": "bool",
                             "include_query_string": "bool",
                             "query_string_blacklist": [
@@ -75120,6 +75975,18 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "psc_connection_id": {
+                "type": "string",
+                "description": "The PSC connection id of the PSC Forwarding Rule.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "psc_connection_status": {
+                "type": "string",
+                "description": "The PSC connection status of the PSC Forwarding Rule. Possible values: STATUS_UNSPECIFIED, PENDING, ACCEPTED, REJECTED, CLOSED",
+                "description_kind": "plain",
+                "computed": true
+              },
               "region": {
                 "type": "string",
                 "description": "The location of this resource.",
@@ -75317,6 +76184,18 @@
                 "description": "The project this resource belongs in.",
                 "description_kind": "plain",
                 "optional": true
+              },
+              "psc_connection_id": {
+                "type": "string",
+                "description": "The PSC connection id of the PSC Forwarding Rule.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "psc_connection_status": {
+                "type": "string",
+                "description": "The PSC connection status of the PSC Forwarding Rule. Possible values: STATUS_UNSPECIFIED, PENDING, ACCEPTED, REJECTED, CLOSED",
+                "description_kind": "plain",
+                "computed": true
               },
               "self_link": {
                 "type": "string",
@@ -78280,6 +79159,7 @@
                           }
                         ]
                       ],
+                      "spot": "bool",
                       "tags": [
                         "list",
                         "string"
@@ -78424,6 +79304,7 @@
                                 }
                               ]
                             ],
+                            "spot": "bool",
                             "tags": [
                               "list",
                               "string"
@@ -79747,6 +80628,15 @@
                 "description": "Configuration for how to query telemetry on a Service.",
                 "description_kind": "plain",
                 "computed": true
+              },
+              "user_labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels which have been used to annotate the service. Label keys must start\nwith a letter. Label keys and values may contain lowercase letters,\nnumbers, underscores, and dashes. Label keys and values have a maximum\nlength of 63 characters, and must be less than 128 bytes in size. Up to 64\nlabel entries may be stored. For labels which do not have a semantic value,\nthe empty string may be supplied for the label value.",
+                "description_kind": "plain",
+                "computed": true
               }
             },
             "description_kind": "plain"
@@ -79822,6 +80712,15 @@
                 "description": "Configuration for how to query telemetry on a Service.",
                 "description_kind": "plain",
                 "computed": true
+              },
+              "user_labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels which have been used to annotate the service. Label keys must start\nwith a letter. Label keys and values may contain lowercase letters,\nnumbers, underscores, and dashes. Label keys and values have a maximum\nlength of 63 characters, and must be less than 128 bytes in size. Up to 64\nlabel entries may be stored. For labels which do not have a semantic value,\nthe empty string may be supplied for the label value.",
+                "description_kind": "plain",
+                "computed": true
               }
             },
             "description_kind": "plain"
@@ -79891,6 +80790,15 @@
                 "description": "Configuration for how to query telemetry on a Service.",
                 "description_kind": "plain",
                 "computed": true
+              },
+              "user_labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels which have been used to annotate the service. Label keys must start\nwith a letter. Label keys and values may contain lowercase letters,\nnumbers, underscores, and dashes. Label keys and values have a maximum\nlength of 63 characters, and must be less than 128 bytes in size. Up to 64\nlabel entries may be stored. For labels which do not have a semantic value,\nthe empty string may be supplied for the label value.",
+                "description_kind": "plain",
+                "computed": true
               }
             },
             "description_kind": "plain"
@@ -79958,6 +80866,15 @@
                   ]
                 ],
                 "description": "Configuration for how to query telemetry on a Service.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "user_labels": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Labels which have been used to annotate the service. Label keys must start\nwith a letter. Label keys and values may contain lowercase letters,\nnumbers, underscores, and dashes. Label keys and values have a maximum\nlength of 63 characters, and must be less than 128 bytes in size. Up to 64\nlabel entries may be stored. For labels which do not have a semantic value,\nthe empty string may be supplied for the label value.",
                 "description_kind": "plain",
                 "computed": true
               }
@@ -81719,7 +82636,7 @@
               },
               "database_version": {
                 "type": "string",
-                "description": "The MySQL, PostgreSQL or SQL Server (beta) version to use. Supported values include MYSQL_5_6, MYSQL_5_7, MYSQL_8_0, POSTGRES_9_6, POSTGRES_10, POSTGRES_11, POSTGRES_12, POSTGRES_13, SQLSERVER_2017_STANDARD, SQLSERVER_2017_ENTERPRISE, SQLSERVER_2017_EXPRESS, SQLSERVER_2017_WEB. Database Version Policies includes an up-to-date reference of supported versions.",
+                "description": "The MySQL, PostgreSQL or SQL Server (beta) version to use. Supported values include MYSQL_5_6, MYSQL_5_7, MYSQL_8_0, POSTGRES_9_6, POSTGRES_10, POSTGRES_11, POSTGRES_12, POSTGRES_13, POSTGRES_14, SQLSERVER_2017_STANDARD, SQLSERVER_2017_ENTERPRISE, SQLSERVER_2017_EXPRESS, SQLSERVER_2017_WEB. Database Version Policies includes an up-to-date reference of supported versions.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -82638,6 +83555,102 @@
                 "computed": true
               },
               "subject_id": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_tags_tag_key": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "create_time": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "namespaced_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "parent": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "short_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "update_time": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "google_tags_tag_value": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "create_time": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "description": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "namespaced_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "parent": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "short_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "update_time": {
                 "type": "string",
                 "description_kind": "plain",
                 "computed": true

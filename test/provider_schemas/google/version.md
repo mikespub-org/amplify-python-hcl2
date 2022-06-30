@@ -1,3 +1,3 @@
-Terraform v1.2.1
+Terraform v1.2.4
 on linux_amd64
-+ provider registry.terraform.io/hashicorp/google v4.22.0
++ provider registry.terraform.io/hashicorp/google v4.27.0
