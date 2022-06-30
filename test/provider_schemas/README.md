@@ -10,11 +10,12 @@ Each provider schema uses the format described at https://www.terraform.io/docs/
  
 ## Current provider schema versions
 
-Terraform v0.13.4
-+ provider registry.terraform.io/hashicorp/aws v3.2.0
-+ provider registry.terraform.io/hashicorp/azurerm v2.23.0
-+ provider registry.terraform.io/hashicorp/google v3.34.0
-+ provider registry.terraform.io/hashicorp/local v1.4.0
+Terraform v1.2.4
+on linux_amd64
++ provider registry.terraform.io/hashicorp/aws v4.20.1
++ provider registry.terraform.io/hashicorp/azurerm v3.11.0
++ provider registry.terraform.io/hashicorp/google v4.27.0
++ provider registry.terraform.io/hashicorp/local v2.2.3
 
 ## Adding providers or updating the schemas
 
