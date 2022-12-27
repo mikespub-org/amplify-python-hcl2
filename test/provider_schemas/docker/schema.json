@@ -57,6 +57,12 @@
                     "description_kind": "markdown",
                     "required": true
                   },
+                  "auth_disabled": {
+                    "type": "bool",
+                    "description": "Setting this to `true` will tell the provider that this registry does not need authentication. Due to the docker internals, the provider will use dummy credentials (see https://github.com/kreuzwerker/terraform-provider-docker/issues/470 for more information). Defaults to `false`.",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
                   "config_file": {
                     "type": "string",
                     "description": "Path to docker json file for registry auth. Defaults to `~/.docker/config.json`. If `DOCKER_CONFIG` is set, the value of `DOCKER_CONFIG` is used as the path. `config_file` has predencen over all other options.",
@@ -134,12 +140,18 @@
                 "description_kind": "markdown",
                 "computed": true
               },
+              "cgroupns_mode": {
+                "type": "string",
+                "description": "Cgroup namespace mode to use for the container. Possible values are: `private`, `host`.",
+                "description_kind": "markdown",
+                "optional": true
+              },
               "command": {
                 "type": [
                   "list",
                   "string"
                 ],
-                "description": "The command to use to start the container. For example, to run `/usr/bin/myprogram -f baz.conf` set the command to be `[\"/usr/bin/myprogram\",\"-\",\"baz.con\"]`.",
+                "description": "The command to use to start the container. For example, to run `/usr/bin/myprogram -f baz.conf` set the command to be `[\"/usr/bin/myprogram\",\"-f\",\"baz.con\"]`.",
                 "description_kind": "markdown",
                 "optional": true,
                 "computed": true
@@ -1226,6 +1238,15 @@
                 "description_kind": "markdown",
                 "optional": true
               },
+              "ipam_options": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "Provide explicit options to the IPAM driver. Valid options vary with `ipam_driver` and refer to that driver's documentation for more details.",
+                "description_kind": "markdown",
+                "optional": true
+              },
               "ipv6": {
                 "type": "bool",
                 "description": "Enable IPv6 networking. Defaults to `false`.",
@@ -1451,6 +1472,15 @@
                 "description": "The sha256 digest of the image.",
                 "description_kind": "markdown",
                 "computed": true
+              },
+              "triggers": {
+                "type": [
+                  "map",
+                  "string"
+                ],
+                "description": "A map of arbitrary strings that, when changed, will force the `docker_registry_image` resource to be replaced. This can be used to rebuild an image when contents of source code folders change or to repush a local image",
+                "description_kind": "markdown",
+                "optional": true
               }
             },
             "block_types": {
