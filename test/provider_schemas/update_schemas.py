@@ -8,6 +8,7 @@ import json
 # TF_CMD = "terraform.exe"
 TF_CMD = "terraform"
 TIMEOUT = 3 * 60
+os.environ['TF_PLUGIN_CACHE_DIR'] = "/data/terraform/plugin-cache"
 
 
 def run_cmd(*args):
