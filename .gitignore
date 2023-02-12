@@ -123,6 +123,8 @@ node_modules/
 
 # Don't commit the generated parser
 lark_parser.py
+.lark_cache.bin
+
 # Skip terraform lock for provider tests
 .terraform.lock.hcl
 
