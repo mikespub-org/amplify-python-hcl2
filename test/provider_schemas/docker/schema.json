@@ -245,13 +245,6 @@
                 "description_kind": "markdown",
                 "computed": true
               },
-              "gateway": {
-                "type": "string",
-                "description": "The network gateway of the container.",
-                "description_kind": "markdown",
-                "deprecated": true,
-                "computed": true
-              },
               "gpus": {
                 "type": "string",
                 "description": "GPU devices to add to the container. Currently, only the value `all` is supported. Passing any other value will result in unexpected behavior.",
@@ -293,36 +286,12 @@
                 "optional": true,
                 "computed": true
               },
-              "ip_address": {
-                "type": "string",
-                "description": "The IP address of the container.",
-                "description_kind": "markdown",
-                "deprecated": true,
-                "computed": true
-              },
-              "ip_prefix_length": {
-                "type": "number",
-                "description": "The IP prefix length of the container.",
-                "description_kind": "markdown",
-                "deprecated": true,
-                "computed": true
-              },
               "ipc_mode": {
                 "type": "string",
                 "description": "IPC sharing mode for the container. Possible values are: `none`, `private`, `shareable`, `container:<name|id>` or `host`.",
                 "description_kind": "markdown",
                 "optional": true,
                 "computed": true
-              },
-              "links": {
-                "type": [
-                  "set",
-                  "string"
-                ],
-                "description": "Set of links for link based connectivity between containers that are running on the same host.",
-                "description_kind": "markdown",
-                "deprecated": true,
-                "optional": true
               },
               "log_driver": {
                 "type": "string",
@@ -376,16 +345,6 @@
                 "description_kind": "markdown",
                 "required": true
               },
-              "network_alias": {
-                "type": [
-                  "set",
-                  "string"
-                ],
-                "description": "Set an alias for the container in all specified networks",
-                "description_kind": "markdown",
-                "deprecated": true,
-                "optional": true
-              },
               "network_data": {
                 "type": [
                   "list",
@@ -410,16 +369,6 @@
                 "type": "string",
                 "description": "Network mode of the container.",
                 "description_kind": "markdown",
-                "optional": true
-              },
-              "networks": {
-                "type": [
-                  "set",
-                  "string"
-                ],
-                "description": "ID of the networks in which the container is.",
-                "description_kind": "markdown",
-                "deprecated": true,
                 "optional": true
               },
               "pid_mode": {
@@ -1060,30 +1009,16 @@
                 "description_kind": "markdown",
                 "optional": true
               },
-              "latest": {
-                "type": "string",
-                "description": "The ID of the image in the form of `sha256:<hash>` image digest. Do not confuse it with the default `latest` tag.",
-                "description_kind": "markdown",
-                "deprecated": true,
-                "computed": true
-              },
               "name": {
                 "type": "string",
                 "description": "The name of the Docker image, including any tags or SHA256 repo digests.",
                 "description_kind": "markdown",
                 "required": true
               },
-              "output": {
+              "platform": {
                 "type": "string",
-                "description_kind": "plain",
-                "deprecated": true,
-                "computed": true
-              },
-              "pull_trigger": {
-                "type": "string",
-                "description": "A value which cause an image pull when changed",
+                "description": "The platform to use when pulling the image. Defaults to the platform of the current machine.",
                 "description_kind": "markdown",
-                "deprecated": true,
                 "optional": true
               },
               "pull_triggers": {
@@ -1125,15 +1060,96 @@
                       "description_kind": "markdown",
                       "optional": true
                     },
+                    "build_args": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "Pairs for build-time variables in the form TODO",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "build_id": {
+                      "type": "string",
+                      "description": "BuildID is an optional identifier that can be passed together with the build request. The same identifier can be used to gracefully cancel the build with the cancel request.",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "cache_from": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "Images to consider as cache sources",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "cgroup_parent": {
+                      "type": "string",
+                      "description": "Optional parent cgroup for the container",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "context": {
+                      "type": "string",
+                      "description": "Value to specify the build context. Currently, only a `PATH` context is supported. You can use the helper function '${path.cwd}/context-dir'. Please see https://docs.docker.com/build/building/context/ for more information about build contexts.",
+                      "description_kind": "markdown",
+                      "required": true
+                    },
+                    "cpu_period": {
+                      "type": "number",
+                      "description": "The length of a CPU period in microseconds",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "cpu_quota": {
+                      "type": "number",
+                      "description": "Microseconds of CPU time that the container can get in a CPU period",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "cpu_set_cpus": {
+                      "type": "string",
+                      "description": "CPUs in which to allow execution (e.g., `0-3`, `0`, `1`)",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "cpu_set_mems": {
+                      "type": "string",
+                      "description": "MEMs in which to allow execution (`0-3`, `0`, `1`)",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "cpu_shares": {
+                      "type": "number",
+                      "description": "CPU shares (relative weight)",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
                     "dockerfile": {
                       "type": "string",
                       "description": "Name of the Dockerfile. Defaults to `Dockerfile`.",
                       "description_kind": "markdown",
                       "optional": true
                     },
+                    "extra_hosts": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "A list of hostnames/IP mappings to add to the container\u2019s /etc/hosts file. Specified in the form [\"hostname:IP\"]",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
                     "force_remove": {
                       "type": "bool",
                       "description": "Always remove intermediate containers",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "isolation": {
+                      "type": "string",
+                      "description": "Isolation represents the isolation technology of a container. The supported values are ",
                       "description_kind": "markdown",
                       "optional": true
                     },
@@ -1146,21 +1162,93 @@
                       "description_kind": "markdown",
                       "optional": true
                     },
-                    "no_cache": {
-                      "type": "bool",
-                      "description": "Do not use cache when building the image",
+                    "labels": {
+                      "type": [
+                        "map",
+                        "string"
+                      ],
+                      "description": "User-defined key/value metadata",
                       "description_kind": "markdown",
                       "optional": true
                     },
-                    "path": {
-                      "type": "string",
-                      "description": "Context path",
+                    "memory": {
+                      "type": "number",
+                      "description": "Set memory limit for build",
                       "description_kind": "markdown",
-                      "required": true
+                      "optional": true
+                    },
+                    "memory_swap": {
+                      "type": "number",
+                      "description": "Total memory (memory + swap), -1 to enable unlimited swap",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "network_mode": {
+                      "type": "string",
+                      "description": "Set the networking mode for the RUN instructions during build",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "no_cache": {
+                      "type": "bool",
+                      "description": "Do not use the cache when building the image",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "platform": {
+                      "type": "string",
+                      "description": "Set platform if server is multi-platform capable",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "pull_parent": {
+                      "type": "bool",
+                      "description": "Attempt to pull the image even if an older image exists locally",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "remote_context": {
+                      "type": "string",
+                      "description": "A Git repository URI or HTTP/HTTPS context URI",
+                      "description_kind": "markdown",
+                      "optional": true
                     },
                     "remove": {
                       "type": "bool",
-                      "description": "Remove intermediate containers after a successful build. Defaults to  `true`.",
+                      "description": "Remove intermediate containers after a successful build. Defaults to `true`.",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "security_opt": {
+                      "type": [
+                        "list",
+                        "string"
+                      ],
+                      "description": "The security options",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "session_id": {
+                      "type": "string",
+                      "description": "Set an ID for the build session",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "shm_size": {
+                      "type": "number",
+                      "description": "Size of /dev/shm in bytes. The size must be greater than 0",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "squash": {
+                      "type": "bool",
+                      "description": "If true the new layers are squashed into a new image with a single new layer",
+                      "description_kind": "markdown",
+                      "optional": true
+                    },
+                    "suppress_output": {
+                      "type": "bool",
+                      "description": "Suppress the build output and print image ID on success",
                       "description_kind": "markdown",
                       "optional": true
                     },
@@ -1178,6 +1266,98 @@
                       "description": "Set the target build stage to build",
                       "description_kind": "markdown",
                       "optional": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "Version of the underlying builder to use",
+                      "description_kind": "markdown",
+                      "optional": true
+                    }
+                  },
+                  "block_types": {
+                    "auth_config": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "auth": {
+                            "type": "string",
+                            "description": "the auth token",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "the user emal",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "host_name": {
+                            "type": "string",
+                            "description": "hostname of the registry",
+                            "description_kind": "markdown",
+                            "required": true
+                          },
+                          "identity_token": {
+                            "type": "string",
+                            "description": "the identity token",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "password": {
+                            "type": "string",
+                            "description": "the registry password",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "registry_token": {
+                            "type": "string",
+                            "description": "the registry token",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "server_address": {
+                            "type": "string",
+                            "description": "the server address",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "user_name": {
+                            "type": "string",
+                            "description": "the registry user name",
+                            "description_kind": "markdown",
+                            "optional": true
+                          }
+                        },
+                        "description": "The configuration for the authentication",
+                        "description_kind": "markdown"
+                      }
+                    },
+                    "ulimit": {
+                      "nesting_mode": "list",
+                      "block": {
+                        "attributes": {
+                          "hard": {
+                            "type": "number",
+                            "description": "soft limit",
+                            "description_kind": "markdown",
+                            "required": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "type of ulimit, e.g. `nofile`",
+                            "description_kind": "markdown",
+                            "required": true
+                          },
+                          "soft": {
+                            "type": "number",
+                            "description": "hard limit",
+                            "description_kind": "markdown",
+                            "required": true
+                          }
+                        },
+                        "description": "Configuration for ulimits",
+                        "description_kind": "markdown"
+                      }
                     }
                   },
                   "description": "Configuration to build an image. Please see [docker build command reference](https://docs.docker.com/engine/reference/commandline/build/#options) too.",
@@ -1478,305 +1658,12 @@
                   "map",
                   "string"
                 ],
-                "description": "A map of arbitrary strings that, when changed, will force the `docker_registry_image` resource to be replaced. This can be used to rebuild an image when contents of source code folders change or to repush a local image",
+                "description": "A map of arbitrary strings that, when changed, will force the `docker_registry_image` resource to be replaced. This can be used to repush a local image",
                 "description_kind": "markdown",
                 "optional": true
               }
             },
-            "block_types": {
-              "build": {
-                "nesting_mode": "list",
-                "block": {
-                  "attributes": {
-                    "build_args": {
-                      "type": [
-                        "map",
-                        "string"
-                      ],
-                      "description": "Pairs for build-time variables in the form TODO",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "build_id": {
-                      "type": "string",
-                      "description": "BuildID is an optional identifier that can be passed together with the build request. The same identifier can be used to gracefully cancel the build with the cancel request.",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "cache_from": {
-                      "type": [
-                        "list",
-                        "string"
-                      ],
-                      "description": "Images to consider as cache sources",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "cgroup_parent": {
-                      "type": "string",
-                      "description": "Optional parent cgroup for the container",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "context": {
-                      "type": "string",
-                      "description": "The absolute path to the context folder. You can use the helper function '${path.cwd}/context-dir'.",
-                      "description_kind": "markdown",
-                      "required": true
-                    },
-                    "cpu_period": {
-                      "type": "number",
-                      "description": "The length of a CPU period in microseconds",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "cpu_quota": {
-                      "type": "number",
-                      "description": "Microseconds of CPU time that the container can get in a CPU period",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "cpu_set_cpus": {
-                      "type": "string",
-                      "description": "CPUs in which to allow execution (e.g., `0-3`, `0`, `1`)",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "cpu_set_mems": {
-                      "type": "string",
-                      "description": "MEMs in which to allow execution (`0-3`, `0`, `1`)",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "cpu_shares": {
-                      "type": "number",
-                      "description": "CPU shares (relative weight)",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "dockerfile": {
-                      "type": "string",
-                      "description": "Dockerfile file. Defaults to `Dockerfile`",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "extra_hosts": {
-                      "type": [
-                        "list",
-                        "string"
-                      ],
-                      "description": "A list of hostnames/IP mappings to add to the container\u2019s /etc/hosts file. Specified in the form [\"hostname:IP\"]",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "force_remove": {
-                      "type": "bool",
-                      "description": "Always remove intermediate containers",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "isolation": {
-                      "type": "string",
-                      "description": "Isolation represents the isolation technology of a container. The supported values are ",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "labels": {
-                      "type": [
-                        "map",
-                        "string"
-                      ],
-                      "description": "User-defined key/value metadata",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "memory": {
-                      "type": "number",
-                      "description": "Set memory limit for build",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "memory_swap": {
-                      "type": "number",
-                      "description": "Total memory (memory + swap), -1 to enable unlimited swap",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "network_mode": {
-                      "type": "string",
-                      "description": "Set the networking mode for the RUN instructions during build",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "no_cache": {
-                      "type": "bool",
-                      "description": "Do not use the cache when building the image",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "platform": {
-                      "type": "string",
-                      "description": "Set platform if server is multi-platform capable",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "pull_parent": {
-                      "type": "bool",
-                      "description": "Attempt to pull the image even if an older image exists locally",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "remote_context": {
-                      "type": "string",
-                      "description": "A Git repository URI or HTTP/HTTPS context URI",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "remove": {
-                      "type": "bool",
-                      "description": "Remove intermediate containers after a successful build (default behavior)",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "security_opt": {
-                      "type": [
-                        "list",
-                        "string"
-                      ],
-                      "description": "The security options",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "session_id": {
-                      "type": "string",
-                      "description": "Set an ID for the build session",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "shm_size": {
-                      "type": "number",
-                      "description": "Size of /dev/shm in bytes. The size must be greater than 0",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "squash": {
-                      "type": "bool",
-                      "description": "If true the new layers are squashed into a new image with a single new layer",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "suppress_output": {
-                      "type": "bool",
-                      "description": "Suppress the build output and print image ID on success",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "target": {
-                      "type": "string",
-                      "description": "Set the target build stage to build",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
-                    "version": {
-                      "type": "string",
-                      "description": "Version of the underlying builder to use",
-                      "description_kind": "markdown",
-                      "optional": true
-                    }
-                  },
-                  "block_types": {
-                    "auth_config": {
-                      "nesting_mode": "list",
-                      "block": {
-                        "attributes": {
-                          "auth": {
-                            "type": "string",
-                            "description": "the auth token",
-                            "description_kind": "markdown",
-                            "optional": true
-                          },
-                          "email": {
-                            "type": "string",
-                            "description": "the user emal",
-                            "description_kind": "markdown",
-                            "optional": true
-                          },
-                          "host_name": {
-                            "type": "string",
-                            "description": "hostname of the registry",
-                            "description_kind": "markdown",
-                            "required": true
-                          },
-                          "identity_token": {
-                            "type": "string",
-                            "description": "the identity token",
-                            "description_kind": "markdown",
-                            "optional": true
-                          },
-                          "password": {
-                            "type": "string",
-                            "description": "the registry password",
-                            "description_kind": "markdown",
-                            "optional": true
-                          },
-                          "registry_token": {
-                            "type": "string",
-                            "description": "the registry token",
-                            "description_kind": "markdown",
-                            "optional": true
-                          },
-                          "server_address": {
-                            "type": "string",
-                            "description": "the server address",
-                            "description_kind": "markdown",
-                            "optional": true
-                          },
-                          "user_name": {
-                            "type": "string",
-                            "description": "the registry user name",
-                            "description_kind": "markdown",
-                            "optional": true
-                          }
-                        },
-                        "description": "The configuration for the authentication",
-                        "description_kind": "markdown"
-                      }
-                    },
-                    "ulimit": {
-                      "nesting_mode": "list",
-                      "block": {
-                        "attributes": {
-                          "hard": {
-                            "type": "number",
-                            "description": "soft limit",
-                            "description_kind": "markdown",
-                            "required": true
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "type of ulimit, e.g. `nofile`",
-                            "description_kind": "markdown",
-                            "required": true
-                          },
-                          "soft": {
-                            "type": "number",
-                            "description": "hard limit",
-                            "description_kind": "markdown",
-                            "required": true
-                          }
-                        },
-                        "description": "Configuration for ulimits",
-                        "description_kind": "markdown"
-                      }
-                    }
-                  },
-                  "description": "Definition for building the image",
-                  "description_kind": "markdown"
-                },
-                "max_items": 1
-              }
-            },
-            "description": "Manages the lifecycle of docker image/tag in a registry means it can store one or more version of specific docker images and identified by their tags.",
+            "description": "Manages the lifecycle of docker image in a registry. You can upload images to a registry (= `docker push`) and also delete them again",
             "description_kind": "markdown"
           }
         },
@@ -2071,15 +1958,6 @@
                       "optional": true,
                       "computed": true
                     },
-                    "networks": {
-                      "type": [
-                        "set",
-                        "string"
-                      ],
-                      "description": "Ids of the networks in which the  container will be put in",
-                      "description_kind": "markdown",
-                      "optional": true
-                    },
                     "runtime": {
                       "type": "string",
                       "description": "Runtime is the type of runtime specified for the task executor. See the [types](https://github.com/moby/moby/blob/master/api/types/swarm/runtime.go).",
@@ -2169,6 +2047,15 @@
                           "stop_signal": {
                             "type": "string",
                             "description": "Signal to stop the container",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "sysctl": {
+                            "type": [
+                              "map",
+                              "string"
+                            ],
+                            "description": "Sysctls config (Linux only)",
                             "description_kind": "markdown",
                             "optional": true
                           },
@@ -2622,6 +2509,39 @@
                         "description_kind": "markdown"
                       },
                       "max_items": 1
+                    },
+                    "networks_advanced": {
+                      "nesting_mode": "set",
+                      "block": {
+                        "attributes": {
+                          "aliases": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description": "The network aliases of the container in the specific network.",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "driver_opts": {
+                            "type": [
+                              "set",
+                              "string"
+                            ],
+                            "description": "An array of driver options for the network, e.g. `opts1=value`",
+                            "description_kind": "markdown",
+                            "optional": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name/id of the network.",
+                            "description_kind": "markdown",
+                            "required": true
+                          }
+                        },
+                        "description": "The networks the container is attached to",
+                        "description_kind": "markdown"
+                      }
                     },
                     "placement": {
                       "nesting_mode": "list",
