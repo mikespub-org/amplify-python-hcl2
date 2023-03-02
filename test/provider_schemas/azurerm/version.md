@@ -1,3 +1,3 @@
-Terraform v1.3.8
+Terraform v1.3.9
 on linux_amd64
-+ provider registry.terraform.io/hashicorp/azurerm v3.43.0
++ provider registry.terraform.io/hashicorp/azurerm v3.45.0
