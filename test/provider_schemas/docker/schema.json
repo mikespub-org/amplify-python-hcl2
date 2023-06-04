@@ -357,6 +357,7 @@
                       "ip_address": "string",
                       "ip_prefix_length": "number",
                       "ipv6_gateway": "string",
+                      "mac_address": "string",
                       "network_name": "string"
                     }
                   ]

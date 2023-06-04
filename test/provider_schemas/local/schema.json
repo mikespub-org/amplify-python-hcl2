@@ -25,6 +25,42 @@
                 "description_kind": "plain",
                 "optional": true
               },
+              "content_base64sha256": {
+                "type": "string",
+                "description": "Base64 encoded SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_base64sha512": {
+                "type": "string",
+                "description": "Base64 encoded SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_md5": {
+                "type": "string",
+                "description": "MD5 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha1": {
+                "type": "string",
+                "description": "SHA1 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha256": {
+                "type": "string",
+                "description": "SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha512": {
+                "type": "string",
+                "description": "SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "directory_permission": {
                 "type": "string",
                 "description": "Permissions to set for directories created (before umask), expressed as string in\n [numeric notation](https://en.wikipedia.org/wiki/File-system_permissions#Numeric_notation).\n Default value is `\"0777\"`.",
@@ -47,7 +83,7 @@
               },
               "id": {
                 "type": "string",
-                "description": "The hexadecimal encoding of the checksum of the file content",
+                "description": "The hexadecimal encoding of the SHA1 checksum of the file content.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -88,6 +124,42 @@
                 "optional": true,
                 "sensitive": true
               },
+              "content_base64sha256": {
+                "type": "string",
+                "description": "Base64 encoded SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_base64sha512": {
+                "type": "string",
+                "description": "Base64 encoded SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_md5": {
+                "type": "string",
+                "description": "MD5 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha1": {
+                "type": "string",
+                "description": "SHA1 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha256": {
+                "type": "string",
+                "description": "SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha512": {
+                "type": "string",
+                "description": "SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "directory_permission": {
                 "type": "string",
                 "description": "Permissions to set for directories created (before umask), expressed as string in\n [numeric notation](https://en.wikipedia.org/wiki/File-system_permissions#Numeric_notation).\n Default value is `\"0700\"`.",
@@ -110,7 +182,7 @@
               },
               "id": {
                 "type": "string",
-                "description": "The hexadecimal encoding of the checksum of the file content",
+                "description": "The hexadecimal encoding of the SHA1 checksum of the file content.",
                 "description_kind": "plain",
                 "computed": true
               },
@@ -143,6 +215,42 @@
                 "description_kind": "plain",
                 "computed": true
               },
+              "content_base64sha256": {
+                "type": "string",
+                "description": "Base64 encoded SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_base64sha512": {
+                "type": "string",
+                "description": "Base64 encoded SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_md5": {
+                "type": "string",
+                "description": "MD5 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha1": {
+                "type": "string",
+                "description": "SHA1 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha256": {
+                "type": "string",
+                "description": "SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha512": {
+                "type": "string",
+                "description": "SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "filename": {
                 "type": "string",
                 "description": "Path to the file that will be read. The data source will return an error if the file does not exist.",
@@ -151,7 +259,7 @@
               },
               "id": {
                 "type": "string",
-                "description": "The hexadecimal encoding of the checksum of the file content.",
+                "description": "The hexadecimal encoding of the SHA1 checksum of the file content.",
                 "description_kind": "plain",
                 "computed": true
               }
@@ -178,6 +286,42 @@
                 "computed": true,
                 "sensitive": true
               },
+              "content_base64sha256": {
+                "type": "string",
+                "description": "Base64 encoded SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_base64sha512": {
+                "type": "string",
+                "description": "Base64 encoded SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_md5": {
+                "type": "string",
+                "description": "MD5 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha1": {
+                "type": "string",
+                "description": "SHA1 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha256": {
+                "type": "string",
+                "description": "SHA256 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
+              "content_sha512": {
+                "type": "string",
+                "description": "SHA512 checksum of file content.",
+                "description_kind": "plain",
+                "computed": true
+              },
               "filename": {
                 "type": "string",
                 "description": "Path to the file that will be read. The data source will return an error if the file does not exist.",
@@ -186,7 +330,7 @@
               },
               "id": {
                 "type": "string",
-                "description": "The hexadecimal encoding of the checksum of the file content",
+                "description": "The hexadecimal encoding of the SHA1 checksum of the file content.",
                 "description_kind": "plain",
                 "computed": true
               }
