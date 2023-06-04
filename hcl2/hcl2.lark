@@ -1,7 +1,7 @@
 start : body
 body : (new_line_or_comment? (attribute | block))* new_line_or_comment?
 attribute : identifier "=" expression
-block : identifier (identifier | STRING_LIT)* "{" body "}"
+block : identifier (identifier | STRING_LIT)* new_line_or_comment? "{" body "}"
 new_line_and_or_comma: new_line_or_comment | "," | "," new_line_or_comment
 new_line_or_comment: ( /\n/ | /#.*\n/ | /\/\/.*\n/ )+
 
@@ -13,7 +13,7 @@ conditional : expression "?" new_line_or_comment? expression new_line_or_comment
 
 ?operation : unary_op | binary_op
 !unary_op : ("-" | "!") expr_term
-binary_op : expression binary_term
+binary_op : expression binary_term new_line_or_comment?
 !binary_operator : "==" | "!=" | "<" | ">" | "<=" | ">=" | "-" | "*" | "/" | "%" | "&&" | "||" | "+"
 binary_term : binary_operator new_line_or_comment? expression
 
