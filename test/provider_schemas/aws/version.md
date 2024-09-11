@@ -1,3 +1,3 @@
-Terraform v1.6.4
+Terraform v1.9.5
 on linux_amd64
-+ provider registry.terraform.io/hashicorp/aws v5.26.0
++ provider registry.terraform.io/hashicorp/aws v5.66.0
